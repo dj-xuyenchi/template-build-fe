@@ -1,0 +1,29 @@
+/* Sexy header color important */
+.table-custom-container .ant-table .ant-table-thead .red-head {
+    background-color: #ff4d4f !important;
+}
+
+.table-custom-container .ant-table .ant-table-thead .yellow-head {
+    background-color: #e1ff00 !important;
+}
+
+.table-custom-container .ant-table .ant-table-thead .green-head {
+    background-color: #00852c !important;
+}
+
+.table-custom-container .ant-table .ant-table-thead .blue-head {
+    background-color: #05428C !important;
+}
+
+.table-custom-container .ant-table .ant-table-thead .orange-head {
+    background-color: #ff820d !important;
+}
+
+/* Sexy header text color important */
+.table-custom-container .ant-table .ant-table-thead .white-text-head {
+    color: white !important;
+}
+
+.table-custom-container .ant-table .ant-table-thead .black-text-head {
+    color: rgb(0, 0, 0) !important;
+}

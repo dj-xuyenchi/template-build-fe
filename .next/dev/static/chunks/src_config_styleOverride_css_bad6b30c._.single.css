@@ -1,0 +1,403 @@
+/* [project]/src/config/styleOverride.css [app-client] (css) */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+.select-custom .ant-select-selector {
+  border-radius: 0 !important;
+}
+
+.picker-custom {
+  border-radius: 0;
+  width: 100%;
+}
+
+.menu {
+  background-image: url("/bg.jpg") !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+
+.ant-menu {
+  background: unset;
+}
+
+.ant-menu-submenu-popup .ant-menu-vertical .ant-menu-item span {
+  color: #000 !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-vertical .ant-menu-item-selected {
+  background: #75aefd !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-vertical .ant-menu-item:hover {
+  background: #bfdaff !important;
+}
+
+.ant-menu-vertical .ant-menu-item-selected {
+  background: #6e9bda !important;
+}
+
+.ant-menu .ant-menu-submenu-arrow, .ant-menu .ant-menu-item-icon, .ant-menu .ant-menu-title-content {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff !important;
+}
+
+.ant-menu .ant-menu-item-selected {
+  background: #3a63ae;
+}
+
+.ant-layout-content {
+  flex: unset;
+}
+
+.ant-input-outlined:hover, .ant-input-outlined:focus-within {
+  box-shadow: unset;
+  border-color: #d9d9d9;
+}
+
+.ant-collapse {
+  border-radius: 0;
+}
+
+.ant-collapse .ant-collapse-header-text {
+  font-weight: 550;
+}
+
+.clearBorderCollapse .ant-collapse-header {
+  padding-left: 0 !important;
+}
+
+.clearBorderCollapse .ant-collapse-content {
+  border-top: unset;
+}
+
+.clearBorderCollapse .ant-collapse-content-box {
+  padding: 4px 0 !important;
+}
+
+.ant-btn-variant-solid {
+  background: #05428c;
+}
+
+.ant-btn-variant-solid:hover {
+  background: #074ca0 !important;
+}
+
+.ant-btn-variant-link {
+  color: #05428c;
+}
+
+.ant-btn-variant-link:hover {
+  color: #074ca0;
+}
+
+.abs-disable:hover {
+  background: unset !important;
+  color: #bfbfbf !important;
+}
+
+.zoom-out-table {
+  top: unset;
+  width: 100vw !important;
+  max-width: unset !important;
+  margin: 0 !important;
+}
+
+.zoom-out-table .ant-modal-content {
+  height: 100vh;
+  border-radius: 0 !important;
+}
+
+.table-custom-container .ant-collapse-header {
+  align-items: center;
+  padding-right: unset !important;
+}
+
+.table-custom .ant-table-container {
+  border-start-start-radius: unset;
+  border-start-end-radius: unset;
+}
+
+.table-custom .ant-table-thead .ant-table-cell {
+  border-radius: unset !important;
+}
+
+.table-custom .ant-table-thead > tr > th {
+  padding: 8px 16px;
+}
+
+.ant-table-tbody tr {
+  height: 44px;
+}
+
+.ant-table-tbody .ant-table-cell {
+  padding: 1px !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-input {
+  border-radius: unset;
+  border: unset;
+}
+
+.ant-table-tbody .ant-table-cell input {
+  position: absolute;
+  inset: 0;
+  border-radius: unset !important;
+  height: 100% !important;
+}
+
+.ant-table-cell-row-hover {
+  background: unset !important;
+  transition: unset !important;
+}
+
+.view-mode table .ant-table-cell-row-hover:before {
+  content: "";
+  z-index: 2;
+  opacity: 1;
+  pointer-events: none;
+  background-color: #9292920d;
+  position: absolute;
+  inset: 0;
+}
+
+.table-custom-container .ant-table-cell-fix-left, .table-custom-container .ant-table-cell-fix-right {
+  z-index: 3 !important;
+  background-color: #fff !important;
+}
+
+.view-mode .ant-input-outlined.ant-input-disabled {
+  background-color: unset;
+  color: unset;
+  cursor: auto;
+}
+
+.ant-table-tbody .ant-table-cell textarea {
+  min-height: 48px;
+}
+
+.ant-table-tbody .ant-table-cell .ant-select {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-select-selector {
+  border: unset;
+  border-radius: unset !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-input-number {
+  border: unset;
+  position: absolute;
+  inset: 0;
+  border-radius: unset !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-input-number .ant-input-number-input-wrap input, .ant-table-tbody .ant-table-cell .ant-input-number .ant-input-number-input-wrap {
+  height: 100% !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-checkbox-group {
+  margin-left: 8px;
+}
+
+.ant-checkbox-inner {
+  border-radius: 0 !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-color-picker-trigger {
+  border: unset;
+  border-radius: unset;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  padding-left: 8px;
+  position: absolute;
+  inset: 0;
+  height: 100% !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-picker {
+  border: unset;
+  border-radius: unset;
+  position: absolute;
+  inset: 0;
+  height: 100% !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-picker input {
+  position: unset;
+}
+
+.ant-table-tbody .ant-table-cell .ant-picker-range {
+  position: absolute;
+  inset: 0;
+  height: 100% !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-switch {
+  margin-left: 8px;
+}
+
+.ant-table-tbody .ant-table-cell .ant-upload-list {
+  margin-bottom: 4px;
+  margin-left: 8px;
+}
+
+.ant-card {
+  border-radius: 0 !important;
+}
+
+.ant-popover-inner {
+  border-radius: 3px !important;
+  padding: 0 !important;
+}
+
+.archive-btn, .delete-btn, .edit-btn, .view-btn {
+  margin-right: 2px;
+  border-radius: 50% !important;
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.view-btn:hover {
+  border: 1px solid #cee0ff;
+  background: #f3f7ff !important;
+}
+
+.edit-btn:hover {
+  border: 1px solid #e6fce8;
+  background: #f3fff4 !important;
+}
+
+.delete-btn:hover {
+  border: 1px solid #fce6e6;
+  background: #fff3f3 !important;
+}
+
+.archive-btn:hover {
+  border: 1px solid #fff5f5;
+  background: #f0f0f0 !important;
+}
+
+.archive-btn .ant-btn-icon, .delete-btn .ant-btn-icon, .edit-btn .ant-btn-icon, .view-btn .ant-btn-icon {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.view-btn svg {
+  color: #05428c;
+  font-size: 20px;
+}
+
+.edit-btn svg {
+  color: #288006;
+  font-size: 20px;
+}
+
+.delete-btn svg {
+  color: #ce0000;
+  font-size: 20px;
+}
+
+.archive-btn svg {
+  font-size: 19px;
+  color: #747474 !important;
+}
+
+.reopen-btn svg {
+  font-size: 19px;
+  color: #283aff !important;
+}
+
+.disable {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.disable img {
+  width: 10px;
+  height: 10px;
+}
+
+.disable-combo {
+  position: absolute;
+  bottom: 3px;
+  left: 20px;
+}
+
+.disable-combo img {
+  width: 10px;
+  height: 10px;
+}
+
+.combo-archive span, .combo-delete span, .combo-edit span, .combo-view span {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.combo-view svg {
+  color: #05428c;
+  font-size: 16px;
+}
+
+.combo-edit svg {
+  color: #288006;
+  font-size: 16px;
+}
+
+.combo-delete svg {
+  color: #ce0000;
+  font-size: 16px;
+}
+
+.combo-archive svg {
+  color: #747474;
+  font-size: 17px;
+}
+
+.expand-col-popver .ant-card-head-title {
+  font-size: 14px !important;
+}
+
+.expand-col-popver .ant-card-head {
+  min-height: 48px;
+  padding: 0 12px;
+}
+
+.expand-col-popver .ant-card-body {
+  padding: 8px 12px;
+}
+
+.show-with-magic {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity .2s;
+}
+
+.disappear-with-magic {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .5s;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: auto;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/*# sourceMappingURL=src_config_styleOverride_css_bad6b30c._.single.css.map*/

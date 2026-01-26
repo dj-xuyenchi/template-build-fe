@@ -1,0 +1,78 @@
+$POLICY_RESPONSIVE1: 1133px;
+$POLICY_RESPONSIVE2: 939px;
+$POLICY_RESPONSIVE3: 870px;
+
+.login {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url("../../../public/bg-login.webp");
+    background-size: cover;
+    background-position: center;
+
+    .formContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-right: 2px solid rgb(255, 255, 255);
+        justify-content: center;
+    }
+
+    .loginForm {
+        width: 340px;
+        height: 420px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 48px;
+
+        .row {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .divi {
+                margin: 0 0 16px 0;
+            }
+
+            p {
+                font-size: 14px;
+                font-weight: 400;
+            }
+
+            .signIn {
+                a {
+                    font-weight: 550;
+                    text-decoration: none;
+                }
+            }
+
+            .loginError {
+                text-align: left;
+                font-size: 14px;
+                margin: 4px 0;
+            }
+        }
+    }
+
+    p {
+        font-size: 12px;
+        font-weight: 500;
+        text-align: center;
+    }
+}
+
+.loginItem {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    margin: 0 4px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}

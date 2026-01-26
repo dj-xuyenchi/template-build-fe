@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/config/styleTableSexy.css"],"sourcesContent":["/* Sexy header color important */\n.table-custom-container .ant-table .ant-table-thead .red-head {\n    background-color: #ff4d4f !important;\n}\n\n.table-custom-container .ant-table .ant-table-thead .yellow-head {\n    background-color: #e1ff00 !important;\n}\n\n.table-custom-container .ant-table .ant-table-thead .green-head {\n    background-color: #00852c !important;\n}\n\n.table-custom-container .ant-table .ant-table-thead .blue-head {\n    background-color: #05428C !important;\n}\n\n.table-custom-container .ant-table .ant-table-thead .orange-head {\n    background-color: #ff820d !important;\n}\n\n/* Sexy header text color important */\n.table-custom-container .ant-table .ant-table-thead .white-text-head {\n    color: white !important;\n}\n\n.table-custom-container .ant-table .ant-table-thead .black-text-head {\n    color: rgb(0, 0, 0) !important;\n}"],"names":[],"mappings":"AACA;;;;AAIA;;;;AAIA;;;;AAIA;;;;AAIA;;;;AAKA;;;;AAIA"}}]
+}

@@ -1,0 +1,204 @@
+.avatarContainer {
+    border: 1px solid rgb(235 235 235);
+    border-radius: 100%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px;
+    overflow: hidden;
+}
+
+.notiBell {
+    margin-right: 16px;
+
+    .antAvatar {
+        cursor: pointer;
+        background: transparent;
+
+        &:hover {
+            background: #e4e6eb !important;
+        }
+    }
+
+    svg {
+        height: 24px;
+        width: 24px;
+        color: #05428c;
+    }
+}
+
+.appTitle {
+    margin-left: 12px;
+    font-size: 16px;
+    margin-bottom: 0;
+    color: rgb(77, 77, 247);
+}
+
+.appBreadcrumb {
+    margin-left: 12px;
+    color: blue;
+
+    li {
+        a {
+            color: blue;
+
+            &:hover {
+                color: blue !important;
+            }
+        }
+    }
+}
+
+.notiContainer {
+    width: 350px;
+    box-shadow:
+        0 3px 6px -4px #0000001f,
+        0 6px 16px #00000014,
+        0 9px 28px 8px #0000000d;
+    z-index: 999;
+    position: absolute;
+    background-color: white;
+    right: 0px;
+    border-radius: 3px;
+
+    .notiContainerDetail {
+        padding: 10px 14px;
+
+        .notiHeader {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            padding-top: 8px;
+
+            .title {
+                font-size: 20px;
+                font-weight: 700;
+            }
+
+            .readAll {
+                cursor: pointer;
+                line-height: 1.7;
+                font-size: 13px;
+
+                &:hover {
+                    color: #00f !important;
+                }
+            }
+        }
+
+        .notiType {
+            display: flex;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            flex-direction: row;
+            border-bottom: 1px solid rgb(235 235 235);
+            padding-bottom: 8px;
+
+            .notiTypeDetail {
+                height: 32px;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 14px;
+                border-radius: 22px;
+                font-weight: 550;
+                color: #464646;
+            }
+
+            .active {
+                background-color: #ebf5ff;
+                color: #1b75d6;
+            }
+        }
+
+        .content {
+            max-height: 800px;
+            overflow: scroll;
+
+            .noData {
+                height: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+
+                span {
+                    color: rgb(187, 187, 187);
+                }
+            }
+
+            .notiItemContainer {
+                min-height: 100px;
+                padding: 10px 8px;
+                position: relative;
+                border-bottom: 1px solid rgb(235 235 235);
+                cursor: pointer;
+
+                &:hover {
+                    border-radius: 5px;
+                    background-color: #f5f5f5;
+                }
+
+                .title {
+                    text-align: start;
+                    display: block;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: rgb(46, 46, 46);
+                    margin-bottom: 4px;
+                }
+
+                .contentNoti {
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                    font-size: 14px;
+                    line-height: 1.6;
+                    /* Tạo khoảng cách dòng dễ đọc */
+                    word-wrap: break-word;
+                    /* Ngắt chữ dài */
+                    word-break: break-word;
+                    /* Ngắt luôn cả những từ không có dấu cách */
+                    white-space: pre-wrap;
+                    /* Giữ định dạng xuống dòng nếu có \n */
+                    text-align: start;
+                    margin-bottom: 4px;
+                }
+
+                .sendTime {
+                    color: #1b75d6;
+                    text-align: start;
+                    font-weight: 500;
+                    font-size: 12px;
+                }
+
+                .processing {
+                    right: 8px;
+                    position: absolute;
+                    bottom: 0;
+                    display: flex;
+                    align-items: center;
+                    top: 0;
+                }
+            }
+
+            .hasRead {
+                span {
+                    color: #acacac !important;
+                }
+            }
+        }
+    }
+}
+
+.breadcrumbSubfunction {
+    display: flex;
+    justify-content: space-between;
+
+    .subContainer {
+        display: flex;
+        align-items: center;
+    }
+}
