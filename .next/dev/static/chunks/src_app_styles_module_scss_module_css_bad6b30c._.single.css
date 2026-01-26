@@ -193,4 +193,15 @@
   display: flex;
 }
 
+.styles-module-scss-module__ie2kxq__headerWrapper {
+  z-index: 1000;
+  background-color: #f5f5f5;
+  position: sticky;
+  top: 0;
+}
+
+.styles-module-scss-module__ie2kxq__contentWrapper {
+  min-height: 200vh;
+}
+
 /*# sourceMappingURL=src_app_styles_module_scss_module_css_bad6b30c._.single.css.map*/

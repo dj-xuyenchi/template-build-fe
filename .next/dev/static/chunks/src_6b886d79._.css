@@ -475,6 +475,17 @@ body {
   display: flex;
 }
 
+.styles-module-scss-module__ie2kxq__headerWrapper {
+  z-index: 1000;
+  background-color: #f5f5f5;
+  position: sticky;
+  top: 0;
+}
+
+.styles-module-scss-module__ie2kxq__contentWrapper {
+  min-height: 200vh;
+}
+
 /* [project]/src/config/styleTableSexy.css [app-client] (css) */
 .table-custom-container .ant-table .ant-table-thead .red-head {
   background-color: #ff4d4f !important;
@@ -565,6 +576,10 @@ body {
 
 .ant-collapse {
   border-radius: 0;
+}
+
+.ant-collapse .ant-collapse-body {
+  padding: 12px 0 !important;
 }
 
 .ant-collapse .ant-collapse-header-text {

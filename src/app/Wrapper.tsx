@@ -159,29 +159,25 @@ export default function Wrapper({
 
   useEffect(() => {
     handleGetBtnRole();
+    const token = localStorage.getItem("_t");
+    setIsLogin(!!token);
     window.scrollTo(0, 0);
     if (typeof window !== "undefined") {
       const sub = localStorage.getItem("_sub");
       const subSelected = localStorage.getItem("_sub-selected");
-     // dispatch(setOptionFeatures(JSON.parse(sub || "")));
+      // dispatch(setOptionFeatures(JSON.parse(sub || "")));
       setSubMenuValue(subSelected || "");
     }
     return () => { };
   }, []);
-  const [mounted, setMounted] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    const token = localStorage.getItem("_t");
-    setIsLogin(!!token);
-  }, []);
 
-  if (!mounted) return null;
   return (
     <>
       {isLogin && (
-        <Layout hasSider onClick={handleUnShowNoti}>
+        <Layout style={{
+        }} hasSider onClick={handleUnShowNoti}>
           <Sider
             className="menu"
             trigger={null}
@@ -199,96 +195,97 @@ export default function Wrapper({
             />
           </Sider>
           <Layout style={{ padding: "0 24px 24px" }}>
-            <Header style={headerStyle}>
-              <Row
-                justify="space-between"
-                style={{
-                  height: "64px",
-                }}
-              >
-                <Col
+            <div className={styles.headerWrapper}>
+              <Header style={headerStyle}>
+                <Row
+                  justify="space-between"
                   style={{
-                    display: "flex",
-                    alignItems: "center",
+                    height: "64px",
                   }}
                 >
-                  <Button
-                    type="text"
-                    icon={
-                      collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-                    }
-                    onClick={() => setCollapsed(!collapsed)}
+                  <Col
                     style={{
-                      fontSize: "16px",
+                      display: "flex",
+                      alignItems: "center",
                     }}
-                  ></Button>
-                  <Breadcrumb
-                    className={styles.appBreadcrumb}
-                    separator=">"
-                    items={[
-                      {
-                        title: "Home",
-                      },
-                      {
-                        title: "Quản trị hệ thống",
-                        href: "",
-                      },
-                    ]}
-                  />
-                </Col>
-                <Col
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Badge
-                    className={styles.notiBell}
-                    overflowCount={9}
-                    count={11}
                   >
-                    <Avatar
-                      className={styles.antAvatar}
-                      shape="circle"
-                      icon={<IoMdNotificationsOutline />}
-                      onClick={handleShowNoti}
+                    <Button
+                      type="text"
+                      icon={
+                        collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                      }
+                      onClick={() => setCollapsed(!collapsed)}
+                      style={{
+                        fontSize: "16px",
+                      }}
+                    ></Button>
+                    <Breadcrumb
+                      className={styles.appBreadcrumb}
+                      separator=">"
+                      items={[
+                        {
+                          title: "Home",
+                        },
+                        {
+                          title: "Quản trị hệ thống",
+                          href: "",
+                        },
+                      ]}
                     />
-                    <SexyNotification isShow={showNoti} />
-                  </Badge>
-                  <Dropdown menu={{ items }}>
-                    <div className={styles.avatarContainer}>
-                      <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
-                    </div>
-                  </Dropdown>
-                </Col>
-              </Row>
-            </Header>
-            <div className={clsx(styles.breadcrumbSubfunction)}>
-              <Breadcrumb
-                items={[{ title: "Home" }, { title: "List" }, { title: "App" }]}
-                style={{ margin: "12px 0" }}
-              />
-              <div className={styles.subContainer}>
-                {true && (
-                  <SelectCustom
-                    placeholder="Chọn chức năng"
-                    value={subMenuValue}
+                  </Col>
+                  <Col
                     style={{
-                      minWidth: "240px",
+                      display: "flex",
+                      alignItems: "center",
                     }}
-                    onChange={handleGoPage}
-                    options={appSlice.optionFeatures}
-                  />
-                )}
+                  >
+                    <Badge
+                      className={styles.notiBell}
+                      overflowCount={9}
+                      count={11}
+                    >
+                      <Avatar
+                        className={styles.antAvatar}
+                        shape="circle"
+                        icon={<IoMdNotificationsOutline />}
+                        onClick={handleShowNoti}
+                      />
+                      <SexyNotification isShow={showNoti} />
+                    </Badge>
+                    <Dropdown menu={{ items }}>
+                      <div className={styles.avatarContainer}>
+                        <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+                      </div>
+                    </Dropdown>
+                  </Col>
+                </Row>
+              </Header>
+              <div className={clsx(styles.breadcrumbSubfunction)}>
+                <Breadcrumb
+                  items={[{ title: "Home" }, { title: "List" }, { title: "App" }]}
+                  style={{ margin: "12px 0" }}
+                />
+                <div className={styles.subContainer}>
+                  {true && (
+                    <SelectCustom
+                      placeholder="Chọn chức năng"
+                      value={subMenuValue}
+                      style={{
+                        minWidth: "240px",
+                      }}
+                      onChange={handleGoPage}
+                      options={appSlice.optionFeatures}
+                    />
+                  )}
+                </div>
               </div>
             </div>
             <div
-              style={{
-                minHeight: "80vh",
-              }}
+              className={styles.contentWrapper}
             >
               {children}
             </div>
+
             <Footer style={footerStyle}>Footer</Footer>
           </Layout>
         </Layout>
