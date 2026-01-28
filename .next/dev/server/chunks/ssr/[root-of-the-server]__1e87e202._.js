@@ -524,6 +524,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$ico
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$cg$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-icons/cg/index.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$InputCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/component/InputCustom.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/clsx/dist/clsx.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$ant$2d$design$2f$icons$2f$es$2f$icons$2f$LoadingOutlined$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__LoadingOutlined$3e$__ = __turbopack_context__.i("[project]/node_modules/@ant-design/icons/es/icons/LoadingOutlined.js [app-ssr] (ecmascript) <export default as LoadingOutlined>");
 "use client";
 ;
 ;
@@ -545,7 +546,18 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist
 ;
 ;
 ;
+;
 const MotionTh = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].th;
+const customIcon = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$ant$2d$design$2f$icons$2f$es$2f$icons$2f$LoadingOutlined$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__LoadingOutlined$3e$__["LoadingOutlined"], {
+    style: {
+        fontSize: 32
+    },
+    spin: true
+}, void 0, false, {
+    fileName: "[project]/src/component/TableCustom.tsx",
+    lineNumber: 67,
+    columnNumber: 20
+}, ("TURBOPACK compile-time value", void 0));
 const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap = false, viewMode, loading, dataSource, tableName, isSupportMultiSelect, scrollPx, ...restProps })=>{
     const [isShowSetting, setIsShowSetting] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [visibleColumns, setVisibleColumns] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(columns || []);
@@ -639,12 +651,12 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                 title: "Hiển thị"
                             }, void 0, false, {
                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                lineNumber: 185,
+                                lineNumber: 188,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         }, void 0, false, {
                             fileName: "[project]/src/component/TableCustom.tsx",
-                            lineNumber: 179,
+                            lineNumber: 182,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$col$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Col$3e$__["Col"], {
@@ -657,7 +669,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                     children: "Chiều rộng cột"
                                 }, void 0, false, {
                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                    lineNumber: 194,
+                                    lineNumber: 197,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$InputNumberCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["InputNumberCustom"], {
@@ -674,13 +686,13 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                    lineNumber: 201,
+                                    lineNumber: 204,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/component/TableCustom.tsx",
-                            lineNumber: 193,
+                            lineNumber: 196,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$col$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Col$3e$__["Col"], {
@@ -693,7 +705,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                     children: "Lọc và sắp xếp"
                                 }, void 0, false, {
                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                    lineNumber: 216,
+                                    lineNumber: 219,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$SelectCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectCustom"], {
@@ -718,19 +730,19 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                    lineNumber: 223,
+                                    lineNumber: 226,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/component/TableCustom.tsx",
-                            lineNumber: 215,
+                            lineNumber: 218,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/component/TableCustom.tsx",
-                    lineNumber: 178,
+                    lineNumber: 181,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             };
@@ -871,7 +883,11 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$table$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Table$3e$__["Table"], {
                             rowKey: "rowUUID",
                             className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])("table-custom"),
-                            loading: loading,
+                            loading: {
+                                spinning: loading,
+                                indicator: customIcon,
+                                tip: "Đang tải dữ liệu..."
+                            },
                             style: {
                                 ...style
                             },
@@ -915,34 +931,34 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                 }
                                             }, void 0, false, {
                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                lineNumber: 411,
+                                                lineNumber: 418,
                                                 columnNumber: 25
                                             }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                            lineNumber: 410,
+                                            lineNumber: 417,
                                             columnNumber: 23
                                         }, void 0)
                                 }
                             }
                         }, void 0, false, {
                             fileName: "[project]/src/component/TableCustom.tsx",
-                            lineNumber: 389,
+                            lineNumber: 392,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/src/component/TableCustom.tsx",
-                        lineNumber: 388,
+                        lineNumber: 391,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/src/component/TableCustom.tsx",
-                    lineNumber: 387,
+                    lineNumber: 390,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/src/component/TableCustom.tsx",
-                lineNumber: 378,
+                lineNumber: 381,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$CollapseCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CollapseCustom"], {
@@ -968,7 +984,11 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$table$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Table$3e$__["Table"], {
                                         rowKey: "rowUUID",
                                         className: "table-custom",
-                                        loading: loading,
+                                        loading: {
+                                            spinning: loading,
+                                            indicator: customIcon,
+                                            tip: "Đang tải dữ liệu..."
+                                        },
                                         style: {
                                             ...style
                                         },
@@ -990,17 +1010,17 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                         ...restProps
                                     }, void 0, false, {
                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                        lineNumber: 450,
+                                        lineNumber: 457,
                                         columnNumber: 21
                                     }, void 0)
                                 }, void 0, false, {
                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                    lineNumber: 443,
+                                    lineNumber: 450,
                                     columnNumber: 19
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                lineNumber: 442,
+                                lineNumber: 449,
                                 columnNumber: 17
                             }, void 0)
                         }, void 0, false),
@@ -1015,7 +1035,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                             },
                                             prefix: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$io5$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["IoSearchSharp"], {}, void 0, false, {
                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                lineNumber: 486,
+                                                lineNumber: 497,
                                                 columnNumber: 35
                                             }, void 0),
                                             placeholder: "Tìm kiếm nhanh...",
@@ -1026,7 +1046,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                            lineNumber: 482,
+                                            lineNumber: 493,
                                             columnNumber: 25
                                         }, void 0),
                                         isEditAddBtn && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1046,20 +1066,20 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                                 }
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                                lineNumber: 511,
+                                                                lineNumber: 522,
                                                                 columnNumber: 33
                                                             }, void 0),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Dữ liệu thay đổi chưa được lưu!"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                                lineNumber: 514,
+                                                                lineNumber: 525,
                                                                 columnNumber: 33
                                                             }, void 0)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                                        lineNumber: 504,
+                                                        lineNumber: 515,
                                                         columnNumber: 31
                                                     }, void 0),
                                                     open: isModalOpen,
@@ -1077,7 +1097,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                                     }
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                                    lineNumber: 523,
+                                                                    lineNumber: 534,
                                                                     columnNumber: 35
                                                                 }, void 0),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
@@ -1091,13 +1111,13 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                                     danger: true
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                                    lineNumber: 531,
+                                                                    lineNumber: 542,
                                                                     columnNumber: 35
                                                                 }, void 0)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                                            lineNumber: 522,
+                                                            lineNumber: 533,
                                                             columnNumber: 33
                                                         }, void 0)
                                                     }, void 0, false),
@@ -1109,18 +1129,18 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                                        lineNumber: 545,
+                                                        lineNumber: 556,
                                                         columnNumber: 29
                                                     }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 502,
+                                                    lineNumber: 513,
                                                     columnNumber: 27
                                                 }, void 0),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
                                                     icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$cg$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CgClose"], {}, void 0, false, {
                                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                                        lineNumber: 551,
+                                                        lineNumber: 562,
                                                         columnNumber: 35
                                                     }, void 0),
                                                     size: extendFunction.size || "middle",
@@ -1132,13 +1152,13 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                     danger: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 550,
+                                                    lineNumber: 561,
                                                     columnNumber: 27
                                                 }, void 0),
                                                 extendFunction.andOn === "table" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
                                                     icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaPlus"], {}, void 0, false, {
                                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                                        lineNumber: 562,
+                                                        lineNumber: 573,
                                                         columnNumber: 37
                                                     }, void 0),
                                                     size: extendFunction.size || "middle",
@@ -1151,7 +1171,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 561,
+                                                    lineNumber: 572,
                                                     columnNumber: 29
                                                 }, void 0),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$modal$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Modal$3e$__["Modal"], {
@@ -1169,20 +1189,20 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                                 }
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                                lineNumber: 584,
+                                                                lineNumber: 595,
                                                                 columnNumber: 33
                                                             }, void 0),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Lưu các thay đổi!"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                                lineNumber: 587,
+                                                                lineNumber: 598,
                                                                 columnNumber: 33
                                                             }, void 0)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                                        lineNumber: 577,
+                                                        lineNumber: 588,
                                                         columnNumber: 31
                                                     }, void 0),
                                                     open: isBeforeConfirmModalOpen,
@@ -1199,7 +1219,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                                     onClick: handleCloseBeforeConfirm
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                                    lineNumber: 596,
+                                                                    lineNumber: 607,
                                                                     columnNumber: 35
                                                                 }, void 0),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
@@ -1211,13 +1231,13 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                                     }
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                                    lineNumber: 603,
+                                                                    lineNumber: 614,
                                                                     columnNumber: 35
                                                                 }, void 0)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                                            lineNumber: 595,
+                                                            lineNumber: 606,
                                                             columnNumber: 33
                                                         }, void 0)
                                                     }, void 0, false),
@@ -1229,18 +1249,18 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                                        lineNumber: 615,
+                                                        lineNumber: 626,
                                                         columnNumber: 29
                                                     }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 575,
+                                                    lineNumber: 586,
                                                     columnNumber: 27
                                                 }, void 0),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
                                                     icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$si$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SiTicktick"], {}, void 0, false, {
                                                         fileName: "[project]/src/component/TableCustom.tsx",
-                                                        lineNumber: 620,
+                                                        lineNumber: 631,
                                                         columnNumber: 35
                                                     }, void 0),
                                                     size: extendFunction.size || "middle",
@@ -1252,7 +1272,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                     type: "primary"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 619,
+                                                    lineNumber: 630,
                                                     columnNumber: 27
                                                 }, void 0)
                                             ]
@@ -1260,7 +1280,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                         !isEditAddBtn && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
                                             icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaPlus"], {}, void 0, false, {
                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                lineNumber: 634,
+                                                lineNumber: 645,
                                                 columnNumber: 33
                                             }, void 0),
                                             size: extendFunction.size || "middle",
@@ -1272,7 +1292,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                            lineNumber: 633,
+                                            lineNumber: 644,
                                             columnNumber: 25
                                         }, void 0),
                                         extendFunction.isSupportExport && !isEditAddBtn && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
@@ -1285,12 +1305,12 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                             disabled: extendFunction.disableExportData || !extendFunction.handleExportData,
                                             icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa6$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaFileArrowDown"], {}, void 0, false, {
                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                lineNumber: 658,
+                                                lineNumber: 669,
                                                 columnNumber: 33
                                             }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                            lineNumber: 647,
+                                            lineNumber: 658,
                                             columnNumber: 25
                                         }, void 0),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$tooltip$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Tooltip$3e$__["Tooltip"], {
@@ -1306,17 +1326,17 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                 shape: "circle",
                                                 icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$ant$2d$design$2f$icons$2f$es$2f$icons$2f$SyncOutlined$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__SyncOutlined$3e$__["SyncOutlined"], {}, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 677,
+                                                    lineNumber: 688,
                                                     columnNumber: 33
                                                 }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                lineNumber: 668,
+                                                lineNumber: 679,
                                                 columnNumber: 25
                                             }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                            lineNumber: 661,
+                                            lineNumber: 672,
                                             columnNumber: 23
                                         }, void 0),
                                         extendFunction.isSupportZoom && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$tooltip$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Tooltip$3e$__["Tooltip"], {
@@ -1334,17 +1354,17 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                 shape: "circle",
                                                 icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$md$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MdOutlineZoomOutMap"], {}, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 699,
+                                                    lineNumber: 710,
                                                     columnNumber: 35
                                                 }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                lineNumber: 688,
+                                                lineNumber: 699,
                                                 columnNumber: 27
                                             }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                            lineNumber: 681,
+                                            lineNumber: 692,
                                             columnNumber: 25
                                         }, void 0),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$tooltip$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Tooltip$3e$__["Tooltip"], {
@@ -1360,28 +1380,28 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                                                 shape: "circle",
                                                 icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$io5$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["IoSettingsSharp"], {}, void 0, false, {
                                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                                    lineNumber: 719,
+                                                    lineNumber: 730,
                                                     columnNumber: 33
                                                 }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                                lineNumber: 710,
+                                                lineNumber: 721,
                                                 columnNumber: 25
                                             }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/component/TableCustom.tsx",
-                                            lineNumber: 703,
+                                            lineNumber: 714,
                                             columnNumber: 23
                                         }, void 0)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/component/TableCustom.tsx",
-                                    lineNumber: 480,
+                                    lineNumber: 491,
                                     columnNumber: 21
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "[project]/src/component/TableCustom.tsx",
-                                lineNumber: 479,
+                                lineNumber: 490,
                                 columnNumber: 19
                             }, void 0)
                         }, void 0, false)
@@ -1390,7 +1410,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                 noBorder: true
             }, void 0, false, {
                 fileName: "[project]/src/component/TableCustom.tsx",
-                lineNumber: 433,
+                lineNumber: 440,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             extendFunction?.andOn === "drawer" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$drawer$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Drawer$3e$__["Drawer"], {
@@ -1402,7 +1422,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                 children: extendFunction.formOnDrawer
             }, void 0, false, {
                 fileName: "[project]/src/component/TableCustom.tsx",
-                lineNumber: 733,
+                lineNumber: 744,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             extendFunction && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$drawer$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Drawer$3e$__["Drawer"], {
@@ -1426,7 +1446,7 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                             title: "Hủy"
                         }, void 0, false, {
                             fileName: "[project]/src/component/TableCustom.tsx",
-                            lineNumber: 750,
+                            lineNumber: 761,
                             columnNumber: 15
                         }, void 0),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$ButtonCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ButtonCustom"], {
@@ -1435,13 +1455,13 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                             title: "Lưu"
                         }, void 0, false, {
                             fileName: "[project]/src/component/TableCustom.tsx",
-                            lineNumber: 755,
+                            lineNumber: 766,
                             columnNumber: 15
                         }, void 0)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/component/TableCustom.tsx",
-                    lineNumber: 749,
+                    lineNumber: 760,
                     columnNumber: 13
                 }, void 0),
                 children: [
@@ -1454,26 +1474,26 @@ const TableCustom = ({ style, columns, columnsEdit, extendFunction, fixedCollap 
                         children: "Cấu hình cột"
                     }, void 0, false, {
                         fileName: "[project]/src/component/TableCustom.tsx",
-                        lineNumber: 763,
+                        lineNumber: 774,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$component$2f$CollapseCustom$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CollapseCustom"], {
                         items: getItemsCollapse()
                     }, void 0, false, {
                         fileName: "[project]/src/component/TableCustom.tsx",
-                        lineNumber: 772,
+                        lineNumber: 783,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/component/TableCustom.tsx",
-                lineNumber: 742,
+                lineNumber: 753,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/component/TableCustom.tsx",
-        lineNumber: 374,
+        lineNumber: 377,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };

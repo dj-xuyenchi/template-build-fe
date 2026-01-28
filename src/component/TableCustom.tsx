@@ -21,7 +21,6 @@ import {
 import { MdOutlineZoomOutMap } from "react-icons/md";
 import { IoSearchSharp, IoSettingsSharp } from "react-icons/io5";
 import {
-  ChangeEvent,
   KeyboardEvent,
   ReactNode,
   useEffect,
@@ -41,6 +40,9 @@ import { InputCustom } from "./InputCustom";
 import clsx from "clsx";
 import { BaseDataTable } from "@/model/BaseDataTable";
 import { Key } from "antd/es/table/interface";
+
+import { LoadingOutlined } from "@ant-design/icons";
+import Spin1 from "./spin/Spin1";
 const MotionTh = motion.th;
 // Interface mở rộng props
 export interface ExtendFunction<T> {
@@ -62,6 +64,7 @@ export interface ExtendFunction<T> {
   handleQuickSearch?: (keyword: string) => void;
 }
 
+const customIcon = <LoadingOutlined style={{ fontSize: 32 }} spin />;
 // Props cho TableCustom
 export interface TablePropsCustom<T> extends TableProps<T> {
   dataSource?: T[];
@@ -389,7 +392,10 @@ export const TableCustom = <T extends BaseDataTable>({
               <Table<T>
                 rowKey="rowUUID"
                 className={clsx("table-custom")}
-                loading={loading}
+                loading={{
+                  spinning: loading as boolean | undefined,
+                  indicator: <Spin1 />,
+                }}
                 style={{ ...style }}
                 bordered
                 columns={visibleColumns}
@@ -450,7 +456,10 @@ export const TableCustom = <T extends BaseDataTable>({
                     <Table<T>
                       rowKey="rowUUID"
                       className="table-custom"
-                      loading={loading}
+                      loading={{
+                        spinning: loading as boolean | undefined,
+                        indicator: <Spin1 />
+                      }}
                       style={{ ...style }}
                       rowSelection={
                         isSupportMultiSelect ? rowSelection : undefined

@@ -1,0 +1,140 @@
+/* From Uiverse.io by SchawnnahJ */
+.loader-spin1 {
+    position: relative;
+    width: 2em;
+    height: 2em;
+    transform: rotate(165deg);
+}
+
+.loader-spin1:before,
+.loader-spin1:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    transform: translate(-50%, -50%);
+}
+
+.loader-spin1:before {
+    animation: before8 2s infinite;
+}
+
+.loader-spin1:after {
+    animation: after6 2s infinite;
+}
+
+@keyframes before8 {
+    0% {
+        width: 0.5em;
+        box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75), -1em 0.5em rgba(111, 202, 220, 0.75);
+    }
+
+    35% {
+        width: 2.5em;
+        box-shadow: 0 -0.5em rgba(225, 20, 98, 0.75), 0 0.5em rgba(111, 202, 220, 0.75);
+    }
+
+    70% {
+        width: 0.5em;
+        box-shadow: -1em -0.5em rgba(225, 20, 98, 0.75), 1em 0.5em rgba(111, 202, 220, 0.75);
+    }
+
+    100% {
+        box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75), -1em 0.5em rgba(111, 202, 220, 0.75);
+    }
+}
+
+@keyframes after6 {
+    0% {
+        height: 0.5em;
+        box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75), -0.5em -1em rgba(233, 169, 32, 0.75);
+    }
+
+    35% {
+        height: 2.5em;
+        box-shadow: 0.5em 0 rgba(61, 184, 143, 0.75), -0.5em 0 rgba(233, 169, 32, 0.75);
+    }
+
+    70% {
+        height: 0.5em;
+        box-shadow: 0.5em -1em rgba(61, 184, 143, 0.75), -0.5em 1em rgba(233, 169, 32, 0.75);
+    }
+
+    100% {
+        box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75), -0.5em -1em rgba(233, 169, 32, 0.75);
+    }
+}
+
+.loader-spin1 {
+    position: absolute;
+    top: calc(48% - 1.25em);
+    left: calc(48% - 1.25em);
+}
+
+.loader-spin1-text {
+    position: absolute;
+    top: calc(48% + 1.1em);
+    left: calc(48% - 55px);
+    font-size: 15px !important;
+    font-weight: 550;
+    animation: bluePulse 2.4s ease-in-out infinite;
+}
+
+@keyframes bluePulse {
+    0% {
+        color: #0f4f99;
+    }
+
+    25% {
+        color: #1f5fa8;
+    }
+
+    50% {
+        color: #05428c;
+    }
+
+    75% {
+        color: #033670;
+    }
+
+    100% {
+        color: #0f4f99;
+    }
+}
+
+.dots {
+    display: inline-block;
+    width: 1.2em;
+    text-align: left;
+}
+
+.dots::after {
+    content: "";
+    animation: dots 1.4s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0% {
+        content: "";
+    }
+
+    25% {
+        content: ".";
+    }
+
+    50% {
+        content: "..";
+    }
+
+    75% {
+        content: "...";
+    }
+
+    100% {
+        content: "";
+    }
+}

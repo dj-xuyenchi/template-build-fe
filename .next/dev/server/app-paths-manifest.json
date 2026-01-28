@@ -2,5 +2,5 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/application-function/api/page": "app/application-function/api/page.js",
   "/application-function/application/page": "app/application-function/application/page.js",
-  "/application-function/apply-role/page": "app/application-function/apply-role/page.js"
+  "/page": "app/page.js"
 }

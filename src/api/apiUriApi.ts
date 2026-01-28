@@ -15,6 +15,7 @@ export const apiUriApi = {
     params: ApiUriFilter,
     signal: AbortSignal
   ): Promise<BasePageResult<ApiUri>> => {
+   
     const res = await axiosClient.get(`${AUTH_SERVICE}/api`, {
       params: params,
       signal: signal,

@@ -14,7 +14,7 @@ import { Application } from "@/model/application/Application";
 
 export const ApiPage = () => {
   const [page, setPage] = useState([] as ApiUri[]);
-  const [applicationList, setApplicationList] = useState([] as Application[]);
+  const [applicationList, setApplicationList] = useState([{}, {}] as Application[]);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
@@ -201,11 +201,11 @@ export const ApiPage = () => {
         totalData: res.totalElements,
       });
       setPage(res.content);
-      // setPage(orderByCreatedAt(res.content));
+      setPage(orderByCreatedAt(res.content));
     } catch (e) {
       console.error(e);
     } finally {
-      setIsTableLoading(false);
+      // setIsTableLoading(false);
     }
   };
   const handleGetApplicationData = async (filter?: ApplicationFilter) => {
