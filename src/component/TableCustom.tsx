@@ -44,6 +44,7 @@ import { Key } from "antd/es/table/interface";
 import { LoadingOutlined } from "@ant-design/icons";
 import Spin1 from "./spin/Spin1";
 const MotionTh = motion.th;
+const HEIGHT_LOADING = 280;
 // Interface mở rộng props
 export interface ExtendFunction<T> {
   buttonAddTitle?: string;
@@ -271,6 +272,9 @@ export const TableCustom = <T extends BaseDataTable>({
   const addRowData = () => {
     if (extendFunction) {
       if (extendFunction.handleUpdateDataSource) {
+        if (loading) {
+          return;
+        };
         dataSource?.unshift({
           rowUUID: uuidv4(),
           isNewRow: true,
@@ -396,6 +400,11 @@ export const TableCustom = <T extends BaseDataTable>({
                   spinning: loading as boolean | undefined,
                   indicator: <Spin1 />,
                 }}
+                locale={
+                  loading
+                    ? { emptyText: <div style={{ height: HEIGHT_LOADING }} /> }
+                    : undefined
+                }
                 style={{ ...style }}
                 bordered
                 columns={visibleColumns}
@@ -460,6 +469,11 @@ export const TableCustom = <T extends BaseDataTable>({
                         spinning: loading as boolean | undefined,
                         indicator: <Spin1 />
                       }}
+                      locale={
+                        loading
+                          ? { emptyText: <div style={{ height: HEIGHT_LOADING }} /> }
+                          : undefined
+                      }
                       style={{ ...style }}
                       rowSelection={
                         isSupportMultiSelect ? rowSelection : undefined
@@ -476,6 +490,9 @@ export const TableCustom = <T extends BaseDataTable>({
                         return true;
                       })}
                       scroll={{ x: "100%" }}
+                      rowClassName={(record) =>
+                        record.isNewRow ? 'new-data' : ''
+                      }
                       {...restProps}
                     />
                   </motion.div>
@@ -641,6 +658,7 @@ export const TableCustom = <T extends BaseDataTable>({
                       {!isEditAddBtn && (
                         <ButtonCustom
                           icon={<FaPlus />}
+                          disabled={loading as boolean | undefined}
                           size={extendFunction.size || "middle"}
                           title={
                             extendFunction.buttonAddTitle || "Chỉnh sửa tạo mới"
@@ -753,6 +771,7 @@ export const TableCustom = <T extends BaseDataTable>({
           closable={{ "aria-label": "Close Button" }}
           open={isShowSetting}
           onClose={handleCloseSetting}
+          className="drawer-setting-table"
           width={600}
           footer={
             <div style={{ textAlign: "right" }}>

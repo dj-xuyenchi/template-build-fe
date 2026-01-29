@@ -205,7 +205,7 @@ export const ApiPage = () => {
     } catch (e) {
       console.error(e);
     } finally {
-      // setIsTableLoading(false);
+      setIsTableLoading(false);
     }
   };
   const handleGetApplicationData = async (filter?: ApplicationFilter) => {

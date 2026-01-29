@@ -10,9 +10,8 @@ export const authApi = {
   //     return res.data;
   // },
   getBtnRole: async (): Promise<BtnRole> => {
-    // const res = await axiosClient.get(`${AUTH_SERVICE}/get-btn-role`);
-    // return res.data;
-    return []
+    const res = await axiosClient.get(`${AUTH_SERVICE}/get-btn-role`);
+    return res.data;
   },
   login: async (requestBody: LoginRequest): Promise<LoginResponse> => {
     const res = await axiosClient.post(`${AUTH_SERVICE}/login`, requestBody);

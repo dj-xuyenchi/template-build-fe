@@ -71,14 +71,14 @@
 
 .loader-spin1 {
     position: absolute;
-    top: calc(48% - 1.25em);
-    left: calc(48% - 1.25em);
+    top: calc(48.6% - 1.25em);
+    left: calc(48.9%);
 }
 
 .loader-spin1-text {
     position: absolute;
-    top: calc(48% + 1.1em);
-    left: calc(48% - 55px);
+    top: calc(50% + 1.1em);
+    left: calc(50% - 55px);
     font-size: 15px !important;
     font-weight: 550;
     animation: bluePulse 2.4s ease-in-out infinite;

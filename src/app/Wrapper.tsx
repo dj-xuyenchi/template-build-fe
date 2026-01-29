@@ -4,7 +4,6 @@ import styles from "./styles.module.scss";
 import "./globals.css";
 import "@/config/styleTableSexy.css";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { MenuInfo } from "rc-menu/lib/interface";
 import { TbLockPassword } from "react-icons/tb";
 import {
   Avatar,
@@ -102,7 +101,7 @@ export default function Wrapper({
       console.error(e);
     }
   };
-  const handleClickMenu = (menuItem: MenuInfo) => {
+  const handleClickMenu = (menuItem: { key: string; }) => {
     for (const menu of menus) {
       if ("children" in menu && menu.children) {
         const children = menu.children;

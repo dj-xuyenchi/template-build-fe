@@ -132,6 +132,13 @@ body {
   padding: 8px 16px;
 }
 
+.table-custom .ant-table-expanded-row-fixed {
+  justify-content: center;
+  align-items: center;
+  height: 280px;
+  display: flex;
+}
+
 .ant-table-tbody tr {
   height: 44px;
 }

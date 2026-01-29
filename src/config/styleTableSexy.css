@@ -27,3 +27,11 @@
 .table-custom-container .ant-table .ant-table-thead .black-text-head {
     color: rgb(0, 0, 0) !important;
 }
+
+.table-custom-container .ant-table .new-data {
+    /* css thêm ở đây nếu cần hiển thị thêm gì với dòng dữ liệu mới */
+}
+
+.drawer-setting-table .ant-collapse .ant-collapse-body {
+    padding: 12px !important;
+}

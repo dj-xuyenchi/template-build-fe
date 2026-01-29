@@ -5,9 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["cdn.cdnstep.com"], // Thêm hostname tại đây
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
 };
 
 export default nextConfig;
