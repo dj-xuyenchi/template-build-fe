@@ -297,9 +297,8 @@ const authApi = {
     //     return res.data;
     // },
     getBtnRole: async ()=>{
-        // const res = await axiosClient.get(`${AUTH_SERVICE}/get-btn-role`);
-        // return res.data;
-        return [];
+        const res = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$config$2f$httpCall$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get(`${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constant$2f$serviceUrl$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AUTH_SERVICE"]}/get-btn-role`);
+        return res.data;
     },
     login: async (requestBody)=>{
         const res = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$config$2f$httpCall$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post(`${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constant$2f$serviceUrl$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AUTH_SERVICE"]}/login`, requestBody);
@@ -1084,7 +1083,7 @@ function Wrapper({ children }) {
             label: "Đổi mật khẩu",
             icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$tb$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TbLockPassword"], {}, void 0, false, {
                 fileName: "[project]/src/app/Wrapper.tsx",
-                lineNumber: 149,
+                lineNumber: 148,
                 columnNumber: 13
             }, this),
             extra: ""
@@ -1094,7 +1093,7 @@ function Wrapper({ children }) {
             label: "Đăng xuất",
             icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaSignOutAlt"], {}, void 0, false, {
                 fileName: "[project]/src/app/Wrapper.tsx",
-                lineNumber: 155,
+                lineNumber: 154,
                 columnNumber: 13
             }, this),
             extra: ""
@@ -1129,7 +1128,7 @@ function Wrapper({ children }) {
                                 style: logoStyle
                             }, void 0, false, {
                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                lineNumber: 189,
+                                lineNumber: 188,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$menu$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__["Menu"], {
@@ -1141,13 +1140,13 @@ function Wrapper({ children }) {
                                 onClick: handleClickMenu
                             }, void 0, false, {
                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                lineNumber: 190,
+                                lineNumber: 189,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/Wrapper.tsx",
-                        lineNumber: 181,
+                        lineNumber: 180,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$layout$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Layout$3e$__["Layout"], {
@@ -1176,11 +1175,11 @@ function Wrapper({ children }) {
                                                             type: "text",
                                                             icon: collapsed ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$ant$2d$design$2f$icons$2f$es$2f$icons$2f$MenuUnfoldOutlined$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MenuUnfoldOutlined$3e$__["MenuUnfoldOutlined"], {}, void 0, false, {
                                                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                                                lineNumber: 215,
+                                                                lineNumber: 214,
                                                                 columnNumber: 37
                                                             }, void 0) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$ant$2d$design$2f$icons$2f$es$2f$icons$2f$MenuFoldOutlined$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MenuFoldOutlined$3e$__["MenuFoldOutlined"], {}, void 0, false, {
                                                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                                                lineNumber: 215,
+                                                                lineNumber: 214,
                                                                 columnNumber: 62
                                                             }, void 0),
                                                             onClick: ()=>setCollapsed(!collapsed),
@@ -1189,7 +1188,7 @@ function Wrapper({ children }) {
                                                             }
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/Wrapper.tsx",
-                                                            lineNumber: 212,
+                                                            lineNumber: 211,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$breadcrumb$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Breadcrumb$3e$__["Breadcrumb"], {
@@ -1206,13 +1205,13 @@ function Wrapper({ children }) {
                                                             ]
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/Wrapper.tsx",
-                                                            lineNumber: 222,
+                                                            lineNumber: 221,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/Wrapper.tsx",
-                                                    lineNumber: 206,
+                                                    lineNumber: 205,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$col$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Col$3e$__["Col"], {
@@ -1231,26 +1230,26 @@ function Wrapper({ children }) {
                                                                     shape: "circle",
                                                                     icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$io$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["IoMdNotificationsOutline"], {}, void 0, false, {
                                                                         fileName: "[project]/src/app/Wrapper.tsx",
-                                                                        lineNumber: 250,
+                                                                        lineNumber: 249,
                                                                         columnNumber: 31
                                                                     }, void 0),
                                                                     onClick: handleShowNoti
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/Wrapper.tsx",
-                                                                    lineNumber: 247,
+                                                                    lineNumber: 246,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$SexyNotification$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SexyNotification"], {
                                                                     isShow: showNoti
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/Wrapper.tsx",
-                                                                    lineNumber: 253,
+                                                                    lineNumber: 252,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/Wrapper.tsx",
-                                                            lineNumber: 242,
+                                                            lineNumber: 241,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$dropdown$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Dropdown$3e$__["Dropdown"], {
@@ -1263,34 +1262,34 @@ function Wrapper({ children }) {
                                                                     src: "https://api.dicebear.com/7.x/miniavs/svg?seed=1"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/Wrapper.tsx",
-                                                                    lineNumber: 257,
+                                                                    lineNumber: 256,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                                                lineNumber: 256,
+                                                                lineNumber: 255,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/Wrapper.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 254,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/Wrapper.tsx",
-                                                    lineNumber: 236,
+                                                    lineNumber: 235,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/Wrapper.tsx",
-                                            lineNumber: 200,
+                                            lineNumber: 199,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/Wrapper.tsx",
-                                        lineNumber: 199,
+                                        lineNumber: 198,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1313,7 +1312,7 @@ function Wrapper({ children }) {
                                                 }
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                                lineNumber: 264,
+                                                lineNumber: 263,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1328,24 +1327,24 @@ function Wrapper({ children }) {
                                                     options: appSlice.optionFeatures
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/Wrapper.tsx",
-                                                    lineNumber: 270,
+                                                    lineNumber: 269,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                                lineNumber: 268,
+                                                lineNumber: 267,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/Wrapper.tsx",
-                                        lineNumber: 263,
+                                        lineNumber: 262,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                lineNumber: 198,
+                                lineNumber: 197,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1353,7 +1352,7 @@ function Wrapper({ children }) {
                                 children: children
                             }, void 0, false, {
                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                lineNumber: 283,
+                                lineNumber: 282,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$layout$2f$layout$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Footer"], {
@@ -1361,19 +1360,19 @@ function Wrapper({ children }) {
                                 children: "Footer"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/Wrapper.tsx",
-                                lineNumber: 289,
+                                lineNumber: 288,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/Wrapper.tsx",
-                        lineNumber: 197,
+                        lineNumber: 196,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/Wrapper.tsx",
-                lineNumber: 179,
+                lineNumber: 178,
                 columnNumber: 9
             }, this),
             !isLogin && children

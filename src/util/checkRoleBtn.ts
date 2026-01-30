@@ -1,24 +1,27 @@
 import store from "@/store/store";
 
-export const isNotHasRole = (btnCode: string): boolean => {
-    // try {
-    //     const global = store.getState().global;
-    //     if (!global || !global.btnRole) {
-    //         return true;
-    //     }
-    //     const btnRole = global.btnRole.btnRole.get(btnCode);
+export const hasRole = (btnCodes: string[]): boolean => {
+    return true;
+    try {
+        const global = store.getState().global;
 
-    //     // const userRole = appSetting.userRole 
-    //     const userRole = ['ADMIN']
+        // Nếu chưa có info user → cho phép (tuỳ policy)
+        if (!global?.userApp?.userRole) {
+            return true;
+        }
 
-    //     if (btnRole && userRole) {
-    //         // Kiểm tra xem có role nào của user trùng với role của btnCode
-    //         const res = userRole.some((role: string) => btnRole.includes(role));
-    //         return !res
-    //     }
-    // } catch (e) {
-    //     console.error("Loi role btn");
-    // }
-    // return true;
-    return false;
+        const userRoles: string[] = global.userApp.userRole;
+        // ví dụ tạm
+        // const userRoles = ['ADMIN'];
+
+        // Nếu button không yêu cầu role → cho phép
+        if (!btnCodes || btnCodes.length === 0) {
+            return true;
+        }
+
+        // User có ít nhất 1 role nằm trong btnCodes
+        return userRoles.some(role => btnCodes.includes(role));
+    } catch (e) {
+        return true;
+    }
 }

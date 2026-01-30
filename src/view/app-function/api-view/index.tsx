@@ -5,15 +5,15 @@ import { TablePropsCustom } from "@/component/TableCustom";
 import { useEffect, useState } from "react";
 import { applicationApi, ApplicationFilter } from "@/api/applicationApi";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
-import { isNotHasRole } from "@/util/checkRoleBtn";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { apiUriApi, ApiUriFilter } from "@/api/apiUriApi";
 import { ApiUri, METHOD } from "@/model/api/ApiUri";
 import { Application } from "@/model/application/Application";
+import { hasRole } from "@/util/checkRoleBtn";
 
 export const ApiPage = () => {
-  const [page, setPage] = useState([] as ApiUri[]);
+  const [page, setPage] = useState([{ apiUriId: 2, status: "O" }] as ApiUri[]);
   const [applicationList, setApplicationList] = useState([{}, {}] as Application[]);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
@@ -167,7 +167,7 @@ export const ApiPage = () => {
         handleGetData(filter, null);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: isNotHasRole("VIEW-APPLICATION"),
+      disableAddData: !hasRole(["VIEW-APPLICATION"]),
       handleUpdateDataSource: (data: []) => {
         setPage([...data]);
       },

@@ -2,7 +2,6 @@ import { InputCustom } from "@/component/InputCustom";
 import { SelectCustom } from "@/component/SelectCustom";
 import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
-import { isNotHasRole } from "@/util/checkRoleBtn";
 import { ArchiveBtn } from "@/component/table-btn/ArchiveBtn";
 import { formatDate } from "@/util/dateUtil";
 import { DATE_TYPE1 } from "@/constant/dateFormat";
@@ -20,6 +19,7 @@ import { TextAreaCustom } from "@/component/TextAreaCustom";
 import { Application } from "@/model/application/Application";
 import { ACTIVE, CLOSE } from "@/model/BaseDataTable";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
+import { hasRole } from "@/util/checkRoleBtn";
 export type CallBacks = BaseTable & {
   handleDeleteRow: (row: ApiUri) => Promise<void>;
   handleReopenRow?: (row: ApiUri) => Promise<void>;
@@ -192,7 +192,7 @@ export const getColumns = ({
         >
           {record.status === ACTIVE && (
             <ArchiveBtn
-              disable={isNotHasRole("ARCHIVE-APPLICATION")}
+              disable={!hasRole(["ARCHIVE-APPLICATION"])}
               handleArchive={() => {
                 handleDeleteRow(record);
               }}
@@ -200,7 +200,7 @@ export const getColumns = ({
           )}
           {record.status === CLOSE && (
             <ReOpenBtn
-              disable={isNotHasRole("ARCHIVE-APPLICATION")}
+              disable={!hasRole(["ARCHIVE-APPLICATION"])}
               handleReopen={() => {
                 if (handleReopenRow) {
                   handleReopenRow(record);
@@ -232,7 +232,7 @@ export const getColumnsEdit = ({
       width: 80,
       render: (value: string, record: ApiUri, index: number) => (
         <TableLabelCustom>{index + 1}</TableLabelCustom>
-      ), 
+      ),
       align: "center",
     },
     {
