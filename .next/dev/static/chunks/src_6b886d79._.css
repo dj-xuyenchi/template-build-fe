@@ -515,6 +515,10 @@ body {
   color: #000 !important;
 }
 
+.table-custom-container .ant-spin-spinning {
+  max-height: unset !important;
+}
+
 .drawer-setting-table .ant-collapse .ant-collapse-body {
   padding: 12px !important;
 }

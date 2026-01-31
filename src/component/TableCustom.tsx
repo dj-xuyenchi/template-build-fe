@@ -20,13 +20,7 @@ import {
 } from "@ant-design/icons";
 import { MdOutlineZoomOutMap } from "react-icons/md";
 import { IoSearchSharp, IoSettingsSharp } from "react-icons/io5";
-import {
-  KeyboardEvent,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { KeyboardEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { ColumnType } from "antd/es/table";
 import { CheckBoxCustom } from "./CheckBoxCustom";
 import { CollapseCustom } from "./CollapseCustom";
@@ -158,7 +152,7 @@ export const TableCustom = <T extends BaseDataTable>({
   const handleChangeColumnSize = (
     e: number,
     col: ColumnType<T>,
-    index: number
+    index: number,
   ) => {
     if (e === null || e === undefined) return;
 
@@ -274,7 +268,7 @@ export const TableCustom = <T extends BaseDataTable>({
       if (extendFunction.handleUpdateDataSource) {
         if (loading) {
           return;
-        };
+        }
         dataSource?.unshift({
           rowUUID: uuidv4(),
           isNewRow: true,
@@ -417,8 +411,7 @@ export const TableCustom = <T extends BaseDataTable>({
                   }
                   return true;
                 })}
-                scroll={{ x: "100%" }}
-                {...restProps}
+                scroll={{ x: "max-content" }}
                 components={{
                   header: {
                     cell: (props: object) => (
@@ -438,6 +431,7 @@ export const TableCustom = <T extends BaseDataTable>({
                     ),
                   },
                 }}
+                {...restProps}
               />
             </motion.div>
           </AnimatePresence>
@@ -467,11 +461,15 @@ export const TableCustom = <T extends BaseDataTable>({
                       className="table-custom"
                       loading={{
                         spinning: loading as boolean | undefined,
-                        indicator: <Spin1 />
+                        indicator: <Spin1 />,
                       }}
                       locale={
                         loading
-                          ? { emptyText: <div style={{ height: HEIGHT_LOADING }} /> }
+                          ? {
+                              emptyText: (
+                                <div style={{ height: HEIGHT_LOADING }} />
+                              ),
+                            }
                           : undefined
                       }
                       style={{ ...style }}
@@ -489,9 +487,10 @@ export const TableCustom = <T extends BaseDataTable>({
                         }
                         return true;
                       })}
-                      scroll={{ x: "100%" }}
+                      sticky={{ offsetHeader: 110 }}
+                      scroll={{ x: "max-content" }}
                       rowClassName={(record) =>
-                        record.isNewRow ? 'new-data' : ''
+                        record.isNewRow ? "new-data" : ""
                       }
                       {...restProps}
                     />
@@ -512,11 +511,11 @@ export const TableCustom = <T extends BaseDataTable>({
                           prefix={<IoSearchSharp />}
                           placeholder="Tìm kiếm nhanh..."
                           onPressEnter={(
-                            e: KeyboardEvent<HTMLInputElement>
+                            e: KeyboardEvent<HTMLInputElement>,
                           ) => {
                             if (extendFunction.handleQuickSearch) {
                               extendFunction.handleQuickSearch(
-                                e.currentTarget.value
+                                e.currentTarget.value,
                               );
                             }
                           }}
@@ -806,7 +805,7 @@ export const TableCustom = <T extends BaseDataTable>({
 
 export const getScrollPx = (
   key: string,
-  columns: ColumnTypeCustom<object>[]
+  columns: ColumnTypeCustom<object>[],
 ): number => {
   let px = 0;
   for (const col of columns) {

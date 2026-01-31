@@ -28,9 +28,14 @@
     color: rgb(0, 0, 0) !important;
 }
 
+.table-custom-container .ant-spin-spinning {
+    max-height: unset !important;
+}
+
 .table-custom-container .ant-table .new-data {
     /* css thêm ở đây nếu cần hiển thị thêm gì với dòng dữ liệu mới */
 }
+
 
 .drawer-setting-table .ant-collapse .ant-collapse-body {
     padding: 12px !important;

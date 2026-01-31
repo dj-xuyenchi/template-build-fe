@@ -648,7 +648,7 @@ const SexyNotification = ({ isShow = false })=>{
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false);
 };
-_s(SexyNotification, "fWPDN5A44kmqfnCQAqFnQkP8x+Q=", false, function() {
+_s(SexyNotification, "KUJWSSvzQ316bhSD9WXkOQ+lpG0=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"]
     ];

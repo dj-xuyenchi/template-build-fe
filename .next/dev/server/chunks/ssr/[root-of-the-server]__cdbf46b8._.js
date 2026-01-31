@@ -11715,16 +11715,16 @@ Object.defineProperty(exports, "CsvParserStream", {
                 utc: !1
             });
         };
-        var o = u.parse;
+        var r = u.parse;
         u.parse = function(t) {
-            t.utc && (this.$u = !0), this.$utils().u(t.$offset) || (this.$offset = t.$offset), o.call(this, t);
+            t.utc && (this.$u = !0), this.$utils().u(t.$offset) || (this.$offset = t.$offset), r.call(this, t);
         };
-        var r = u.init;
+        var o = u.init;
         u.init = function() {
             if (this.$u) {
                 var t = this.$d;
                 this.$y = t.getUTCFullYear(), this.$M = t.getUTCMonth(), this.$D = t.getUTCDate(), this.$W = t.getUTCDay(), this.$H = t.getUTCHours(), this.$m = t.getUTCMinutes(), this.$s = t.getUTCSeconds(), this.$ms = t.getUTCMilliseconds();
-            } else r.call(this);
+            } else o.call(this);
         };
         var a = u.utcOffset;
         u.utcOffset = function(s, f) {
@@ -11741,13 +11741,12 @@ Object.defineProperty(exports, "CsvParserStream", {
                 ], n = f[0], u = 60 * +f[1] + +f[2];
                 return 0 === u ? 0 : "+" === n ? u : -u;
             }(s), null === s)) return this;
-            var u = Math.abs(s) <= 16 ? 60 * s : s, o = this;
-            if (f) return o.$offset = u, o.$u = 0 === s, o;
-            if (0 !== s) {
-                var r = this.$u ? this.toDate().getTimezoneOffset() : -1 * this.utcOffset();
-                (o = this.local().add(u + r, t)).$offset = u, o.$x.$localOffset = r;
-            } else o = this.utc();
-            return o;
+            var u = Math.abs(s) <= 16 ? 60 * s : s;
+            if (0 === u) return this.utc(f);
+            var r = this.clone();
+            if (f) return r.$offset = u, r.$u = !1, r;
+            var o = this.$u ? this.toDate().getTimezoneOffset() : -1 * this.utcOffset();
+            return (r = this.local().add(u + o, t)).$offset = u, r.$x.$localOffset = o, r;
         };
         var h = u.format;
         u.format = function(t) {
@@ -12132,7 +12131,9 @@ Object.defineProperty(exports, "CsvParserStream", {
 "[project]/node_modules/readdir-glob/node_modules/minimatch/lib/path.js [app-ssr] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
 const isWindows = typeof process === 'object' && process && process.platform === 'win32';
-module.exports = ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : {
+module.exports = isWindows ? {
+    sep: '\\'
+} : {
     sep: '/'
 };
 }),
@@ -13904,7 +13905,7 @@ function expand(str, isTop) {
         var isOptions = m.body.indexOf(',') >= 0;
         if (!isSequence && !isOptions) {
             // {a},b}
-            if (m.post.match(/,.*\}/)) {
+            if (m.post.match(/,(?!,).*\}/)) {
                 str = m.pre + '{' + m.body + escClose + m.post;
                 return expand(str);
             }
@@ -14059,7 +14060,7 @@ function expand(str, isTop) {
     var isOptions = m.body.indexOf(',') >= 0;
     if (!isSequence && !isOptions) {
         // {a},b}
-        if (m.post.match(/,.*\}/)) {
+        if (m.post.match(/,(?!,).*\}/)) {
             str = m.pre + '{' + m.body + escClose + m.post;
             return expand(str);
         }
@@ -18325,8 +18326,10 @@ exports.realpathSync = function realpathSync(p, cache) {
         base = m[0];
         previous = '';
         // On windows, check that the root exists. On unix there is no need.
-        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-        ;
+        if (isWindows && !knownHard[base]) {
+            fs.lstatSync(base);
+            knownHard[base] = true;
+        }
     }
     // walk down the path, swapping out linked pathparts for their real
     // values
@@ -18357,11 +18360,9 @@ exports.realpathSync = function realpathSync(p, cache) {
             // read the link if it wasn't read before
             // dev/ino always return 0 on windows, so skip the check.
             var linkTarget = null;
-            if ("TURBOPACK compile-time truthy", 1) {
-                var id = stat.dev.toString(32) + ':' + stat.ino.toString(32);
-                if (seenLinks.hasOwnProperty(id)) {
-                    linkTarget = seenLinks[id];
-                }
+            if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+            {
+                var id;
             }
             if (linkTarget === null) {
                 fs.statSync(base);
@@ -18370,7 +18371,8 @@ exports.realpathSync = function realpathSync(p, cache) {
             resolvedLink = pathModule.resolve(previous, linkTarget);
             // track this, if given a cache.
             if (cache) cache[base] = resolvedLink;
-            if ("TURBOPACK compile-time truthy", 1) seenLinks[id] = linkTarget;
+            if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+            ;
         }
         // resolve the link, then start over
         p = pathModule.resolve(resolvedLink, p.slice(pos));
@@ -18407,9 +18409,13 @@ exports.realpath = function realpath(p, cache, cb) {
         base = m[0];
         previous = '';
         // On windows, check that the root exists. On unix there is no need.
-        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-        ;
-        else {
+        if (isWindows && !knownHard[base]) {
+            fs.lstat(base, function(err) {
+                if (err) return cb(err);
+                knownHard[base] = true;
+                LOOP();
+            });
+        } else {
             process.nextTick(LOOP);
         }
     }
@@ -18449,16 +18455,15 @@ exports.realpath = function realpath(p, cache, cb) {
         // stat & read the link if not read before
         // call gotTarget as soon as the link target is known
         // dev/ino always return 0 on windows, so skip the check.
-        if ("TURBOPACK compile-time truthy", 1) {
-            var id = stat.dev.toString(32) + ':' + stat.ino.toString(32);
-            if (seenLinks.hasOwnProperty(id)) {
-                return gotTarget(null, seenLinks[id], base);
-            }
+        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+        {
+            var id;
         }
         fs.stat(base, function(err) {
             if (err) return cb(err);
             fs.readlink(base, function(err, target) {
-                if ("TURBOPACK compile-time truthy", 1) seenLinks[id] = target;
+                if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+                ;
                 gotTarget(err, target);
             });
         });
@@ -18562,7 +18567,7 @@ function win32(path) {
     // UNC paths are always absolute
     return Boolean(result[2] || isUnc);
 }
-module.exports = ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : posix;
+module.exports = ("TURBOPACK compile-time truthy", 1) ? win32 : "TURBOPACK unreachable";
 module.exports.posix = posix;
 module.exports.win32 = win32;
 }),
@@ -18653,13 +18658,11 @@ function setopts(self, pattern, options) {
     }
     self.root = options.root || path.resolve(self.cwd, "/");
     self.root = path.resolve(self.root);
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
+    if ("TURBOPACK compile-time truthy", 1) self.root = self.root.replace(/\\/g, "/");
     // TODO: is an absolute `cwd` supposed to be resolved against `root`?
     // e.g. { cwd: '/test', root: __dirname } === path.join(__dirname, '/test')
     self.cwdAbs = isAbsolute(self.cwd) ? self.cwd : makeAbs(self, self.cwd);
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
+    if ("TURBOPACK compile-time truthy", 1) self.cwdAbs = self.cwdAbs.replace(/\\/g, "/");
     self.nomount = !!options.nomount;
     // disable comments and negation in Minimatch.
     // Note that they are not supported in Glob itself anyway.
@@ -18741,8 +18744,7 @@ function makeAbs(self, f) {
     } else {
         abs = path.resolve(f);
     }
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
+    if ("TURBOPACK compile-time truthy", 1) abs = abs.replace(/\\/g, '/');
     return abs;
 }
 // Return true, if pattern ends with globstar '**', for the accompanying parent directory.
@@ -19060,8 +19062,7 @@ GlobSync.prototype._processSimple = function(prefix, index) {
             if (trail) prefix += '/';
         }
     }
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
+    if ("TURBOPACK compile-time truthy", 1) prefix = prefix.replace(/\\/g, '/');
     // Mark this as a match
     this._emitMatch(index, prefix);
 };
@@ -19641,8 +19642,7 @@ Glob.prototype._processSimple2 = function(prefix, index, er, exists, cb) {
             if (trail) prefix += '/';
         }
     }
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
+    if ("TURBOPACK compile-time truthy", 1) prefix = prefix.replace(/\\/g, '/');
     // Mark this as a match
     this._emitMatch(index, prefix);
     cb();
@@ -20801,20 +20801,19 @@ inherits(Archiver, Transform);
     }
     // 511 === 0777; 493 === 0755; 438 === 0666; 420 === 0644
     if (typeof data.mode === 'number') {
-        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+        if ("TURBOPACK compile-time truthy", 1) {
+            data.mode &= 511;
+        } else //TURBOPACK unreachable
         ;
-        else {
-            data.mode &= 4095;
-        }
     } else if (data.stats && data.mode === null) {
-        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+        if ("TURBOPACK compile-time truthy", 1) {
+            data.mode = data.stats.mode & 511;
+        } else //TURBOPACK unreachable
         ;
-        else {
-            data.mode = data.stats.mode & 4095;
-        }
         // stat isn't reliable on windows; force 0755 for dir
-        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-        ;
+        if (win32 && isDir) {
+            data.mode = 493;
+        }
     } else if (data.mode === null) {
         data.mode = isDir ? 493 : 420;
     }
@@ -24532,6 +24531,7 @@ module.exports = __turbopack_context__.r("[externals]/fs [external] (fs, cjs)").
 
 var once = __turbopack_context__.r("[project]/node_modules/once/once.js [app-ssr] (ecmascript)");
 var noop = function() {};
+var qnt = /*TURBOPACK member replacement*/ __turbopack_context__.g.Bare ? queueMicrotask : process.nextTick.bind(process);
 var isRequest = function(stream) {
     return stream.setHeader && typeof stream.abort === 'function';
 };
@@ -24565,7 +24565,7 @@ var eos = function(stream, opts, callback) {
         callback.call(stream, err);
     };
     var onclose = function() {
-        process.nextTick(onclosenexttick);
+        qnt(onclosenexttick);
     };
     var onclosenexttick = function() {
         if (cancelled) return;
@@ -27306,8 +27306,17 @@ function Reader(props, currentStat) {
     self.parent = props.parent || null;
     self.root = props.root || props.parent && props.parent.root || self;
     self._path = self.path = path.resolve(props.path);
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
+    if ("TURBOPACK compile-time truthy", 1) {
+        self.path = self._path = self.path.replace(/\?/g, '_');
+        if (self._path.length >= 260) {
+            // how DOES one create files on the moon?
+            // if the path has spaces in it, then UNC will fail.
+            self._swallowErrors = true;
+            // if (self._path.indexOf(" ") === -1) {
+            self._path = '\\\\?\\' + self.path.replace(/\//g, '\\');
+        // }
+        }
+    }
     self.basename = props.basename = path.basename(self.path);
     self.dirname = props.dirname = path.dirname(self.path);
     // these have served their purpose, and are now just noisy clutter
@@ -27670,17 +27679,14 @@ LinkWriter.prototype._create = function() {
     // console.error(" LW _create")
     var self = this;
     var hard = self.type === 'Link' || process.platform === 'win32';
-    var link = hard ? 'link' : 'symlink';
-    var lp = hard ? path.resolve(self.dirname, self.linkpath) : self.linkpath;
+    var link = ("TURBOPACK compile-time truthy", 1) ? 'link' : "TURBOPACK unreachable";
+    var lp = ("TURBOPACK compile-time truthy", 1) ? path.resolve(self.dirname, self.linkpath) : "TURBOPACK unreachable";
     // can only change the link path by clobbering
     // For hard links, let's just assume that's always the case, since
     // there's no good way to read them if we don't already know.
-    if (hard) return clobber(self, lp, link);
-    fs.readlink(self._path, function(er, p) {
-        // only skip creation if it's exactly the same link
-        if (p && p === lp) return finish(self);
-        clobber(self, lp, link);
-    });
+    if ("TURBOPACK compile-time truthy", 1) return clobber(self, lp, link);
+    //TURBOPACK unreachable
+    ;
 };
 function clobber(self, lp, link) {
     rimraf(self._path, function(er) {
@@ -27699,9 +27705,13 @@ function create(self, lp, link) {
         // A better solution would be to have fs.symlink be supported on
         // windows in some nice fashion.
         if (er) {
-            if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-            ;
-            else return self.error(er);
+            if ((er.code === 'ENOENT' || er.code === 'EACCES' || er.code === 'EPERM') && process.platform === 'win32') {
+                self.ready = true;
+                self.emit('ready');
+                self.emit('end');
+                self.emit('close');
+                self.end = self._finish = function() {};
+            } else return self.error(er);
         }
         finish(self);
     });
@@ -27927,7 +27937,7 @@ var inherits = __turbopack_context__.r("[project]/node_modules/inherits/inherits
 var rimraf = __turbopack_context__.r("[externals]/rimraf [external] (rimraf, cjs, [project]/node_modules/rimraf)");
 var mkdir = __turbopack_context__.r("[project]/node_modules/mkdirp/index.js [app-ssr] (ecmascript)");
 var path = __turbopack_context__.r("[externals]/path [external] (path, cjs)");
-var umask = ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : process.umask();
+var umask = ("TURBOPACK compile-time truthy", 1) ? 0 : "TURBOPACK unreachable";
 var getType = __turbopack_context__.r("[project]/node_modules/fstream/lib/get-type.js [app-ssr] (ecmascript)");
 var Abstract = __turbopack_context__.r("[project]/node_modules/fstream/lib/abstract.js [app-ssr] (ecmascript)");
 // Must do this *before* loading the child classes
@@ -27982,8 +27992,13 @@ function Writer(props, current) {
     self.parent = props.parent || null;
     self.root = props.root || props.parent && props.parent.root || self;
     self._path = self.path = path.resolve(props.path);
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
+    if ("TURBOPACK compile-time truthy", 1) {
+        self.path = self._path = self.path.replace(/\?/g, '_');
+        if (self._path.length >= 260) {
+            self._swallowErrors = true;
+            self._path = '\\\\?\\' + self.path.replace(/\//g, '\\');
+        }
+    }
     self.basename = path.basename(props.path);
     self.dirname = path.dirname(props.path);
     self.linkpath = props.linkpath || null;
@@ -28074,34 +28089,20 @@ function endChmod(self, want, current, path, cb) {
 }
 function endChown(self, want, current, path, cb) {
     // Don't even try it unless root.  Too easy to EPERM.
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    if ("TURBOPACK compile-time truthy", 1) return cb();
+    //TURBOPACK unreachable
     ;
-    if (!process.getuid || process.getuid() !== 0) return cb();
-    if (typeof want.uid !== 'number' && typeof want.gid !== 'number') return cb();
-    if (current.uid === want.uid && current.gid === want.gid) return cb();
-    var chown = self.props.follow || self.type !== 'SymbolicLink' ? 'chown' : 'lchown';
-    if (!fs[chown]) return cb();
-    if (typeof want.uid !== 'number') want.uid = current.uid;
-    if (typeof want.gid !== 'number') want.gid = current.gid;
-    fs[chown](path, want.uid, want.gid, cb);
+    var chown;
 }
 function endUtimes(self, want, current, path, cb) {
-    if (!fs.utimes || process.platform === 'win32') return cb();
-    var utimes = want.follow || self.type !== 'SymbolicLink' ? 'utimes' : 'lutimes';
-    if (utimes === 'lutimes' && !fs[utimes]) {
-        utimes = 'utimes';
-    }
-    if (!fs[utimes]) return cb();
-    var curA = current.atime;
-    var curM = current.mtime;
-    var meA = want.atime;
-    var meM = want.mtime;
-    if (meA === undefined) meA = curA;
-    if (meM === undefined) meM = curM;
-    if (!isDate(meA)) meA = new Date(meA);
-    if (!isDate(meM)) meA = new Date(meM);
-    if (meA.getTime() === curA.getTime() && meM.getTime() === curM.getTime()) return cb();
-    fs[utimes](path, meA, meM, cb);
+    if ("TURBOPACK compile-time truthy", 1) return cb();
+    //TURBOPACK unreachable
+    ;
+    var utimes;
+    var curA;
+    var curM;
+    var meA;
+    var meM;
 }
 // XXX This function is beastly.  Break it up!
 Writer.prototype._finish = function() {
@@ -28132,9 +28133,14 @@ Writer.prototype._finish = function() {
                 // directory, it's very possible that the thing we're linking to
                 // doesn't exist yet (especially if it was intended as a symlink),
                 // so swallow ENOENT errors here and just soldier on.
-                if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-                ;
-                else return self.error(er);
+                if (er.code === 'ENOENT' && (self.type === 'Link' || self.type === 'SymbolicLink') && process.platform === 'win32') {
+                    self.ready = true;
+                    self.emit('ready');
+                    self.emit('end');
+                    self.emit('close');
+                    self.end = self._finish = function() {};
+                    return;
+                } else return self.error(er);
             }
             setProps(self._old = current);
         });
@@ -29730,8 +29736,7 @@ const _c = {
 };
 /*
  * The working inner variables.
- */ const // the random characters to choose from
-RANDOM_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', TEMPLATE_PATTERN = /XXXXXX/, DEFAULT_TRIES = 3, CREATE_FLAGS = (_c.O_CREAT || _c.fs.O_CREAT) | (_c.O_EXCL || _c.fs.O_EXCL) | (_c.O_RDWR || _c.fs.O_RDWR), // constants are off on the windows platform and will not match the actual errno codes
+ */ const RANDOM_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', TEMPLATE_PATTERN = /XXXXXX/, DEFAULT_TRIES = 3, CREATE_FLAGS = (_c.O_CREAT || _c.fs.O_CREAT) | (_c.O_EXCL || _c.fs.O_EXCL) | (_c.O_RDWR || _c.fs.O_RDWR), // constants are off on the windows platform and will not match the actual errno codes
 IS_WIN32 = os.platform() === 'win32', EBADF = _c.EBADF || _c.os.errno.EBADF, ENOENT = _c.ENOENT || _c.os.errno.ENOENT, DIR_MODE = 0o700 /* 448 */ , FILE_MODE = 0o600 /* 384 */ , EXIT = 'exit', // this will hold the objects need to be removed on exit
 _removeObjects = [], // API change in fs.rmdirSync leads to error when passing in a second parameter, e.g. the callback
 FN_RMDIR_SYNC = fs.rmdirSync.bind(fs);
@@ -29764,27 +29769,25 @@ let _gracefulCleanup = false;
  * @param {?tmpNameCallback} callback the callback function
  */ function tmpName(options, callback) {
     const args = _parseArguments(options, callback), opts = args[0], cb = args[1];
-    try {
-        _assertAndSanitizeOptions(opts);
-    } catch (err) {
-        return cb(err);
-    }
-    let tries = opts.tries;
-    (function _getUniqueName() {
-        try {
-            const name = _generateTmpName(opts);
-            // check whether the path exists then retry if needed
-            fs.stat(name, function(err) {
-                /* istanbul ignore else */ if (!err) {
-                    /* istanbul ignore else */ if (tries-- > 0) return _getUniqueName();
-                    return cb(new Error('Could not get a unique tmp filename, max tries reached ' + name));
-                }
-                cb(null, name);
-            });
-        } catch (err) {
-            cb(err);
-        }
-    })();
+    _assertAndSanitizeOptions(opts, function(err, sanitizedOptions) {
+        if (err) return cb(err);
+        let tries = sanitizedOptions.tries;
+        (function _getUniqueName() {
+            try {
+                const name = _generateTmpName(sanitizedOptions);
+                // check whether the path exists then retry if needed
+                fs.stat(name, function(err) {
+                    /* istanbul ignore else */ if (!err) {
+                        /* istanbul ignore else */ if (tries-- > 0) return _getUniqueName();
+                        return cb(new Error('Could not get a unique tmp filename, max tries reached ' + name));
+                    }
+                    cb(null, name);
+                });
+            } catch (err) {
+                cb(err);
+            }
+        })();
+    });
 }
 /**
  * Synchronous version of tmpName.
@@ -29794,10 +29797,10 @@ let _gracefulCleanup = false;
  * @throws {Error} if the options are invalid or could not generate a filename
  */ function tmpNameSync(options) {
     const args = _parseArguments(options), opts = args[0];
-    _assertAndSanitizeOptions(opts);
-    let tries = opts.tries;
+    const sanitizedOptions = _assertAndSanitizeOptionsSync(opts);
+    let tries = sanitizedOptions.tries;
     do {
-        const name = _generateTmpName(opts);
+        const name = _generateTmpName(sanitizedOptions);
         try {
             fs.statSync(name);
         } catch (e) {
@@ -29843,7 +29846,7 @@ let _gracefulCleanup = false;
     const args = _parseArguments(options), opts = args[0];
     const discardOrDetachDescriptor = opts.discardDescriptor || opts.detachDescriptor;
     const name = tmpNameSync(opts);
-    var fd = fs.openSync(name, CREATE_FLAGS, opts.mode || FILE_MODE);
+    let fd = fs.openSync(name, CREATE_FLAGS, opts.mode || FILE_MODE);
     /* istanbul ignore else */ if (opts.discardDescriptor) {
         fs.closeSync(fd);
         fd = undefined;
@@ -30033,19 +30036,10 @@ let _gracefulCleanup = false;
     } catch (e) {
         rnd = crypto.pseudoRandomBytes(howMany);
     }
-    for(var i = 0; i < howMany; i++){
+    for(let i = 0; i < howMany; i++){
         value.push(RANDOM_CHARS[rnd[i] % RANDOM_CHARS.length]);
     }
     return value.join('');
-}
-/**
- * Helper which determines whether a string s is blank, that is undefined, or empty or null.
- *
- * @private
- * @param {string} s
- * @returns {Boolean} true whether the string s is blank, false otherwise
- */ function _isBlank(s) {
-    return s === null || _isUndefined(s) || !s.trim();
 }
 /**
  * Checks whether the `obj` parameter is defined or not.
@@ -30089,6 +30083,43 @@ let _gracefulCleanup = false;
     ];
 }
 /**
+ * Resolve the specified path name in respect to tmpDir.
+ *
+ * The specified name might include relative path components, e.g. ../
+ * so we need to resolve in order to be sure that is is located inside tmpDir
+ *
+ * @private
+ */ function _resolvePath(name, tmpDir, cb) {
+    const pathToResolve = path.isAbsolute(name) ? name : path.join(tmpDir, name);
+    fs.stat(pathToResolve, function(err) {
+        if (err) {
+            fs.realpath(path.dirname(pathToResolve), function(err, parentDir) {
+                if (err) return cb(err);
+                cb(null, path.join(parentDir, path.basename(pathToResolve)));
+            });
+        } else {
+            fs.realpath(pathToResolve, cb);
+        }
+    });
+}
+/**
+ * Resolve the specified path name in respect to tmpDir.
+ *
+ * The specified name might include relative path components, e.g. ../
+ * so we need to resolve in order to be sure that is is located inside tmpDir
+ *
+ * @private
+ */ function _resolvePathSync(name, tmpDir) {
+    const pathToResolve = path.isAbsolute(name) ? name : path.join(tmpDir, name);
+    try {
+        fs.statSync(pathToResolve);
+        return fs.realpathSync(pathToResolve);
+    } catch (_err) {
+        const parentDir = fs.realpathSync(path.dirname(pathToResolve));
+        return path.join(parentDir, path.basename(pathToResolve));
+    }
+}
+/**
  * Generates a new temporary name.
  *
  * @param {Object} opts
@@ -30096,8 +30127,12 @@ let _gracefulCleanup = false;
  * @private
  */ function _generateTmpName(opts) {
     const tmpDir = opts.tmpdir;
-    /* istanbul ignore else */ if (!_isUndefined(opts.name)) return path.join(tmpDir, opts.dir, opts.name);
-    /* istanbul ignore else */ if (!_isUndefined(opts.template)) return path.join(tmpDir, opts.dir, opts.template).replace(TEMPLATE_PATTERN, _randomChars(6));
+    /* istanbul ignore else */ if (!_isUndefined(opts.name)) {
+        return path.join(tmpDir, opts.dir, opts.name);
+    }
+    /* istanbul ignore else */ if (!_isUndefined(opts.template)) {
+        return path.join(tmpDir, opts.dir, opts.template).replace(TEMPLATE_PATTERN, _randomChars(6));
+    }
     // prefix and postfix
     const name = [
         opts.prefix ? opts.prefix : 'tmp',
@@ -30110,77 +30145,101 @@ let _gracefulCleanup = false;
     return path.join(tmpDir, opts.dir, name);
 }
 /**
- * Asserts whether the specified options are valid, also sanitizes options and provides sane defaults for missing
- * options.
+ * Asserts and sanitizes the basic options.
  *
- * @param {Options} options
  * @private
- */ function _assertAndSanitizeOptions(options) {
-    options.tmpdir = _getTmpDir(options);
-    const tmpDir = options.tmpdir;
-    /* istanbul ignore else */ if (!_isUndefined(options.name)) _assertIsRelative(options.name, 'name', tmpDir);
-    /* istanbul ignore else */ if (!_isUndefined(options.dir)) _assertIsRelative(options.dir, 'dir', tmpDir);
-    /* istanbul ignore else */ if (!_isUndefined(options.template)) {
-        _assertIsRelative(options.template, 'template', tmpDir);
-        if (!options.template.match(TEMPLATE_PATTERN)) throw new Error(`Invalid template, found "${options.template}".`);
+ */ function _assertOptionsBase(options) {
+    if (!_isUndefined(options.name)) {
+        const name = options.name;
+        // assert that name is not absolute and does not contain a path
+        if (path.isAbsolute(name)) throw new Error(`name option must not contain an absolute path, found "${name}".`);
+        // must not fail on valid .<name> or ..<name> or similar such constructs
+        const basename = path.basename(name);
+        if (basename === '..' || basename === '.' || basename !== name) throw new Error(`name option must not contain a path, found "${name}".`);
     }
-    /* istanbul ignore else */ if (!_isUndefined(options.tries) && isNaN(options.tries) || options.tries < 0) throw new Error(`Invalid tries, found "${options.tries}".`);
+    /* istanbul ignore else */ if (!_isUndefined(options.template) && !options.template.match(TEMPLATE_PATTERN)) {
+        throw new Error(`Invalid template, found "${options.template}".`);
+    }
+    /* istanbul ignore else */ if (!_isUndefined(options.tries) && isNaN(options.tries) || options.tries < 0) {
+        throw new Error(`Invalid tries, found "${options.tries}".`);
+    }
     // if a name was specified we will try once
     options.tries = _isUndefined(options.name) ? options.tries || DEFAULT_TRIES : 1;
     options.keep = !!options.keep;
     options.detachDescriptor = !!options.detachDescriptor;
     options.discardDescriptor = !!options.discardDescriptor;
     options.unsafeCleanup = !!options.unsafeCleanup;
-    // sanitize dir, also keep (multiple) blanks if the user, purportedly sane, requests us to
-    options.dir = _isUndefined(options.dir) ? '' : path.relative(tmpDir, _resolvePath(options.dir, tmpDir));
-    options.template = _isUndefined(options.template) ? undefined : path.relative(tmpDir, _resolvePath(options.template, tmpDir));
-    // sanitize further if template is relative to options.dir
-    options.template = _isBlank(options.template) ? undefined : path.relative(options.dir, options.template);
     // for completeness' sake only, also keep (multiple) blanks if the user, purportedly sane, requests us to
-    options.name = _isUndefined(options.name) ? undefined : options.name;
     options.prefix = _isUndefined(options.prefix) ? '' : options.prefix;
     options.postfix = _isUndefined(options.postfix) ? '' : options.postfix;
 }
 /**
- * Resolve the specified path name in respect to tmpDir.
+ * Gets the relative directory to tmpDir.
  *
- * The specified name might include relative path components, e.g. ../
- * so we need to resolve in order to be sure that is is located inside tmpDir
- *
- * @param name
- * @param tmpDir
- * @returns {string}
  * @private
- */ function _resolvePath(name, tmpDir) {
-    if (name.startsWith(tmpDir)) {
-        return path.resolve(name);
-    } else {
-        return path.resolve(path.join(tmpDir, name));
-    }
+ */ function _getRelativePath(option, name, tmpDir, cb) {
+    if (_isUndefined(name)) return cb(null);
+    _resolvePath(name, tmpDir, function(err, resolvedPath) {
+        if (err) return cb(err);
+        const relativePath = path.relative(tmpDir, resolvedPath);
+        if (!resolvedPath.startsWith(tmpDir)) {
+            return cb(new Error(`${option} option must be relative to "${tmpDir}", found "${relativePath}".`));
+        }
+        cb(null, relativePath);
+    });
 }
 /**
- * Asserts whether specified name is relative to the specified tmpDir.
+ * Gets the relative path to tmpDir.
  *
- * @param {string} name
- * @param {string} option
- * @param {string} tmpDir
- * @throws {Error}
  * @private
- */ function _assertIsRelative(name, option, tmpDir) {
-    if (option === 'name') {
-        // assert that name is not absolute and does not contain a path
-        if (path.isAbsolute(name)) throw new Error(`${option} option must not contain an absolute path, found "${name}".`);
-        // must not fail on valid .<name> or ..<name> or similar such constructs
-        let basename = path.basename(name);
-        if (basename === '..' || basename === '.' || basename !== name) throw new Error(`${option} option must not contain a path, found "${name}".`);
-    } else {
-        // assert that dir or template are relative to tmpDir
-        if (path.isAbsolute(name) && !name.startsWith(tmpDir)) {
-            throw new Error(`${option} option must be relative to "${tmpDir}", found "${name}".`);
-        }
-        let resolvedPath = _resolvePath(name, tmpDir);
-        if (!resolvedPath.startsWith(tmpDir)) throw new Error(`${option} option must be relative to "${tmpDir}", found "${resolvedPath}".`);
+ */ function _getRelativePathSync(option, name, tmpDir) {
+    if (_isUndefined(name)) return;
+    const resolvedPath = _resolvePathSync(name, tmpDir);
+    const relativePath = path.relative(tmpDir, resolvedPath);
+    if (!resolvedPath.startsWith(tmpDir)) {
+        throw new Error(`${option} option must be relative to "${tmpDir}", found "${relativePath}".`);
     }
+    return relativePath;
+}
+/**
+ * Asserts whether the specified options are valid, also sanitizes options and provides sane defaults for missing
+ * options.
+ *
+ * @private
+ */ function _assertAndSanitizeOptions(options, cb) {
+    _getTmpDir(options, function(err, tmpDir) {
+        if (err) return cb(err);
+        options.tmpdir = tmpDir;
+        try {
+            _assertOptionsBase(options, tmpDir);
+        } catch (err) {
+            return cb(err);
+        }
+        // sanitize dir, also keep (multiple) blanks if the user, purportedly sane, requests us to
+        _getRelativePath('dir', options.dir, tmpDir, function(err, dir) {
+            if (err) return cb(err);
+            options.dir = _isUndefined(dir) ? '' : dir;
+            // sanitize further if template is relative to options.dir
+            _getRelativePath('template', options.template, tmpDir, function(err, template) {
+                if (err) return cb(err);
+                options.template = template;
+                cb(null, options);
+            });
+        });
+    });
+}
+/**
+ * Asserts whether the specified options are valid, also sanitizes options and provides sane defaults for missing
+ * options.
+ *
+ * @private
+ */ function _assertAndSanitizeOptionsSync(options) {
+    const tmpDir = options.tmpdir = _getTmpDirSync(options);
+    _assertOptionsBase(options, tmpDir);
+    const dir = _getRelativePathSync('dir', options.dir, tmpDir);
+    options.dir = _isUndefined(dir) ? '' : dir;
+    options.template = _getRelativePathSync('template', options.template, tmpDir);
+    return options;
 }
 /**
  * Helper for testing against EBADF to compensate changes made to Node 7.x under Windows.
@@ -30214,7 +30273,7 @@ let _gracefulCleanup = false;
  * @param {string} code
  * @private
  */ function _isExpectedError(error, errno, code) {
-    return ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : error.code === code && error.errno === errno;
+    return ("TURBOPACK compile-time truthy", 1) ? error.code === code : "TURBOPACK unreachable";
 }
 /**
  * Sets the graceful cleanup.
@@ -30229,10 +30288,15 @@ let _gracefulCleanup = false;
  * Returns the currently configured tmp dir from os.tmpdir().
  *
  * @private
- * @param {?Options} options
- * @returns {string} the currently configured tmp dir
- */ function _getTmpDir(options) {
-    return path.resolve(options && options.tmpdir || os.tmpdir());
+ */ function _getTmpDir(options, cb) {
+    return fs.realpath(options && options.tmpdir || os.tmpdir(), cb);
+}
+/**
+ * Returns the currently configured tmp dir from os.tmpdir().
+ *
+ * @private
+ */ function _getTmpDirSync(options) {
+    return fs.realpathSync(options && options.tmpdir || os.tmpdir());
 }
 // Install process exit listener
 process.addListener(EXIT, _garbageCollector);
@@ -30308,7 +30372,7 @@ Object.defineProperty(module.exports, 'tmpdir', {
     enumerable: true,
     configurable: false,
     get: function() {
-        return _getTmpDir();
+        return _getTmpDirSync();
     }
 });
 module.exports.dir = dir;

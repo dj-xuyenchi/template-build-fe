@@ -13,8 +13,45 @@ import { Application } from "@/model/application/Application";
 import { hasRole } from "@/util/checkRoleBtn";
 
 export const ApiPage = () => {
-  const [page, setPage] = useState([{ apiUriId: 2, status: "O" }] as ApiUri[]);
-  const [applicationList, setApplicationList] = useState([{}, {}] as Application[]);
+  const [page, setPage] = useState([
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+    ,
+    { apiUriId: 2, status: "O" },
+  ] as ApiUri[]);
+  const [applicationList, setApplicationList] = useState([
+    {},
+    {},
+  ] as Application[]);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
@@ -111,7 +148,7 @@ export const ApiPage = () => {
         ...filter,
         keyword: keyword,
       },
-      null
+      null,
     );
   };
 
@@ -148,7 +185,7 @@ export const ApiPage = () => {
           pageNumber: page - 1,
           pageSize: pageSize,
         },
-        null
+        null,
       );
     },
   };
@@ -184,7 +221,7 @@ export const ApiPage = () => {
 
   const handleGetData = async (
     params: ApiUriFilter,
-    signal: AbortSignal | null
+    signal: AbortSignal | null,
   ) => {
     try {
       setIsTableLoading(true);
@@ -193,7 +230,7 @@ export const ApiPage = () => {
           ...filter,
           ...params,
         },
-        signal as AbortSignal
+        signal as AbortSignal,
       );
 
       setFilter({
@@ -205,7 +242,7 @@ export const ApiPage = () => {
     } catch (e) {
       console.error(e);
     } finally {
-      setIsTableLoading(false);
+      // setIsTableLoading(false);
     }
   };
   const handleGetApplicationData = async (filter?: ApplicationFilter) => {
@@ -248,6 +285,7 @@ export const ApiPage = () => {
           filter={filter}
         />
       </Content>
+      <TableData config={config} />
       <TableData config={config} />
     </>
   );
