@@ -1,7 +1,7 @@
 import store from "@/store/store";
 
 export const hasRole = (btnCodes: string[]): boolean => {
-    return true;
+    // return true;
     try {
         const global = store.getState().global;
 
@@ -22,6 +22,8 @@ export const hasRole = (btnCodes: string[]): boolean => {
         // User có ít nhất 1 role nằm trong btnCodes
         return userRoles.some(role => btnCodes.includes(role));
     } catch (e) {
-        return true;
+        console.error("Lỗi kiểm tra quyền sử dụng nút!");
+
+        return false;
     }
 }

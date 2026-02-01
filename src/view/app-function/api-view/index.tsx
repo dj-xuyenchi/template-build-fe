@@ -11,42 +11,30 @@ import { apiUriApi, ApiUriFilter } from "@/api/apiUriApi";
 import { ApiUri, METHOD } from "@/model/api/ApiUri";
 import { Application } from "@/model/application/Application";
 import { hasRole } from "@/util/checkRoleBtn";
+import { DrawerFeature } from "./DrawFeature";
 
 export const ApiPage = () => {
   const [page, setPage] = useState([
     { apiUriId: 2, status: "O" },
-    ,
     { apiUriId: 2, status: "O" },
     { apiUriId: 2, status: "O" },
     { apiUriId: 2, status: "O" },
-    ,
-    { apiUriId: 2, status: "O" },
-    ,
-    { apiUriId: 2, status: "O" },
-    ,
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    ,
     { apiUriId: 2, status: "O" },
     { apiUriId: 2, status: "O" },
     { apiUriId: 2, status: "O" },
-    ,
-    { apiUriId: 2, status: "O" },
-    ,
-    { apiUriId: 2, status: "O" },
-    ,
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    ,
     { apiUriId: 2, status: "O" },
     { apiUriId: 2, status: "O" },
     { apiUriId: 2, status: "O" },
-    ,
     { apiUriId: 2, status: "O" },
-    ,
     { apiUriId: 2, status: "O" },
-    ,
     { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" },
+    { apiUriId: 2, status: "O" }
   ] as ApiUri[]);
   const [applicationList, setApplicationList] = useState([
     {},
@@ -55,7 +43,7 @@ export const ApiPage = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
-    pageSize: 20,
+    pageSize: 10,
     totalData: 0,
     status: ["O"],
   } as ApiUriFilter);
@@ -286,7 +274,7 @@ export const ApiPage = () => {
         />
       </Content>
       <TableData config={config} />
-      <TableData config={config} />
+      <DrawerFeature />
     </>
   );
 };
