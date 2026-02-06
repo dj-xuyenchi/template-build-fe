@@ -1,5 +1,5 @@
 // src/api/axiosClient.ts
-import { getUserDeviceInfo } from "@/util/baseRequestHandle";
+import { getUserDeviceInfo } from "@/util/authen-service/baseRequestHandle";
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import qs from "qs";
 import { getMessageInstance } from "./messageContext";

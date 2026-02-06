@@ -31,6 +31,8 @@ import { SelectCustom } from "@/component/SelectCustom";
 import { RootState } from "@/store/store";
 import { goPage } from "@/config/menu/letsGo";
 import { menus } from "@/config/menu/menu";
+import { handleLogout } from "@/util/authen-service/authenService";
+import { TOKEN_KEY } from "@/constant/authen/authenConst";
 
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -72,6 +74,7 @@ export default function Wrapper({
   const [collapsed, setCollapsed] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [subMenuValue, setSubMenuValue] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
 
   const global = useSelector((state: RootState) => state.global);
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
@@ -153,25 +156,27 @@ export default function Wrapper({
       label: "Đăng xuất",
       icon: <FaSignOutAlt />,
       extra: "",
+      onClick: handleLogout
     },
   ];
 
   useEffect(() => {
     handleGetBtnRole();
-    const token = localStorage.getItem("_t");
-    setIsLogin(!!token);
-    window.scrollTo(0, 0);
-    if (typeof window !== "undefined") {
-      const sub = localStorage.getItem("_sub");
-      const subSelected = localStorage.getItem("_sub-selected");
-      // dispatch(setOptionFeatures(JSON.parse(sub || "")));
-      setSubMenuValue(subSelected || "");
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (token) {
+      setIsLogin(!!token);
+      console.error(123);
+
+      window.scrollTo(0, 0);
+      if (typeof window !== "undefined") {
+        const sub = localStorage.getItem("_sub");
+        const subSelected = localStorage.getItem("_sub-selected");
+        // dispatch(setOptionFeatures(JSON.parse(sub || "")));
+        setSubMenuValue(subSelected || "");
+      }
     }
     return () => { };
   }, []);
-  const [isLogin, setIsLogin] = useState(false);
-
-
   return (
     <>
       {isLogin && (

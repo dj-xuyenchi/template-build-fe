@@ -19,7 +19,7 @@ import { TextAreaCustom } from "@/component/TextAreaCustom";
 import { Application } from "@/model/application/Application";
 import { ACTIVE, CLOSE } from "@/model/BaseDataTable";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
-import { hasRole } from "@/util/checkRoleBtn";
+import { hasRole } from "@/util/authen-service/checkRoleBtn";
 export type CallBacks = BaseTable & {
   handleDeleteRow: (row: ApiUri) => Promise<void>;
   handleReopenRow?: (row: ApiUri) => Promise<void>;

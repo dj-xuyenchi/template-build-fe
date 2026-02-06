@@ -20,8 +20,8 @@
   "static/chunks/node_modules_@rc-component_select_es_ed3847c4._.js",
   "static/chunks/node_modules_@rc-component_bdb676df._.js",
   "static/chunks/node_modules_@ant-design_abeb5ab4._.js",
-  "static/chunks/node_modules_762807aa._.js",
-  "static/chunks/_09ea15e8._.js",
+  "static/chunks/node_modules_12866600._.js",
+  "static/chunks/_09500104._.js",
   "static/chunks/src_6b886d79._.css"
 ],
     source: "dynamic"

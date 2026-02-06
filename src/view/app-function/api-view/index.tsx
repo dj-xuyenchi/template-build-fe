@@ -10,7 +10,7 @@ import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { apiUriApi, ApiUriFilter } from "@/api/apiUriApi";
 import { ApiUri, METHOD } from "@/model/api/ApiUri";
 import { Application } from "@/model/application/Application";
-import { hasRole } from "@/util/checkRoleBtn";
+import { hasRole } from "@/util/authen-service/checkRoleBtn";
 import { DrawerFeature } from "./DrawFeature";
 
 export const ApiPage = () => {

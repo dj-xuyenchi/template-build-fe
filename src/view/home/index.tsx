@@ -24,7 +24,7 @@ import { CollapseCustom } from "@/component/CollapseCustom";
 import { InputCustom } from "@/component/InputCustom";
 import { FormCustom } from "@/component/FormCustom";
 import { ButtonCustom } from "@/component/ButtonCustom";
-import { encryptRSA } from "@/util/rsaEncrypt";
+import { encryptRSA } from "@/util/authen-service/rsaEncrypt";
 
 export const Welcome = () => {
   const [form] = Form.useForm();
@@ -44,7 +44,7 @@ export const Welcome = () => {
   const config = {} as TablePropsCustom<SystemRole>;
   const btn = {
     buttonAddTitle: "Thêm mới",
-    buttonAddFunction() {},
+    buttonAddFunction() { },
     isSupportExport: true,
     handleExportData() {
       exportExcel(columns, data, "hi");
