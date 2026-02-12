@@ -5,15 +5,14 @@ export const hasRole = (btnCodes: string[]): boolean => {
     try {
         const global = store.getState().global;
 
-        // Nếu chưa có info user → cho phép (tuỳ policy)
+        // Chưa có thông tin quyền thì mặc định không có quyền
         if (!global?.userApp?.userRole) {
-            return true;
+            return false;
         }
 
         const userRoles: string[] = global.userApp.userRole;
         // ví dụ tạm
         // const userRoles = ['ADMIN'];
-
         // Nếu button không yêu cầu role → cho phép
         if (!btnCodes || btnCodes.length === 0) {
             return true;
@@ -22,8 +21,7 @@ export const hasRole = (btnCodes: string[]): boolean => {
         // User có ít nhất 1 role nằm trong btnCodes
         return userRoles.some(role => btnCodes.includes(role));
     } catch (e) {
-        console.error("Lỗi kiểm tra quyền sử dụng nút!");
-
+        console.error("Lỗi kiểm tra quyền sử dụng nút! {}", e);
         return false;
     }
 }

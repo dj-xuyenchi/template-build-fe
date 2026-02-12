@@ -1,5 +1,5 @@
 import axiosClient from "@/config/httpCall";
-import { AUTH_SERVICE } from "@/constant/serviceUrl";
+import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { LoginRequest } from "@/model/login/LoginRequest";
 import { LoginResponse } from "@/model/login/LoginResponse";
 import { BtnRole } from "@/model/system/BtnRole";
@@ -10,11 +10,11 @@ export const authApi = {
   //     return res.data;
   // },
   getBtnRole: async (): Promise<BtnRole> => {
-    const res = await axiosClient.get(`${AUTH_SERVICE}/get-btn-role`);
+    const res = await axiosClient.get(`${AUTHEN_SERVICE}/btn-role-by-user`);
     return res.data;
   },
   login: async (requestBody: LoginRequest): Promise<LoginResponse> => {
-    const res = await axiosClient.post(`${AUTH_SERVICE}/login`, requestBody);
+    const res = await axiosClient.post(`${AUTHEN_SERVICE}/login`, requestBody);
     return res.data;
   },
 };

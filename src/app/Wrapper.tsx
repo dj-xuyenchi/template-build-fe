@@ -171,7 +171,7 @@ export default function Wrapper({
       if (typeof window !== "undefined") {
         const sub = localStorage.getItem("_sub");
         const subSelected = localStorage.getItem("_sub-selected");
-        // dispatch(setOptionFeatures(JSON.parse(sub || "")));
+        dispatch(setOptionFeatures(JSON.parse(sub || "")));
         setSubMenuValue(subSelected || "");
       }
     }

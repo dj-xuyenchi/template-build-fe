@@ -1,5 +1,5 @@
 import axiosClient from "@/config/httpCall";
-import { AUTH_SERVICE } from "@/constant/serviceUrl";
+import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import {
   Application,
   CreateApplication,
@@ -17,7 +17,7 @@ export const applicationApi = {
     requestParams: ApplicationFilter,
     signal?: AbortSignal
   ): Promise<BasePageResult<Application>> => {
-    const res = await axiosClient.get(`${AUTH_SERVICE}/application`, {
+    const res = await axiosClient.get(`${AUTHEN_SERVICE}/application`, {
       params: requestParams,
       signal: signal,
     });
@@ -27,7 +27,7 @@ export const applicationApi = {
     requestBody: CreateApplication
   ): Promise<Application[]> => {
     const res = await axiosClient.post(
-      `${AUTH_SERVICE}/application/create`,
+      `${AUTHEN_SERVICE}/application/create`,
       requestBody
     );
     return res.data;
@@ -36,7 +36,7 @@ export const applicationApi = {
     requestBody: DeleteApplication
   ): Promise<Application[]> => {
     const res = await axiosClient.post(
-      `${AUTH_SERVICE}/application/archive`,
+      `${AUTHEN_SERVICE}/application/archive`,
       requestBody
     );
     return res.data;
@@ -45,7 +45,7 @@ export const applicationApi = {
     requestBody: UpdateApplication
   ): Promise<Application[]> => {
     const res = await axiosClient.post(
-      `${AUTH_SERVICE}/application/update`,
+      `${AUTHEN_SERVICE}/application/update`,
       requestBody
     );
     return res.data;

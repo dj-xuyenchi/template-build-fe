@@ -1,2 +1,1 @@
-export const AUTH_SERVICE = "";
-// export const AUTH_SERVICE = "/auth-service";
+export const AUTHEN_SERVICE = "/authen-service";

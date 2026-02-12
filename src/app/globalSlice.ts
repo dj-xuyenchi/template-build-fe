@@ -3,7 +3,7 @@ import { UserAppSetting } from "@/model/system/UserAppSetting";
 import { AppSlice } from "@/store/AppSlice";
 import { createSlice } from "@reduxjs/toolkit";
 
-const userApp = {} as UserAppSetting;
+const userApp = { userRole: ["QADZ"] } as UserAppSetting;
 const appSlice = {} as AppSlice;
 
 const globalSlice = createSlice({
@@ -17,8 +17,7 @@ const globalSlice = createSlice({
       state.userApp.btnRole = action.payload;
     },
     setUserRole: (state, action) => {
-      console.error(action);
-      state.userApp.userRole = ["ADMIN"];
+      state.userApp.userRole = action.payload;
     },
     setOptionFeatures: (state, action) => {
       state.appSlice.optionFeatures = action.payload;
@@ -29,7 +28,7 @@ const globalSlice = createSlice({
   },
 });
 
-export const { setBtnRole, setOptionFeatures, setCallBack } =
+export const { setBtnRole, setOptionFeatures, setCallBack, setUserRole } =
   globalSlice.actions;
 
 export default globalSlice.reducer;

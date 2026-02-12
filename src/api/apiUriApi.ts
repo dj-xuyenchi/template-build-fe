@@ -1,6 +1,6 @@
 import { DeleteApi, ReOpenApi } from "./../model/api/ApiUri";
 import axiosClient from "@/config/httpCall";
-import { AUTH_SERVICE } from "@/constant/serviceUrl";
+import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { ApiUri, CreateApi, UpdateApi } from "@/model/api/ApiUri";
 import { BaseFilter } from "@/model/BaseFilter";
 import { BasePageResult } from "@/model/BasePageResult";
@@ -16,7 +16,7 @@ export const apiUriApi = {
     signal: AbortSignal
   ): Promise<BasePageResult<ApiUri>> => {
    
-    const res = await axiosClient.get(`${AUTH_SERVICE}/api`, {
+    const res = await axiosClient.get(`${AUTHEN_SERVICE}/api`, {
       params: params,
       signal: signal,
     });
@@ -24,28 +24,28 @@ export const apiUriApi = {
   },
   create: async (requestBody: CreateApi): Promise<ApiUri[]> => {
     const res = await axiosClient.post(
-      `${AUTH_SERVICE}/api/create`,
+      `${AUTHEN_SERVICE}/api/create`,
       requestBody
     );
     return res.data;
   },
   update: async (requestBody: UpdateApi): Promise<object> => {
     const res = await axiosClient.post(
-      `${AUTH_SERVICE}/api/update`,
+      `${AUTHEN_SERVICE}/api/update`,
       requestBody
     );
     return res.data;
   },
   delete: async (requestBody: DeleteApi): Promise<object> => {
     const res = await axiosClient.post(
-      `${AUTH_SERVICE}/api/delete`,
+      `${AUTHEN_SERVICE}/api/delete`,
       requestBody
     );
     return res.data;
   },
   reopen: async (requestBody: ReOpenApi): Promise<object> => {
     const res = await axiosClient.post(
-      `${AUTH_SERVICE}/api/re-open`,
+      `${AUTHEN_SERVICE}/api/re-open`,
       requestBody
     );
     return res.data;

@@ -1,5 +1,5 @@
 import axiosClient from "@/config/httpCall";
-import { AUTH_SERVICE } from "@/constant/serviceUrl";
+import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import {
     Application,
     UpdateApplication,
@@ -20,7 +20,7 @@ export const functionApi = {
         requestParams: FunctionFilter,
         signal: AbortSignal
     ): Promise<BasePageResult<Function>> => {
-        const res = await axiosClient.get(`${AUTH_SERVICE}/function`, {
+        const res = await axiosClient.get(`${AUTHEN_SERVICE}/function`, {
             params: requestParams,
             signal: signal,
         });
@@ -30,7 +30,7 @@ export const functionApi = {
         requestBody: CreateFunction
     ): Promise<Function[]> => {
         const res = await axiosClient.post(
-            `${AUTH_SERVICE}/function/create`,
+            `${AUTHEN_SERVICE}/function/create`,
             requestBody
         );
         return res.data;
@@ -39,7 +39,7 @@ export const functionApi = {
         requestBody: ArchiveFunction
     ): Promise<Application[]> => {
         const res = await axiosClient.post(
-            `${AUTH_SERVICE}/application/archive`,
+            `${AUTHEN_SERVICE}/application/archive`,
             requestBody
         );
         return res.data;
@@ -48,7 +48,7 @@ export const functionApi = {
         requestBody: UpdateApplication
     ): Promise<Application[]> => {
         const res = await axiosClient.post(
-            `${AUTH_SERVICE}/application/update`,
+            `${AUTHEN_SERVICE}/application/update`,
             requestBody
         );
         return res.data;

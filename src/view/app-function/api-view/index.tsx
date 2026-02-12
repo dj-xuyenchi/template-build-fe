@@ -16,25 +16,6 @@ import { DrawerFeature } from "./DrawFeature";
 export const ApiPage = () => {
   const [page, setPage] = useState([
     { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" },
-    { apiUriId: 2, status: "O" }
   ] as ApiUri[]);
   const [applicationList, setApplicationList] = useState([
     {},
