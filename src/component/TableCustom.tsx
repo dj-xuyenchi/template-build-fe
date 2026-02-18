@@ -466,10 +466,10 @@ export const TableCustom = <T extends BaseDataTable>({
                       locale={
                         loading
                           ? {
-                              emptyText: (
-                                <div style={{ height: HEIGHT_LOADING }} />
-                              ),
-                            }
+                            emptyText: (
+                              <div style={{ height: HEIGHT_LOADING }} />
+                            ),
+                          }
                           : undefined
                       }
                       style={{ ...style }}
@@ -771,7 +771,7 @@ export const TableCustom = <T extends BaseDataTable>({
           open={isShowSetting}
           onClose={handleCloseSetting}
           className="drawer-setting-table"
-          width={600}
+          size={600}
           footer={
             <div style={{ textAlign: "right" }}>
               <ButtonCustom

@@ -20,7 +20,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      localStorage.setItem(TOKEN_KEY, "test");
+      localStorage.setItem(TOKEN_KEY, "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmhkcTEyMyIsInNlc3Npb25JZCI6IjEyYWQwODRiLTkzNWYtNDI0OS04OTEyLWQ5NzZjNjczNDdkNyIsImp0aSI6IjEzIiwiaWF0IjoxNzUwNzQ2OTYwLCJleHAiOjg4MTUwNzQ2OTYwfQ.5r9Juu6GG_Ck9XSRdXscoftGouzEuw9d1I3Dh5Ys-kkImowiByTXQmCXQ9jSUUWBVP1cDq-T-HPqngaVvUBaWQ");
       localStorage.setItem(REFRESH_TOKEN_KEY, "test");
       window.location.href = LANDING || "/";
       // const loginRes = await authApi.login({

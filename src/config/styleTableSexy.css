@@ -36,6 +36,13 @@
     /* css thêm ở đây nếu cần hiển thị thêm gì với dòng dữ liệu mới */
 }
 
+.table-custom-container .ant-table-cell-fix {
+    background: #ffff !important;
+}
+
+.table-custom-container .ant-table-wrapper .ant-table-thead>tr>th {
+    background: #fafafa !important;
+}
 
 .drawer-setting-table .ant-collapse .ant-collapse-body {
     padding: 12px !important;

@@ -25,8 +25,11 @@ axiosClient.interceptors.request.use(
 
     switch (config.method?.toLocaleLowerCase()) {
       case "post": {
+        const { params, ...rest } = config.data || {};
+
         config.data = {
-          ...config.data,
+          ...rest,
+          ...params,
           ...getUserDeviceInfo(),
         };
         break;

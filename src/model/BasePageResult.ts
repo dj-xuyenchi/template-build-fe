@@ -1,6 +1,5 @@
 export interface BasePageResult<T> {
-  content: T[];
-  totalPages: number;
-  totalElements: number;
-  size: number;
+  data: T[];
+  code: number;
+  message: number;
 }

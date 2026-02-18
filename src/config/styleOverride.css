@@ -208,7 +208,7 @@ body {
 
 /* textarea */
 .ant-table-tbody .ant-table-cell textarea {
-    min-height: 48px;
+    /* min-height: 48px; */
 }
 
 

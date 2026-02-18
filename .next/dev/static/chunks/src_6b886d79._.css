@@ -519,6 +519,14 @@ body {
   max-height: unset !important;
 }
 
+.table-custom-container .ant-table-cell-fix {
+  background: #fff !important;
+}
+
+.table-custom-container .ant-table-wrapper .ant-table-thead > tr > th {
+  background: #fafafa !important;
+}
+
 .drawer-setting-table .ant-collapse .ant-collapse-body {
   padding: 12px !important;
 }
@@ -708,10 +716,6 @@ body {
   background-color: unset;
   color: unset;
   cursor: auto;
-}
-
-.ant-table-tbody .ant-table-cell textarea {
-  min-height: 48px;
 }
 
 .ant-table-tbody .ant-table-cell .ant-select {

@@ -185,10 +185,6 @@ body {
   cursor: auto;
 }
 
-.ant-table-tbody .ant-table-cell textarea {
-  min-height: 48px;
-}
-
 .ant-table-tbody .ant-table-cell .ant-select {
   position: absolute;
   inset: 0;

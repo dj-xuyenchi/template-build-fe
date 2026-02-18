@@ -3,6 +3,7 @@ import {
   APPLICATION,
   APPLICATION_FUNCTION,
   APPLY_ROLE,
+  CMS_ROLE,
   FUNCTION,
 } from "@/constant/keyCodeMenu";
 import { createElement } from "react";
@@ -50,13 +51,17 @@ export const appAndFunction = {
       ],
     },
     {
-      key: APPLY_ROLE,
+      key: CMS_ROLE,
       icon: createElement(BsPersonFillLock),
-      label: "Phân quyền",
+      label: "Quản lý phân quyền",
       childFeatures: [
         {
+          value: CMS_ROLE,
+          label: "Quản lý quyền",
+        },
+        {
           value: APPLY_ROLE,
-          label: "Phân quyền",
+          label: "Phân quyền người dùng",
         },
       ],
     },
