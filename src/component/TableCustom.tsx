@@ -59,7 +59,6 @@ export interface ExtendFunction<T> {
   handleQuickSearch?: (keyword: string) => void;
 }
 
-const customIcon = <LoadingOutlined style={{ fontSize: 32 }} spin />;
 // Props cho TableCustom
 export interface TablePropsCustom<T> extends TableProps<T> {
   dataSource?: T[];

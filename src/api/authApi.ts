@@ -17,4 +17,8 @@ export const authApi = {
     const res = await axiosClient.post(`${AUTHEN_SERVICE}/login`, requestBody);
     return res.data;
   },
+  getUserInformation: async (): Promise<LoginResponse> => {
+    const res = await axiosClient.get(`${AUTHEN_SERVICE}/authentication/get-user-information`);
+    return res.data;
+  },
 };

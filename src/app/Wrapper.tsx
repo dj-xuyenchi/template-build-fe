@@ -159,13 +159,23 @@ export default function Wrapper({
       onClick: handleLogout
     },
   ];
+  const handleGetUserInformation = async () => {
+    try {
+      const res = await authApi.getUserInformation();
+      console.error(res);
+
+    } catch (e) {
+      console.error(e);
+    } finally { }
+  }
+
 
   useEffect(() => {
-    handleGetBtnRole();
+    // handleGetBtnRole();
+    handleGetUserInformation();
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
       setIsLogin(!!token);
-      console.error(123);
 
       window.scrollTo(0, 0);
       if (typeof window !== "undefined") {
