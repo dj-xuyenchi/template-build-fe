@@ -2,12 +2,12 @@ import clsx from "clsx";
 import styles from "./styles.module.scss";
 import "./globals.css";
 import { MouseEvent, useState } from "react";
-import { Notification } from "@/model/system/Notification";
 import Image from "next/image";
 import empty from "../../public/empty.webp";
 import { Badge, Spin } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { Notification } from "@/model/push-noti/Notification";
 export const SexyNotification = ({ isShow = false }) => {
   const [activeType, setActiveType] = useState(1);
   const [notifications, setNotifications] = useState([

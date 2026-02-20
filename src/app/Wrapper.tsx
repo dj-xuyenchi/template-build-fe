@@ -34,6 +34,7 @@ import { buildMenu } from "@/config/menu/menu";
 import { handleLogout } from "@/util/authen-service/authenService";
 import { TOKEN_KEY } from "@/constant/authen/authenConst";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
+import { FeatureAsMenu } from "@/model/feature/FeatureAsMenu";
 
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -102,28 +103,46 @@ export default function Wrapper({
     if (!menus) {
       return;
     }
-    for (const menu of menus) {
-      if (menu && "children" in menu && menu.children) {
-        const children = menu.children;
-        const subMenu = children.find((item) => {
-          return item.key === menuItem.key;
-        });
-        if (subMenu) {
-          dispatch(setOptionFeatures(subMenu.childFeatures));
-          if (typeof window !== "undefined") {
-            localStorage.setItem("_sub", JSON.stringify(subMenu.childFeatures));
-            localStorage.setItem(
-              "_sub-selected",
-              subMenu.childFeatures[0].value
-            );
-          }
-          setSubMenuValue(subMenu.childFeatures[0].value);
-          router.push(goPage(subMenu.key, { id: 1 }));
+    console.error("handleClickMenu", menuItem);
+
+    for (const m of menus) {
+      const menu = m as FeatureAsMenu;
+      if (menu.key === menuItem.key) {
+        handleGoPage(menu.key);
+      }
+      if (menu.children) {
+        const child = menu.children.find((child) => child.key === menuItem.key);
+        if (child) {
+          handleGoPage(child.key);
         }
       }
     }
+
+
+    // for (const menu of menus) {
+    //   if (menu && "children" in menu && menu.children) {
+    //     const children = menu.children;
+    //     const subMenu = children.find((item) => {
+    //       return item?.key === menuItem.key;
+    //     });
+    //     if (subMenu && "childFeatures" in subMenu && Array.isArray(subMenu.childFeatures) && typeof subMenu.key === "string") {
+    //       dispatch(setOptionFeatures(subMenu.childFeatures));
+    //       if (typeof window !== "undefined") {
+    //         localStorage.setItem("_sub", JSON.stringify(subMenu.childFeatures));
+    //         localStorage.setItem(
+    //           "_sub-selected",
+    //           subMenu.childFeatures[0].value
+    //         );
+    //       }
+    //       setSubMenuValue(subMenu.childFeatures[0].value);
+    //       router.push(goPage(subMenu.key, { id: 1 }));
+    //     }
+    //   }
+    // }
   };
   const handleGoPage = (key: string) => {
+    console.info("handleGoPage", key);
+
     if (key) {
       if (typeof window !== "undefined") {
         localStorage.setItem("_sub-selected", key);

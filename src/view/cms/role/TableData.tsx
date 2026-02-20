@@ -1,9 +1,9 @@
 import { TableCustom, TablePropsCustom } from "@/component/TableCustom";
 import { Content } from "antd/es/layout/layout";
-import { ApiUri } from "@/model/api/ApiUri";
+import { RoleDTO } from "@/model/cms/role/RoleDTO";
 
 type TableFunction = {
-  config: TablePropsCustom<ApiUri>;
+  config: TablePropsCustom<RoleDTO>;
 };
 export const TableData = ({ config }: TableFunction) => {
   return (

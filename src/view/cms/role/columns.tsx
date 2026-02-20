@@ -172,7 +172,7 @@ export const getColumns = ({
         >
           {record.status === ACTIVE && (
             <ArchiveBtn
-              disable={!hasRole(["ARCHIVE-APPLICATION"])}
+              disable={!hasRole("ARCHIVE-APPLICATION")}
               handleArchive={() => {
                 handleDeleteRow(record);
               }}
@@ -180,7 +180,7 @@ export const getColumns = ({
           )}
           {record.status === CLOSE && (
             <ReOpenBtn
-              disable={!hasRole(["ARCHIVE-APPLICATION"])}
+              disable={!hasRole('ARCHIVE-APPLICATION')}
               handleReopen={() => {
                 if (handleReopenRow) {
                   handleReopenRow(record);

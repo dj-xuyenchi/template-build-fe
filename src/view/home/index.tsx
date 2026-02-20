@@ -1,30 +1,20 @@
-import { CascaderCustom } from "@/component/CascaderCustom";
-import { CheckBoxGroupCustom } from "@/component/CheckBoxGroupCustom";
-import { ColorPickerCustom } from "@/component/ColorPickerCustom";
-import { DatePickerCustom } from "@/component/DatepickerCustom";
-import { DateRangePickerCustom } from "@/component/DateRangeCustom";
-import { InputNumberCustom } from "@/component/InputNumberCustom";
-import { SelectCustom } from "@/component/SelectCustom";
-import { SwitchCustom } from "@/component/SwitchCustom";
+
 import {
   ExtendFunction,
-  TableCustom,
   TablePropsCustom,
 } from "@/component/TableCustom";
-import { TextAreaCustom } from "@/component/TextAreaCustom";
-import { UploadFileCustom } from "@/component/UploadFileCustom";
 import { exportExcel } from "@/util/sexyExportData";
 import { CheckboxOptionType, Col, Form, Row, TableColumnProps } from "antd";
 import { useState } from "react";
 
 import dayjs from "dayjs";
-import { SystemRole } from "@/model/system/SystemRole";
 import { Content } from "antd/es/layout/layout";
 import { CollapseCustom } from "@/component/CollapseCustom";
 import { InputCustom } from "@/component/InputCustom";
 import { FormCustom } from "@/component/FormCustom";
 import { ButtonCustom } from "@/component/ButtonCustom";
 import { encryptRSA } from "@/util/authen-service/rsaEncrypt";
+import { RoleDTO } from "@/model/cms/role/RoleDTO";
 
 export const Welcome = () => {
   const [form] = Form.useForm();
@@ -41,7 +31,7 @@ export const Welcome = () => {
     { id: 3, input: "ss", datepicker: "2033-2-2" },
     { id: 2, input: "ss", datepicker: "2033-2-2" },
   ]);
-  const config = {} as TablePropsCustom<SystemRole>;
+  const config = {} as TablePropsCustom<RoleDTO>;
   const btn = {
     buttonAddTitle: "Thêm mới",
     buttonAddFunction() { },

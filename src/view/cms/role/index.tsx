@@ -27,10 +27,10 @@ export const Index = () => {
     if (!row.roleId) {
       return;
     }
-    const res = await roleApi.delete({
-      roleId: row.roleId,
-    });
-    console.error(res);
+    // const res = await roleApi.delete({
+    //   roleId: row.roleId,
+    // });
+    // console.error(res);
 
     handleGetData(filter, null);
   };
@@ -38,9 +38,9 @@ export const Index = () => {
     if (!row.roleId) {
       return;
     }
-    await roleApi.reopen({
-      roleId: row.roleId,
-    });
+    // await roleApi.reopen({
+    //   roleId: row.roleId,
+    // });
     handleGetData(filter, null);
   };
 
@@ -105,12 +105,12 @@ export const Index = () => {
       null,
     );
   };
-
   const columnsEdit = getColumnsEdit({
     handleSetName,
     handleSetDescription,
     handleSetEffectiveType,
     handleSetStatus,
+    handleDeleteRow
   });
 
   const toggleViewMode = (mode: boolean) => {
@@ -153,7 +153,7 @@ export const Index = () => {
         handleGetData(filter, null);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !hasRole(["VIEW-APPLICATION"]),
+      disableAddData: !hasRole("VIEW-APPLICATION"),
       handleUpdateDataSource: (data: []) => {
         setData({ data: [...data] });
       },

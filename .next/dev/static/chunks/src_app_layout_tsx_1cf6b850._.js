@@ -19,7 +19,7 @@
   "static/chunks/node_modules_@rc-component_bdb676df._.js",
   "static/chunks/node_modules_@ant-design_abeb5ab4._.js",
   "static/chunks/node_modules_12866600._.js",
-  "static/chunks/_b1ac171b._.js",
+  "static/chunks/_5f907653._.js",
   "static/chunks/src_6b886d79._.css"
 ],
     source: "dynamic"
