@@ -2,10 +2,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import globalReducer from "@/app/globalSlice";
-import { UserAppSetting } from "@/model/system/UserAppSetting";
+import { UserInformation } from "@/model/login/UserInformation";
 
 export interface StoreRedux {
-  global: UserAppSetting;
+  global: UserInformation;
 }
 
 const rootReducer = combineReducers({

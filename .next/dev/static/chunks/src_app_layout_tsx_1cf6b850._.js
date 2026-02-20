@@ -5,10 +5,8 @@
   "static/chunks/node_modules_react-icons_fa_index_mjs_0459ff00._.js",
   "static/chunks/node_modules_react-icons_io_index_mjs_7f31b177._.js",
   "static/chunks/node_modules_react-icons_tb_index_mjs_c5ac7ced._.js",
-  "static/chunks/node_modules_react-icons_bs_index_mjs_8a44a60a._.js",
   "static/chunks/node_modules_react-icons_ri_index_mjs_150b4c77._.js",
-  "static/chunks/node_modules_react-icons_si_index_mjs_86623806._.js",
-  "static/chunks/node_modules_react-icons_ai_index_mjs_9504e8ee._.js",
+  "static/chunks/node_modules_react-icons_bs_index_mjs_8a44a60a._.js",
   "static/chunks/node_modules_react-icons_lib_844c6c50._.js",
   "static/chunks/node_modules_@ant-design_cssinjs_es_daa47774._.js",
   "static/chunks/node_modules_antd_es_67f80961._.js",
@@ -21,7 +19,7 @@
   "static/chunks/node_modules_@rc-component_bdb676df._.js",
   "static/chunks/node_modules_@ant-design_abeb5ab4._.js",
   "static/chunks/node_modules_12866600._.js",
-  "static/chunks/_09500104._.js",
+  "static/chunks/_b1ac171b._.js",
   "static/chunks/src_6b886d79._.css"
 ],
     source: "dynamic"

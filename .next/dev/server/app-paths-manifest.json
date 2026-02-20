@@ -1,3 +1,4 @@
 {
-  "/cms/role/page": "app/cms/role/page.js"
+  "/cms/role/page": "app/cms/role/page.js",
+  "/page": "app/page.js"
 }

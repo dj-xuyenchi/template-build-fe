@@ -1,9 +1,9 @@
 // store/slices/exampleSlice.js
-import { UserAppSetting } from "@/model/system/UserAppSetting";
+import { UserInformation } from "@/model/login/UserInformation";
 import { AppSlice } from "@/store/AppSlice";
 import { createSlice } from "@reduxjs/toolkit";
 
-const userApp = { userRole: ["QADZ"] } as UserAppSetting;
+const userApp = {} as UserInformation;
 const appSlice = {} as AppSlice;
 
 const globalSlice = createSlice({
@@ -13,11 +13,8 @@ const globalSlice = createSlice({
     appSlice,
   },
   reducers: {
-    setBtnRole: (state, action) => {
-      state.userApp.btnRole = action.payload;
-    },
-    setUserRole: (state, action) => {
-      state.userApp.userRole = action.payload;
+    setUserInformation: (state, action) => {
+      state.userApp = action.payload;
     },
     setOptionFeatures: (state, action) => {
       state.appSlice.optionFeatures = action.payload;
@@ -28,7 +25,7 @@ const globalSlice = createSlice({
   },
 });
 
-export const { setBtnRole, setOptionFeatures, setCallBack, setUserRole } =
+export const { setUserInformation, setOptionFeatures, setCallBack } =
   globalSlice.actions;
 
 export default globalSlice.reducer;

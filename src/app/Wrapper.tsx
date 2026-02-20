@@ -22,7 +22,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/api/authApi";
-import { setBtnRole, setOptionFeatures } from "./globalSlice";
+import { setOptionFeatures, setUserInformation } from "./globalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { MenuProps } from "antd";
 import { SexyNotification } from "./SexyNotification";
@@ -30,9 +30,10 @@ import clsx from "clsx";
 import { SelectCustom } from "@/component/SelectCustom";
 import { RootState } from "@/store/store";
 import { goPage } from "@/config/menu/letsGo";
-import { menus } from "@/config/menu/menu";
+import { buildMenu } from "@/config/menu/menu";
 import { handleLogout } from "@/util/authen-service/authenService";
 import { TOKEN_KEY } from "@/constant/authen/authenConst";
+import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
 
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -75,6 +76,7 @@ export default function Wrapper({
   const [showNoti, setShowNoti] = useState(false);
   const [subMenuValue, setSubMenuValue] = useState("");
   const [isLogin, setIsLogin] = useState(false);
+  const [menus, setMenus] = useState([] as MenuProps["items"]);
 
   const global = useSelector((state: RootState) => state.global);
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
@@ -96,17 +98,12 @@ export default function Wrapper({
     setShowNoti(true);
   };
 
-  const handleGetBtnRole = async () => {
-    try {
-      const res = await authApi.getBtnRole();
-      dispatch(setBtnRole(res));
-    } catch (e) {
-      console.error(e);
-    }
-  };
   const handleClickMenu = (menuItem: { key: string; }) => {
+    if (!menus) {
+      return;
+    }
     for (const menu of menus) {
-      if ("children" in menu && menu.children) {
+      if (menu && "children" in menu && menu.children) {
         const children = menu.children;
         const subMenu = children.find((item) => {
           return item.key === menuItem.key;
@@ -161,8 +158,15 @@ export default function Wrapper({
   ];
   const handleGetUserInformation = async () => {
     try {
-      const res = await authApi.getUserInformation();
-      console.error(res);
+      const requestParam = {
+        isTakeAllowFeatureList: true
+      } as GetUserInformationFilter
+      const res = await authApi.getUserInformation(requestParam);
+      const data = res.data;
+      const menuData = buildMenu(data.features || []);
+
+      setMenus(menuData);
+      dispatch(setUserInformation(data));
 
     } catch (e) {
       console.error(e);
@@ -171,17 +175,22 @@ export default function Wrapper({
 
 
   useEffect(() => {
-    // handleGetBtnRole();
-    handleGetUserInformation();
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
+      handleGetUserInformation();
       setIsLogin(!!token);
 
       window.scrollTo(0, 0);
       if (typeof window !== "undefined") {
-        const sub = localStorage.getItem("_sub");
+        const sub = localStorage.getItem("_sub") || "";
         const subSelected = localStorage.getItem("_sub-selected");
-        dispatch(setOptionFeatures(JSON.parse(sub || "")));
+        let parsedSub = [];
+        try {
+          parsedSub = sub ? JSON.parse(sub) : [];
+        } catch (error) {
+          parsedSub = [];
+        }
+        dispatch(setOptionFeatures(parsedSub));
         setSubMenuValue(subSelected || "");
       }
     }
