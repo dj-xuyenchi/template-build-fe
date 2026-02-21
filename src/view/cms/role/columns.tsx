@@ -15,7 +15,7 @@ import { ColumnTypeCustom } from "@/component/TableCustom";
 import { TextAreaCustom } from "@/component/TextAreaCustom";
 import { ACTIVE, CLOSE } from "@/model/BaseDataTable";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
-import { hasRole } from "@/util/authen-service/checkRoleBtn";
+import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
 import { SwitchCustom } from "@/component/SwitchCustom";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
@@ -172,7 +172,7 @@ export const getColumns = ({
         >
           {record.status === ACTIVE && (
             <ArchiveBtn
-              disable={!hasRole("ARCHIVE-APPLICATION")}
+              disable={!allowBtnCode("ARCHIVE-APPLICATION")}
               handleArchive={() => {
                 handleDeleteRow(record);
               }}
@@ -180,7 +180,7 @@ export const getColumns = ({
           )}
           {record.status === CLOSE && (
             <ReOpenBtn
-              disable={!hasRole('ARCHIVE-APPLICATION')}
+              disable={!allowBtnCode('ARCHIVE-APPLICATION')}
               handleReopen={() => {
                 if (handleReopenRow) {
                   handleReopenRow(record);

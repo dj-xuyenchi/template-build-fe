@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
-import { hasRole } from "@/util/authen-service/checkRoleBtn";
+import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
@@ -153,7 +153,7 @@ export const Index = () => {
         handleGetData(filter, null);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !hasRole("VIEW-APPLICATION"),
+      disableAddData: !allowBtnCode("CREATE_ROLE"),
       handleUpdateDataSource: (data: []) => {
         setData({ data: [...data] });
       },

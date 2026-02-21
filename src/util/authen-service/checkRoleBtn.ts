@@ -1,6 +1,6 @@
 import store from "@/store/store";
 
-export const hasRole = (btnCode: string): boolean => {
+export const allowBtnCode = (btnCode: string): boolean => {
     // return true;
     try {
         const global = store.getState().global;
