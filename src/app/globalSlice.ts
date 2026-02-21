@@ -16,16 +16,14 @@ const globalSlice = createSlice({
     setUserInformation: (state, action) => {
       state.userApp = action.payload;
     },
-    setOptionFeatures: (state, action) => {
-      state.appSlice.optionFeatures = action.payload;
-    },
+
     setCallBack: (state, action) => {
       state.appSlice.callBack = action.payload;
     },
   },
 });
 
-export const { setUserInformation, setOptionFeatures, setCallBack } =
+export const { setUserInformation, setCallBack } =
   globalSlice.actions;
 
 export default globalSlice.reducer;

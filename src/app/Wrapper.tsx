@@ -22,7 +22,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/api/authApi";
-import { setOptionFeatures, setUserInformation } from "./globalSlice";
+import { setUserInformation } from "./globalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { MenuProps } from "antd";
 import { SexyNotification } from "./SexyNotification";
@@ -76,6 +76,7 @@ export default function Wrapper({
   const [collapsed, setCollapsed] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [subMenuValue, setSubMenuValue] = useState("");
+  const [subMenuOptions, setSubMenuOptions] = useState([] as { value: string; label: string }[]);
   const [isLogin, setIsLogin] = useState(false);
   const [menus, setMenus] = useState([] as MenuProps["items"]);
 
@@ -108,39 +109,17 @@ export default function Wrapper({
     for (const m of menus) {
       const menu = m as FeatureAsMenu;
       if (menu.key === menuItem.key) {
-        handleGoPage(menu.key);
+        handleGoPage(menu.key, false);
       }
       if (menu.children) {
         const child = menu.children.find((child) => child.key === menuItem.key);
         if (child) {
-          handleGoPage(child.key);
+          handleGoPage(child.key, false);
         }
       }
     }
-
-
-    // for (const menu of menus) {
-    //   if (menu && "children" in menu && menu.children) {
-    //     const children = menu.children;
-    //     const subMenu = children.find((item) => {
-    //       return item?.key === menuItem.key;
-    //     });
-    //     if (subMenu && "childFeatures" in subMenu && Array.isArray(subMenu.childFeatures) && typeof subMenu.key === "string") {
-    //       dispatch(setOptionFeatures(subMenu.childFeatures));
-    //       if (typeof window !== "undefined") {
-    //         localStorage.setItem("_sub", JSON.stringify(subMenu.childFeatures));
-    //         localStorage.setItem(
-    //           "_sub-selected",
-    //           subMenu.childFeatures[0].value
-    //         );
-    //       }
-    //       setSubMenuValue(subMenu.childFeatures[0].value);
-    //       router.push(goPage(subMenu.key, { id: 1 }));
-    //     }
-    //   }
-    // }
   };
-  const handleGoPage = (key: string) => {
+  const handleGoPage = (key: string, isFromSubmenu?: boolean) => {
     console.info("handleGoPage", key);
 
     if (key) {
@@ -148,7 +127,9 @@ export default function Wrapper({
         localStorage.setItem("_sub-selected", key);
       }
       router.push(goPage(key, { id: 1 }));
-      setSubMenuValue(key);
+      if (!isFromSubmenu) {
+        setSubMenuValue(key);
+      }
     }
   };
 
@@ -185,6 +166,7 @@ export default function Wrapper({
       const menuData = buildMenu(data.features || []);
 
       setMenus(menuData);
+      setSubMenuOptions([{ value: "/cms/role", label: "Quản lý quyền" }]);
       dispatch(setUserInformation(data));
 
     } catch (e) {
@@ -209,7 +191,6 @@ export default function Wrapper({
         } catch (error) {
           parsedSub = [];
         }
-        dispatch(setOptionFeatures(parsedSub));
         setSubMenuValue(subSelected || "");
       }
     }
@@ -308,17 +289,17 @@ export default function Wrapper({
                   style={{ margin: "12px 0" }}
                 />
                 <div className={styles.subContainer}>
-                  {true && (
-                    <SelectCustom
-                      placeholder="Chọn chức năng"
-                      value={subMenuValue}
-                      style={{
-                        minWidth: "240px",
-                      }}
-                      onChange={handleGoPage}
-                      options={appSlice.optionFeatures}
-                    />
-                  )}
+                  <SelectCustom
+                    placeholder="Chọn chức năng"
+                    value={subMenuValue}
+                    style={{
+                      minWidth: "240px",
+                    }}
+                    onChange={(value) => {
+                      handleGoPage(value, true);
+                    }}
+                    options={subMenuOptions}
+                  />
                 </div>
               </div>
             </div>

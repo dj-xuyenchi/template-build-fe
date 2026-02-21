@@ -59,6 +59,14 @@ export const Filter = ({
 
     handleFilter(params, null);
   };
+  const handleOnchange = (value: string) => {
+    if (value != "E") {
+      form.setFieldsValue({
+        effectiveFrom: null,
+        effectiveTo: null,
+      });
+    }
+  }
 
   const handleClearFilter = () => {
     form.resetFields();
@@ -130,6 +138,7 @@ export const Filter = ({
                           options={[
                             ...effectiveType,
                           ]}
+                          onChange={handleOnchange}
                         />
                       </Form.Item>
                     </Col>
