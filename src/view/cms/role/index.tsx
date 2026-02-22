@@ -2,7 +2,7 @@ import { Content } from "antd/es/layout/layout";
 import { Filter } from "./Filter";
 import { TableData } from "./TableData";
 import { TablePropsCustom } from "@/component/TableCustom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
@@ -32,7 +32,7 @@ export const Index = () => {
     // });
     // console.error(res);
 
-    handleGetData(filter, null);
+    // handleGetData(filter, null);
   };
   const handleReopenRow = async (row: RoleDTO) => {
     if (!row.roleId) {
@@ -41,7 +41,7 @@ export const Index = () => {
     // await roleApi.reopen({
     //   roleId: row.roleId,
     // });
-    handleGetData(filter, null);
+    // handleGetData(filter, null);
   };
 
   const addNewData = async () => {
@@ -66,7 +66,7 @@ export const Index = () => {
     } catch (e) {
       throw e;
     } finally {
-      handleGetData(filter, null);
+      // handleGetData(filter, null);
       setIsTableLoading(false);
     }
   };
@@ -79,13 +79,13 @@ export const Index = () => {
     row.isEdited = true;
   };
   const handleSetEffectiveType = (row: RoleDTO, value: string) => {
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
-      data: prev.data.map(item =>
+      data: prev.data.map((item) =>
         item.roleId === row.roleId
           ? { ...item, effectiveType: value, isEdited: true }
-          : item
-      )
+          : item,
+      ),
     }));
   };
   const handleSetStatus = (row: RoleDTO, value: boolean) => {
@@ -110,7 +110,7 @@ export const Index = () => {
     handleSetDescription,
     handleSetEffectiveType,
     handleSetStatus,
-    handleDeleteRow
+    handleDeleteRow,
   });
 
   const toggleViewMode = (mode: boolean) => {
@@ -176,7 +176,6 @@ export const Index = () => {
       setIsTableLoading(true);
       const res = await roleApi.getRole(
         {
-          ...filter,
           ...params,
         },
         signal as AbortSignal,
@@ -191,15 +190,16 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-
-
+  const isFirstRender = useRef(true);
   useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    handleGetData({ ...filter }, signal);
-    return () => {
-      controller.abort();
-    };
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+
+      const controller = new AbortController();
+      handleGetData({ ...filter }, controller.signal);
+
+      return () => controller.abort();
+    }
   }, []);
 
   return (
@@ -213,10 +213,7 @@ export const Index = () => {
           borderRadius: "3px",
         }}
       >
-        <Filter
-          handleFilter={handleGetData}
-          filter={filter}
-        />
+        <Filter handleFilter={handleGetData} filter={filter} />
       </Content>
       <TableData config={config} />
     </>

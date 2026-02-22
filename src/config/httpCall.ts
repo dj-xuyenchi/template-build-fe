@@ -1,10 +1,10 @@
 // src/api/axiosClient.ts
-import { getUserDeviceInfo } from "@/util/authen-service/baseRequestHandle";
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import qs from "qs";
 import { getMessageInstance } from "./messageContext";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
 const ROOT_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
+const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const axiosClient = axios.create({
   baseURL: ROOT_URL,
   timeout: 30000,
@@ -30,7 +30,6 @@ axiosClient.interceptors.request.use(
         config.data = {
           ...rest,
           ...params,
-          ...getUserDeviceInfo(),
         };
         break;
       }
@@ -39,14 +38,13 @@ axiosClient.interceptors.request.use(
           qs.stringify(params, { arrayFormat: "repeat" });
         config.params = {
           ...(config.params || {}),
-          ...getUserDeviceInfo(),
         };
         break;
       }
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Interceptor cho response
@@ -57,36 +55,45 @@ axiosClient.interceptors.response.use(
 
     const messageApi = getMessageInstance();
     const status = error.response?.status;
-    const errorMess = error.response?.data.error;
     const code = error.code;
+    const fullUrl = window.location.href;
+
     if (code === "ERR_NETWORK") {
       messageApi.error("Kết nối đến máy chủ thất bại!");
       return Promise.reject(error);
     }
     switch (status) {
-      case 400: {
-        messageApi.error(errorMess);
-        break;
-      }
-      case 403: {
-        messageApi.error(errorMess);
-        break;
-      }
+      case 400:
+      case 403:
       case 401: {
+        const message =
+          error.response?.data.message || error.response?.data.error;
+        messageApi.error(message);
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        if (fullUrl == FE_URL + "/login") {
+          return;
+        } else {
+          setTimeout(() => {
+            window.location.href = FE_URL + "/login";
+          }, 5000);
+        }
         break;
       }
-      case 503: {
-        messageApi.error("Ứng dụng đang bảo trì!");
-        break;
-      }
+      case 503:
       case 500: {
-        messageApi.error("Ứng dụng đang bảo trì!");
+        const message = error.response?.data.message;
+        messageApi.error(message);
         break;
+      }
+      default: {
+        messageApi.error(error);
+        return;
       }
     }
-    // window.location.href = "http://localhost:3000/";
+
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosClient;

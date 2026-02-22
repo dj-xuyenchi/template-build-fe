@@ -35,7 +35,9 @@ import { handleLogout } from "@/util/authen-service/authenService";
 import { TOKEN_KEY } from "@/constant/authen/authenConst";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
 import { FeatureAsMenu } from "@/model/feature/FeatureAsMenu";
+import { useLocation } from "react-router-dom";
 
+const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
   height: 64,
@@ -76,7 +78,9 @@ export default function Wrapper({
   const [collapsed, setCollapsed] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [subMenuValue, setSubMenuValue] = useState("");
-  const [subMenuOptions, setSubMenuOptions] = useState([] as { value: string; label: string }[]);
+  const [subMenuOptions, setSubMenuOptions] = useState(
+    [] as { value: string; label: string }[],
+  );
   const [isLogin, setIsLogin] = useState(false);
   const [menus, setMenus] = useState([] as MenuProps["items"]);
 
@@ -100,7 +104,7 @@ export default function Wrapper({
     setShowNoti(true);
   };
 
-  const handleClickMenu = (menuItem: { key: string; }) => {
+  const handleClickMenu = (menuItem: { key: string }) => {
     if (!menus) {
       return;
     }
@@ -153,14 +157,14 @@ export default function Wrapper({
       label: "Đăng xuất",
       icon: <FaSignOutAlt />,
       extra: "",
-      onClick: handleLogout
+      onClick: handleLogout,
     },
   ];
   const handleGetUserInformation = async () => {
     try {
       const requestParam = {
-        isTakeAllowFeatureList: true
-      } as GetUserInformationFilter
+        isTakeAllowFeatureList: true,
+      } as GetUserInformationFilter;
       const res = await authApi.getUserInformation(requestParam);
       const data = res.data;
       const menuData = buildMenu(data.features || []);
@@ -168,15 +172,18 @@ export default function Wrapper({
       setMenus(menuData);
       setSubMenuOptions([{ value: "/cms/role", label: "Quản lý quyền" }]);
       dispatch(setUserInformation(data));
-
     } catch (e) {
       console.error(e);
-    } finally { }
-  }
-
+    } finally {
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
+    const fullUrl = window.location.href;
+    if (fullUrl == FE_URL + "/login") {
+      return;
+    }
     if (token) {
       handleGetUserInformation();
       setIsLogin(!!token);
@@ -194,13 +201,12 @@ export default function Wrapper({
         setSubMenuValue(subSelected || "");
       }
     }
-    return () => { };
+    return () => {};
   }, []);
   return (
     <>
       {isLogin && (
-        <Layout style={{
-        }} hasSider onClick={handleUnShowNoti}>
+        <Layout style={{}} hasSider onClick={handleUnShowNoti}>
           <Sider
             className="menu"
             trigger={null}
@@ -235,7 +241,11 @@ export default function Wrapper({
                     <Button
                       type="text"
                       icon={
-                        collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                        collapsed ? (
+                          <MenuUnfoldOutlined />
+                        ) : (
+                          <MenuFoldOutlined />
+                        )
                       }
                       onClick={() => setCollapsed(!collapsed)}
                       style={{
@@ -285,7 +295,11 @@ export default function Wrapper({
               </Header>
               <div className={clsx(styles.breadcrumbSubfunction)}>
                 <Breadcrumb
-                  items={[{ title: "Home" }, { title: "List" }, { title: "App" }]}
+                  items={[
+                    { title: "Home" },
+                    { title: "List" },
+                    { title: "App" },
+                  ]}
                   style={{ margin: "12px 0" }}
                 />
                 <div className={styles.subContainer}>
@@ -303,11 +317,7 @@ export default function Wrapper({
                 </div>
               </div>
             </div>
-            <div
-              className={styles.contentWrapper}
-            >
-              {children}
-            </div>
+            <div className={styles.contentWrapper}>{children}</div>
 
             <Footer style={footerStyle}>Footer</Footer>
           </Layout>

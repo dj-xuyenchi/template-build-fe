@@ -45,10 +45,7 @@ type FilterProps = {
   handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
   filter: GetRoleFilter;
 };
-export const Filter = ({
-  handleFilter,
-  filter,
-}: FilterProps) => {
+export const Filter = ({ handleFilter, filter }: FilterProps) => {
   const [form] = Form.useForm();
   const onFinish = (value: GetRoleFilter) => {
     const params = {
@@ -66,7 +63,7 @@ export const Filter = ({
         effectiveTo: null,
       });
     }
-  }
+  };
 
   const handleClearFilter = () => {
     form.resetFields();
@@ -78,7 +75,6 @@ export const Filter = ({
       ...filter,
       status: filter.status || ALL,
     });
-    handleFilter(filter, null);
   }, []);
   return (
     <>
@@ -121,9 +117,7 @@ export const Filter = ({
                         <SelectCustom
                           placeholder="Chọn trạng thái"
                           mode="multiple"
-                          options={[
-                            ...statusSelect,
-                          ]}
+                          options={[...statusSelect]}
                         />
                       </Form.Item>
                     </Col>
@@ -135,9 +129,7 @@ export const Filter = ({
                       >
                         <SelectCustom
                           placeholder="Chọn kiểu áp dụng thời gian"
-                          options={[
-                            ...effectiveType,
-                          ]}
+                          options={[...effectiveType]}
                           onChange={handleOnchange}
                         />
                       </Form.Item>
@@ -147,7 +139,6 @@ export const Filter = ({
                         label="Áp dụng từ"
                         name="effectiveFrom"
                         tooltip="Áp dụng từ"
-
                       >
                         <DatePickerCustom
                           placeholder="Chọn thời gian áp dụng từ"
@@ -168,9 +159,11 @@ export const Filter = ({
                       </Form.Item>
                     </Col>
                   </Row>
-                  <Form.Item style={{
-                    marginBottom: "unset"
-                  }}>
+                  <Form.Item
+                    style={{
+                      marginBottom: "unset",
+                    }}
+                  >
                     <ButtonCustom
                       type="primary"
                       htmlType="submit"

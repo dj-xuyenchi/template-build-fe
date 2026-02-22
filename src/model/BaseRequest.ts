@@ -1,5 +1,1 @@
-export interface BaseRequest {
-    ip?: string;
-    os?: string;
-    browser?: string;
-}
+export interface BaseRequest {}

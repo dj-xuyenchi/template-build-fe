@@ -262,10 +262,6 @@ img, video {
   display: flex;
 }
 
-.\[value\:\"\"\] {
-  value: "";
-}
-
 :root {
   --background: #fff;
   --foreground: #171717;
