@@ -66,8 +66,11 @@ axiosClient.interceptors.response.use(
       case 400:
       case 403:
       case 401: {
-        const message =
+        let message =
           error.response?.data.message || error.response?.data.error;
+        if (!message) {
+          message = "Lỗi!";
+        }
         messageApi.error(message);
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(REFRESH_TOKEN_KEY);

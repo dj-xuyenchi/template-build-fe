@@ -35,7 +35,6 @@ import clsx from "clsx";
 import { BaseDataTable } from "@/model/BaseDataTable";
 import { Key } from "antd/es/table/interface";
 
-import { LoadingOutlined } from "@ant-design/icons";
 import Spin1 from "./spin/Spin1";
 const MotionTh = motion.th;
 const HEIGHT_LOADING = 280;
