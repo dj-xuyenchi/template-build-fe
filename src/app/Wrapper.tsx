@@ -108,7 +108,7 @@ export default function Wrapper({
     if (!menus) {
       return;
     }
-    console.error("handleClickMenu", menuItem);
+    console.info("handleClickMenu", menuItem);
 
     for (const m of menus) {
       const menu = m as FeatureAsMenu;

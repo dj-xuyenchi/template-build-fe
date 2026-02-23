@@ -169,6 +169,11 @@ body {
     border: unset;
 }
 
+.ant-table-tbody .ant-table-cell .ant-input.ant-input-status-error {
+    border: 1px solid #ff4d4f !important;
+}
+
+
 .ant-table-tbody .ant-table-cell input {
     border-radius: unset !important;
     position: absolute;
@@ -286,6 +291,10 @@ body {
 
 .ant-table-tbody .ant-table-cell .ant-picker input {
     position: unset;
+}
+
+.ant-table-tbody .ant-table-cell .ant-picker-status-error {
+    border: 1px solid #ff4d4f !important;
 }
 
 /* date range picker */

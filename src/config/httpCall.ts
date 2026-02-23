@@ -49,9 +49,19 @@ axiosClient.interceptors.request.use(
 
 // Interceptor cho response
 axiosClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
+  (response: AxiosResponse) => {
+    const messageApi = getMessageInstance();
+    if (response.data.code === "ERROR") {
+      messageApi.error(response.data.message);
+    }
+    if (response.data.code === "SUCCESS") {
+      if (response.data.message && response.data.message.trim() !== "") {
+        messageApi.info(response.data.message);
+      }
+    }
+    return response;
+  },
   (error) => {
-    console.error(error);
 
     const messageApi = getMessageInstance();
     const status = error.response?.status;
@@ -63,6 +73,7 @@ axiosClient.interceptors.response.use(
       return Promise.reject(error);
     }
     switch (status) {
+
       case 400:
       case 403:
       case 401: {

@@ -3,9 +3,15 @@ export interface BaseDataTable {
   isNewRow?: boolean | false;
   isDeleted?: boolean | false;
   rowUUID?: string;
-  createdAt: Date
+  createdAt: Date;
+  indexCountNumber?: number
 }
-
+export const reIndexDataTable = <T extends BaseDataTable>(data: T[]): T[] => {
+  return data.map((item, index) => ({
+    ...item,
+    indexCountNumber: index + 1,
+  }));
+}
 
 export const ACTIVE = "O"
 export const CLOSE = "C"

@@ -20,7 +20,7 @@ export const Index = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
-    pageSize: 10,
+    pageSize: 5,
     totalData: 0,
     status: ["O"],
   } as GetRoleFilter);
@@ -48,10 +48,11 @@ export const Index = () => {
   };
 
   const addNewData = async () => {
+    let isError = false;
     try {
       setIsTableLoading(true);
-      const newDataList = data.data.filter((data) => {
-        return data.isNewRow;
+      const newDataList = data.data.filter((item) => {
+        return item.isNewRow;
       }).map((item: RoleDTO) => {
         return {
           roleCode: item.roleCode,
@@ -65,9 +66,10 @@ export const Index = () => {
       const request = {
         data: newDataList || [],
       }
-      console.error(request);
-
       const res = await roleApi.createRole(request);
+      if (res.code && res.code === "ERROR") {
+        isError = true
+      }
       // const update = data.data.filter((data) => {
       //   return data.isEdited && !data.isNewRow;
       // });
@@ -80,7 +82,11 @@ export const Index = () => {
     } catch (e) {
       throw e;
     } finally {
-      // handleGetData(filter, null);
+      if (!isError) {
+        handleGetData(filter, null);
+      } else {
+        toggleViewMode(false)
+      }
       setIsTableLoading(false);
     }
   };
@@ -113,7 +119,9 @@ export const Index = () => {
             ...item, effectiveType: value,
             isEdited: true,
             effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-            effectiveTo: value == "NE" ? undefined : item.effectiveTo
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+            isErrorRoleEffectiveFrom: false,
+            isErrorRoleEffectiveTo: false,
           }
           : item,
       ),
@@ -190,7 +198,7 @@ export const Index = () => {
   const pageConfig = {
     current: filter.pageNumber + 1, // Trang hiện tại
     pageSize: filter.pageSize, // Số phần tử/trang
-    total: filter.totalData, // Tổng số phần tử
+    total: data.data.length, // Tổng số phần tử
     showSizeChanger: true, // Cho phép chọn số phần tử/trang
     pageSizeOptions: ["10", "20", "50", "100", "500"], // Tuỳ chọn pageSize
     onChange: (page: number, pageSize: number) => {
@@ -199,14 +207,6 @@ export const Index = () => {
         pageNumber: page - 1,
         pageSize: pageSize,
       });
-      handleGetData(
-        {
-          ...filter,
-          pageNumber: page - 1,
-          pageSize: pageSize,
-        },
-        null,
-      );
     },
   };
   const config = {
@@ -216,7 +216,7 @@ export const Index = () => {
     loading: isTableLoading,
     dataSource: data.data as RoleDTO[],
     viewMode: viewMode,
-    tableName: "Quản lý API",
+    tableName: "Quản lý quyền",
     extendFunction: {
       quickSearch: true,
       handleQuickSearch: handleQuickSearch,
@@ -232,9 +232,53 @@ export const Index = () => {
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
-        addNewData().catch((e) => {
-          throw e;
-        });
+        let isError = false;
+        const validData = data.data.filter((data) => {
+          if (!data.roleName || data.roleName.trim() == "") {
+            data.isErrorRoleName = true;
+            isError = true;
+          } else {
+            data.isErrorRoleName = false;
+          }
+          if (!data.roleCode || data.roleCode.trim() == "") {
+            data.isErrorRoleCode = true;
+            isError = true;
+          } else {
+            data.isErrorRoleCode = false;
+          }
+          if (!data.effectiveType || data.effectiveType.trim() == "") {
+            data.isErrorRoleEffectiveType = true;
+            isError = true;
+          } else {
+            data.isErrorRoleEffectiveType = false;
+          }
+          if (data.effectiveType == "E") {
+            if (!data.effectiveFrom) {
+              data.isErrorRoleEffectiveFrom = true;
+              isError = true;
+            } else {
+              data.isErrorRoleEffectiveFrom = false;
+            }
+            if (!data.effectiveTo) {
+              data.isErrorRoleEffectiveTo = true;
+              isError = true;
+            } else {
+              data.isErrorRoleEffectiveTo = false;
+            }
+          }
+          return data;
+        })
+        if (isError) {
+          setData((prev) => ({
+            ...prev,
+            data: [...validData],
+          }));
+          return false;
+        } else {
+          addNewData().catch((e) => {
+            throw e;
+          });
+        }
       },
     },
   } as TablePropsCustom<RoleDTO>;

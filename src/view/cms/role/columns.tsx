@@ -44,7 +44,7 @@ export const getColumns = ({
       fixed: "left",
       width: 80,
       render: (value: string, record: RoleDTO, index: number) => (
-        <TableLabelCustom>{index + 1}</TableLabelCustom>
+        <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -69,10 +69,10 @@ export const getColumns = ({
       align: "center",
     },
     {
-      title: "Mô tả",
+      title: "Mô tả quyền",
       dataIndex: "roleDescription",
       key: "roleDescription",
-      width: 200,
+      width: 240,
       render: (value: string, record: RoleDTO, index: number) => (
         <TableLabelCustom>{value}</TableLabelCustom>
       ),
@@ -84,7 +84,7 @@ export const getColumns = ({
       key: "effectiveType",
       width: 200,
       render: (value: string, record: RoleDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
+        <TableLabelCustom>{value == "NE" ? "Không áp dụng thời gian" : "Có áp dụng thời gian"}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -94,7 +94,7 @@ export const getColumns = ({
       key: "effectiveFrom",
       width: 200,
       render: (value: Date, record: RoleDTO, index: number) => (
-        <TableLabelCustom align="left">{formatDate(value, DDmmYYY)}</TableLabelCustom>
+        <TableLabelCustom align="left">{formatDateWithDayVN(value, true)}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -105,7 +105,7 @@ export const getColumns = ({
       key: "effectiveTo",
       width: 200,
       render: (value: Date, record: RoleDTO, index: number) => (
-        <TableLabelCustom align="left">{formatDateWithDayVN(value)}</TableLabelCustom>
+        <TableLabelCustom align="left">{formatDateWithDayVN(value, true)}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -227,6 +227,7 @@ export const getColumnsEdit = ({
       width: 240,
       render: (value: string, record: RoleDTO, index: number) => (
         <InputCustom
+          status={record.isErrorRoleName ? "error" : ""}
           defaultValue={record.roleName}
           onBlur={(e) => {
             const value = e.target.value;
@@ -245,6 +246,7 @@ export const getColumnsEdit = ({
         <InputCustom
           disabled={record.isNewRow ? false : true}
           defaultValue={record.roleCode}
+          status={record.isErrorRoleCode ? "error" : ""}
           onBlur={(e) => {
             const value = e.target.value;
             handleSetRoleCode(record, value);
@@ -257,11 +259,13 @@ export const getColumnsEdit = ({
       dataIndex: "roleDescription",
       key: "roleDescription",
       align: "center",
-      width: 200,
+      width: 240,
       render: (value: string, record: RoleDTO, index: number) => (
         <TextAreaCustom
+          // style={{ minHeight: 45 }}
           rows={1}
           defaultValue={value}
+          // status={record.isErrorRoleDescription ? "error" : ""}
           onBlur={(e) => {
             const value = e.target.value;
             handleSetDescription(record, value);
@@ -278,6 +282,7 @@ export const getColumnsEdit = ({
       render: (value: string, record: RoleDTO, index: number) => (
         <SelectCustom
           size="small"
+          status={record.isErrorRoleEffectiveType ? "error" : ""}
           value={record.effectiveType}
           options={effectiveType}
           onChange={(e) => {
@@ -293,10 +298,15 @@ export const getColumnsEdit = ({
       align: "center",
       width: 200,
       render: (value: string, record: RoleDTO, index: number) => (
-        <DatePickerCustom disabled={record.effectiveType != "E"} placeholder="Chọn thời gian áp dụng từ" onChange={(e) => {
-          const value = e;
-          handleSetEffectiveFrom(record, value as dayjs.Dayjs | null);
-        }} />
+        <DatePickerCustom
+          status={record.isErrorRoleEffectiveFrom ? "error" : ""}
+          value={value ? dayjs(value) : null}
+          disabled={record.effectiveType != "E"}
+          placeholder="Chọn thời gian áp dụng từ"
+          onChange={(e) => {
+            const value = e;
+            handleSetEffectiveFrom(record, value as dayjs.Dayjs | null);
+          }} />
       ),
     }, {
       title: "Áp dụng đến",
@@ -305,10 +315,14 @@ export const getColumnsEdit = ({
       align: "center",
       width: 200,
       render: (value: string, record: RoleDTO, index: number) => (
-        <DatePickerCustom disabled={record.effectiveType != "E"} placeholder="Chọn thời gian áp dụng đến" onChange={(e) => {
-          const value = e;
-          handleSetEffectiveTo(record, value as dayjs.Dayjs | null);
-        }} />
+        <DatePickerCustom
+          status={record.isErrorRoleEffectiveTo ? "error" : ""}
+          value={value ? dayjs(value) : null}
+          disabled={record.effectiveType != "E"} placeholder="Chọn thời gian áp dụng đến"
+          onChange={(e) => {
+            const value = e;
+            handleSetEffectiveTo(record, value as dayjs.Dayjs | null);
+          }} />
       ),
     },
     {
@@ -316,7 +330,7 @@ export const getColumnsEdit = ({
       dataIndex: "status",
       key: "status",
       align: "center",
-      width: 200,
+      width: 110,
       render: (value: string, record: RoleDTO, index: number) => (
         <SwitchCustom size="small"
           defaultValue={record.status === ACTIVE}

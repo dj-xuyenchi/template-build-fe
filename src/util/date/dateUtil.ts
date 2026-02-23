@@ -7,12 +7,14 @@ export const formatDate = (date: Date, type: string): string => {
     }
     return dayjs(date).format(type);
 };
-export const formatDateWithDayVN = (date: Date): string => {
+export const formatDateWithDayVN = (date: Date, isTakeTime?: boolean): string => {
     if (!date) {
         return '';
     }
     dayjs.locale("vi");
-
+    if (isTakeTime) {
+        return dayjs(date).format("H:mm dddd, DD/MM/YYYY");
+    }
     return dayjs(date).format("dddd, DD/MM/YYYY");
 };
 

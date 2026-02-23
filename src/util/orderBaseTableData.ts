@@ -1,10 +1,10 @@
-import { BaseDataTable } from "@/model/BaseDataTable";
+import { BaseDataTable, reIndexDataTable } from "@/model/BaseDataTable";
 
 export const orderByCreatedAt = <T extends BaseDataTable>(data: T[]): T[] => {
     if (!data || data.length === 0) {
         return []
     }
-    return data.sort((a, b) => {
+    return reIndexDataTable(data.sort((a, b) => {
         const dateA = a.createdAt ? new Date(a.createdAt).getTime() : null;
         const dateB = b.createdAt ? new Date(b.createdAt).getTime() : null;
 
@@ -13,5 +13,5 @@ export const orderByCreatedAt = <T extends BaseDataTable>(data: T[]): T[] => {
         if (dateB === null) return -1; // b null -> cho xuống dưới
 
         return dateB - dateA; // Giảm dần: mới trước, cũ sau
-    });
+    }));
 }

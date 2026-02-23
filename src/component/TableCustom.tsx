@@ -53,7 +53,7 @@ export interface ExtendFunction<T> {
   disableExportData?: boolean;
   andOn?: "table" | "drawer" | "page";
   formOnDrawer?: ReactNode;
-  handleConfirm?: () => void;
+  handleConfirm?: () => boolean;
   quickSearch?: boolean;
   handleQuickSearch?: (keyword: string) => void;
 }
@@ -314,10 +314,14 @@ export const TableCustom = <T extends BaseDataTable>({
     handleOpenBeforeConfirm();
   };
   const handleConfirm = () => {
+    let isValidError = false;
     try {
       if (extendFunction) {
         if (extendFunction.handleConfirm) {
-          extendFunction.handleConfirm();
+          const result = extendFunction.handleConfirm();
+          if (result === false) {
+            isValidError = true;
+          }
         }
       }
     } catch (e) {
@@ -327,11 +331,13 @@ export const TableCustom = <T extends BaseDataTable>({
         content: "e",
       });
     } finally {
-      handleCloseBeforeConfirm();
-      setIsEditAddBtn(false);
-      if (extendFunction?.toggleViewMode) {
-        extendFunction.toggleViewMode(true);
+      if (!isValidError) {
+        setIsEditAddBtn(false);
+        if (extendFunction?.toggleViewMode) {
+          extendFunction.toggleViewMode(true);
+        }
       }
+      handleCloseBeforeConfirm();
     }
   };
   const handleCloseBeforeConfirm = () => {
@@ -653,7 +659,7 @@ export const TableCustom = <T extends BaseDataTable>({
                       )}
 
                       {!isEditAddBtn && (
-                        <ButtonCustom
+                        < ButtonCustom
                           icon={<FaPlus />}
                           disabled={loading as boolean | undefined}
                           size={extendFunction.size || "middle"}
