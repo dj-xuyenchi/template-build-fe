@@ -2,6 +2,7 @@ import axiosClient from "@/config/httpCall";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { BaseFilter } from "@/model/BaseFilter";
 import { BasePageResult } from "@/model/BasePageResult";
+import { CreateRoleRequest } from "@/model/cms/role/CreateRoleRequest";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
 export interface ApiUriFilter extends BaseFilter {
@@ -21,16 +22,11 @@ export const roleApi = {
             signal: signal,
         });
         return res.data;
-    }, 
+    },
     createRole: async (
-        params: GetRoleFilter,
-        signal: AbortSignal
+        params: CreateRoleRequest
     ): Promise<BasePageResult<RoleDTO>> => {
-
-        const res = await axiosClient.post(`${AUTHEN_SERVICE}/role/create-role`, {
-            params: params,
-            signal: signal,
-        });
+        const res = await axiosClient.post(`${AUTHEN_SERVICE}/role/create-role`, params);
         return res.data;
     },
 };

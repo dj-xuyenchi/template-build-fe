@@ -3,8 +3,7 @@ import { SelectCustom } from "@/component/SelectCustom";
 import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
 import { ArchiveBtn } from "@/component/table-btn/ArchiveBtn";
-import { formatDate } from "@/util/dateUtil";
-import { DATE_TYPE1 } from "@/constant/dateFormat";
+import { formatDate, formatDateWithDayVN } from "@/util/date/dateUtil";
 import {
   effectiveType,
   getStatusLabel,
@@ -19,12 +18,18 @@ import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
 import { SwitchCustom } from "@/component/SwitchCustom";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
+import dayjs from "dayjs";
+import { DDmmYYY, DDmmYYY_HHMMSS } from "@/constant/dateFormat";
+
 export type CallBacks = BaseTable & {
   handleDeleteRow: (row: RoleDTO) => Promise<void>;
   handleReopenRow?: (row: RoleDTO) => Promise<void>;
   handleSetName: (row: RoleDTO, value: string) => void;
   handleSetDescription: (row: RoleDTO, value: string) => void;
   handleSetEffectiveType: (row: RoleDTO, value: string) => void;
+  handleSetRoleCode: (row: RoleDTO, value: string) => void;
+  handleSetEffectiveFrom: (row: RoleDTO, value: dayjs.Dayjs | null) => void;
+  handleSetEffectiveTo: (row: RoleDTO, value: dayjs.Dayjs | null) => void;
   handleSetStatus: (row: RoleDTO, value: boolean) => void;
 };
 
@@ -88,8 +93,8 @@ export const getColumns = ({
       dataIndex: "effectiveFrom",
       key: "effectiveFrom",
       width: 200,
-      render: (value: string, record: RoleDTO, index: number) => (
-        <TableLabelCustom align="left">{value}</TableLabelCustom>
+      render: (value: Date, record: RoleDTO, index: number) => (
+        <TableLabelCustom align="left">{formatDate(value, DDmmYYY)}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -99,8 +104,8 @@ export const getColumns = ({
       dataIndex: "effectiveTo",
       key: "effectiveTo",
       width: 200,
-      render: (value: string, record: RoleDTO, index: number) => (
-        <TableLabelCustom align="left">{value}</TableLabelCustom>
+      render: (value: Date, record: RoleDTO, index: number) => (
+        <TableLabelCustom align="left">{formatDateWithDayVN(value)}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -134,7 +139,7 @@ export const getColumns = ({
       key: "createdAt",
       width: 160,
       render: (value: Date, record: RoleDTO, index: number) => (
-        <TableLabelCustom>{formatDate(value, DATE_TYPE1)}</TableLabelCustom>
+        <TableLabelCustom>{formatDate(value, DDmmYYY)}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -154,7 +159,7 @@ export const getColumns = ({
       key: "updatedAt",
       width: 160,
       render: (value: Date, record: RoleDTO, index: number) => (
-        <TableLabelCustom>{formatDate(value, DATE_TYPE1)}</TableLabelCustom>
+        <TableLabelCustom>{formatDate(value, DDmmYYY_HHMMSS)}</TableLabelCustom>
       ),
       align: "center",
     },
@@ -198,7 +203,10 @@ export const getColumnsEdit = ({
   handleSetName,
   handleSetDescription,
   handleSetEffectiveType,
-  handleSetStatus
+  handleSetStatus,
+  handleSetEffectiveFrom,
+  handleSetEffectiveTo,
+  handleSetRoleCode
 }: CallBacks) => [
     {
       title: "STT",
@@ -228,9 +236,26 @@ export const getColumnsEdit = ({
       ),
     },
     {
+      title: "Mã quyền",
+      dataIndex: "roleCode",
+      key: "roleCode",
+      align: "center",
+      width: 240,
+      render: (value: string, record: RoleDTO, index: number) => (
+        <InputCustom
+          disabled={record.isNewRow ? false : true}
+          defaultValue={record.roleCode}
+          onBlur={(e) => {
+            const value = e.target.value;
+            handleSetRoleCode(record, value);
+          }}
+        />
+      ),
+    },
+    {
       title: "Mô tả quyền",
-      dataIndex: "description",
-      key: "description",
+      dataIndex: "roleDescription",
+      key: "roleDescription",
       align: "center",
       width: 200,
       render: (value: string, record: RoleDTO, index: number) => (
@@ -268,7 +293,10 @@ export const getColumnsEdit = ({
       align: "center",
       width: 200,
       render: (value: string, record: RoleDTO, index: number) => (
-        <DatePickerCustom disabled={record.effectiveType != "E"} placeholder="Chọn thời gian áp dụng từ" />
+        <DatePickerCustom disabled={record.effectiveType != "E"} placeholder="Chọn thời gian áp dụng từ" onChange={(e) => {
+          const value = e;
+          handleSetEffectiveFrom(record, value as dayjs.Dayjs | null);
+        }} />
       ),
     }, {
       title: "Áp dụng đến",
@@ -277,7 +305,10 @@ export const getColumnsEdit = ({
       align: "center",
       width: 200,
       render: (value: string, record: RoleDTO, index: number) => (
-        <DatePickerCustom disabled={record.effectiveType != "E"} placeholder="Chọn thời gian áp dụng đến" />
+        <DatePickerCustom disabled={record.effectiveType != "E"} placeholder="Chọn thời gian áp dụng đến" onChange={(e) => {
+          const value = e;
+          handleSetEffectiveTo(record, value as dayjs.Dayjs | null);
+        }} />
       ),
     },
     {

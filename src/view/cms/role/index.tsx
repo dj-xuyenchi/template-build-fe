@@ -10,6 +10,9 @@ import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
+import dayjs from "dayjs";
+import { CreateRoleRequestData } from "@/model/cms/role/CreateRoleRequest";
+import { toDateSendBE } from "@/util/date/dateUtil";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleDTO[] });
@@ -49,11 +52,22 @@ export const Index = () => {
       setIsTableLoading(true);
       const newDataList = data.data.filter((data) => {
         return data.isNewRow;
+      }).map((item: RoleDTO) => {
+        return {
+          roleCode: item.roleCode,
+          roleName: item.roleName,
+          roleDescription: item.roleDescription,
+          effectiveType: item.effectiveType,
+          effectiveFrom: item.effectiveFrom,
+          effectiveTo: item.effectiveTo,
+        } as CreateRoleRequestData;
       });
+      const request = {
+        data: newDataList || [],
+      }
+      console.error(request);
 
-      // const res = await RoleDTOApi.create({
-      //   createApis: newDataList || [],
-      // });
+      const res = await roleApi.createRole(request);
       // const update = data.data.filter((data) => {
       //   return data.isEdited && !data.isNewRow;
       // });
@@ -71,26 +85,80 @@ export const Index = () => {
     }
   };
   const handleSetName = (row: RoleDTO, value: string) => {
-    row.roleName = value;
-    row.isEdited = true;
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, roleName: value, isEdited: true }
+          : item,
+      ),
+    }));
   };
   const handleSetDescription = (row: RoleDTO, value: string) => {
-    row.roleDescription = value;
-    row.isEdited = true;
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, roleDescription: value, isEdited: true }
+          : item,
+      ),
+    }));
   };
   const handleSetEffectiveType = (row: RoleDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
-        item.roleId === row.roleId
-          ? { ...item, effectiveType: value, isEdited: true }
+        item.rowUUID === row.rowUUID
+          ? {
+            ...item, effectiveType: value,
+            isEdited: true,
+            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo
+          }
+          : item,
+      ),
+    }));
+  };
+  const handleSetEffectiveFrom = (row: RoleDTO, value: dayjs.Dayjs | null) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, effectiveFrom: toDateSendBE(value), isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const handleSetEffectiveTo = (row: RoleDTO, value: dayjs.Dayjs | null) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, effectiveTo: toDateSendBE(value), isEdited: true }
           : item,
       ),
     }));
   };
   const handleSetStatus = (row: RoleDTO, value: boolean) => {
-    row.status = value ? "O" : "C";
-    row.isEdited = true;
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, status: value ? "O" : "C", isEdited: true }
+          : item,
+      ),
+    }));
+  };
+  const handleSetRoleCode = (row: RoleDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, roleCode: value, isEdited: true }
+          : item,
+      ),
+    }));
   };
   const handleQuickSearch = (keyword: string) => {
     setFilter({
@@ -110,7 +178,10 @@ export const Index = () => {
     handleSetDescription,
     handleSetEffectiveType,
     handleSetStatus,
+    handleSetEffectiveFrom,
+    handleSetEffectiveTo,
     handleDeleteRow,
+    handleSetRoleCode
   });
 
   const toggleViewMode = (mode: boolean) => {
