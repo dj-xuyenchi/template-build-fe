@@ -657,7 +657,7 @@ body {
   border-start-end-radius: unset;
 }
 
-.table-custom .ant-table-thead .ant-table-cell {
+.table-custom .ant-table-header, .table-custom .ant-table-thead .ant-table-cell {
   border-radius: unset !important;
 }
 

@@ -139,6 +139,10 @@ body {
     border-start-end-radius: unset
 }
 
+.table-custom .ant-table-header {
+    border-radius: unset !important;
+}
+
 .table-custom .ant-table-thead .ant-table-cell {
     border-radius: unset !important;
 }

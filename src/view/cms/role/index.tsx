@@ -51,24 +51,26 @@ export const Index = () => {
     let isError = false;
     try {
       setIsTableLoading(true);
-      const newDataList = data.data.filter((item) => {
-        return item.isNewRow;
-      }).map((item: RoleDTO) => {
-        return {
-          roleCode: item.roleCode,
-          roleName: item.roleName,
-          roleDescription: item.roleDescription,
-          effectiveType: item.effectiveType,
-          effectiveFrom: item.effectiveFrom,
-          effectiveTo: item.effectiveTo,
-        } as CreateRoleRequestData;
-      });
+      const newDataList = data.data
+        .filter((item) => {
+          return item.isNewRow;
+        })
+        .map((item: RoleDTO) => {
+          return {
+            roleCode: item.roleCode,
+            roleName: item.roleName,
+            roleDescription: item.roleDescription,
+            effectiveType: item.effectiveType,
+            effectiveFrom: item.effectiveFrom,
+            effectiveTo: item.effectiveTo,
+          } as CreateRoleRequestData;
+        });
       const request = {
         data: newDataList || [],
-      }
+      };
       const res = await roleApi.createRole(request);
       if (res.code && res.code === "ERROR") {
-        isError = true
+        isError = true;
       }
       // const update = data.data.filter((data) => {
       //   return data.isEdited && !data.isNewRow;
@@ -85,7 +87,7 @@ export const Index = () => {
       if (!isError) {
         handleGetData(filter, null);
       } else {
-        toggleViewMode(false)
+        toggleViewMode(false);
       }
       setIsTableLoading(false);
     }
@@ -116,13 +118,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item, effectiveType: value,
-            isEdited: true,
-            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-            isErrorRoleEffectiveFrom: false,
-            isErrorRoleEffectiveTo: false,
-          }
+              ...item,
+              effectiveType: value,
+              isEdited: true,
+              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+              isErrorRoleEffectiveFrom: false,
+              isErrorRoleEffectiveTo: false,
+            }
           : item,
       ),
     }));
@@ -189,7 +192,7 @@ export const Index = () => {
     handleSetEffectiveFrom,
     handleSetEffectiveTo,
     handleDeleteRow,
-    handleSetRoleCode
+    handleSetRoleCode,
   });
 
   const toggleViewMode = (mode: boolean) => {
@@ -198,7 +201,7 @@ export const Index = () => {
   const pageConfig = {
     current: filter.pageNumber + 1, // Trang hiện tại
     pageSize: filter.pageSize, // Số phần tử/trang
-    total: data.data.length, // Tổng số phần tử
+    total: data?.data?.length, // Tổng số phần tử
     showSizeChanger: true, // Cho phép chọn số phần tử/trang
     pageSizeOptions: ["10", "20", "50", "100", "500"], // Tuỳ chọn pageSize
     onChange: (page: number, pageSize: number) => {
@@ -267,7 +270,7 @@ export const Index = () => {
             }
           }
           return data;
-        })
+        });
         if (isError) {
           setData((prev) => ({
             ...prev,
