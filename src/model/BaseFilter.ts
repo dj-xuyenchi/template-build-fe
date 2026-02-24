@@ -1,5 +1,5 @@
 export interface BaseFilter {
-  pageSize: number | 5;
+  pageSize: number | 10;
   pageNumber: number | 1;
   totalData: number | 0;
   keyword?: string;

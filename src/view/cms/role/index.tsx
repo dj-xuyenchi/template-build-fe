@@ -7,7 +7,7 @@ import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { RoleDTO } from "@/model/cms/role/RoleDTO";
+import { ROLE_CLOSE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import dayjs from "dayjs";
@@ -20,7 +20,7 @@ export const Index = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
-    pageSize: 5,
+    pageSize: 10,
     totalData: 0,
     status: ["O"],
   } as GetRoleFilter);
@@ -63,6 +63,7 @@ export const Index = () => {
             effectiveType: item.effectiveType,
             effectiveFrom: item.effectiveFrom,
             effectiveTo: item.effectiveTo,
+            status: item.status,
           } as CreateRoleRequestData;
         });
       const request = {
@@ -86,8 +87,6 @@ export const Index = () => {
     } finally {
       if (!isError) {
         handleGetData(filter, null);
-      } else {
-        toggleViewMode(false);
       }
       setIsTableLoading(false);
     }
@@ -118,14 +117,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorRoleEffectiveFrom: false,
-              isErrorRoleEffectiveTo: false,
-            }
+            ...item,
+            effectiveType: value,
+            isEdited: true,
+            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+            isErrorRoleEffectiveFrom: false,
+            isErrorRoleEffectiveTo: false,
+          }
           : item,
       ),
     }));
@@ -232,6 +231,9 @@ export const Index = () => {
         setData({ data: [...data] });
       },
       andOn: "table",
+      callBackAddOnTable: (row: RoleDTO) => {
+        row.status = ROLE_CLOSE;
+      },
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {

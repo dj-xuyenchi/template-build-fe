@@ -335,8 +335,7 @@ export const getColumnsEdit = ({
         <SwitchCustom size="small"
           defaultValue={record.status === ACTIVE}
           onChange={(e) => {
-            const value = e;
-            handleSetStatus(record, value);
+            handleSetStatus(record, e);
           }} />
       ),
     },

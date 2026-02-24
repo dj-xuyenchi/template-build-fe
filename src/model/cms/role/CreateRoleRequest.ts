@@ -10,4 +10,5 @@ export interface CreateRoleRequestData {
     effectiveType: string;
     effectiveFrom: string;
     effectiveTo: string;
+    status: string;
 }

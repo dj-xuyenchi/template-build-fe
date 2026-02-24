@@ -54,6 +54,7 @@ export interface ExtendFunction<T> {
   andOn?: "table" | "drawer" | "page";
   formOnDrawer?: ReactNode;
   handleConfirm?: () => boolean;
+  callBackAddOnTable?: (row: object) => void;
   quickSearch?: boolean;
   handleQuickSearch?: (keyword: string) => void;
 }
@@ -122,7 +123,9 @@ export const TableCustom = <T extends BaseDataTable>({
   };
 
   const handleChangeColumn = (isChecked: boolean, columnKey: string) => {
-    if (!columns) return;
+    if (!columns) {
+      return;
+    }
 
     if (isChecked) {
       // Thêm lại cột nếu đang bị ẩn
@@ -267,10 +270,16 @@ export const TableCustom = <T extends BaseDataTable>({
         if (loading) {
           return;
         }
-        dataSource?.unshift({
+        const newRow = {
           rowUUID: uuidv4(),
           isNewRow: true,
-        } as T);
+        } as T
+
+        if (extendFunction.callBackAddOnTable) {
+          extendFunction.callBackAddOnTable(newRow);
+        }
+        dataSource?.unshift(newRow);
+
         extendFunction.handleUpdateDataSource(dataSource as []);
       }
     }
