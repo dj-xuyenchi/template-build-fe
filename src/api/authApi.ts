@@ -13,13 +13,21 @@ export const authApi = {
   // },
 
   login: async (requestBody: LoginRequest): Promise<LoginResponse> => {
-    const res = await axiosClient.post(`${AUTHEN_SERVICE}/login`, requestBody);
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/authentication/login`,
+      requestBody,
+    );
     return res.data;
   },
-  getUserInformation: async (filter: GetUserInformationFilter): Promise<BaseResponse<UserInformation>> => {
-    const res = await axiosClient.get(`${AUTHEN_SERVICE}/authentication/get-user-information`, {
-      params: filter
-    });
+  getUserInformation: async (
+    filter: GetUserInformationFilter,
+  ): Promise<BaseResponse<UserInformation>> => {
+    const res = await axiosClient.get(
+      `${AUTHEN_SERVICE}/authentication/get-user-information`,
+      {
+        params: filter,
+      },
+    );
     return res.data;
   },
 };

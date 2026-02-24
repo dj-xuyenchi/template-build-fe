@@ -12,7 +12,7 @@ import { getMessageInstance } from "@/config/messageContext";
 import { useRouter } from "next/navigation";
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
 export default function Login() {
-  const LANDING = process.env.NEXT_PUBLIC_PRODUCTION_URL;
+  const FE_ROOT = process.env.NEXT_PUBLIC_PRODUCTION_URL;
   const [loginModel, setLoginModel] = useState({} as LoginRequest);
   const [traceModeOpen, setTraceModeOpen] = useState(false);
   const messageApi = getMessageInstance();
@@ -20,23 +20,23 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      localStorage.setItem(TOKEN_KEY, "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmhkcTEyMyIsInNlc3Npb25JZCI6IjEyYWQwODRiLTkzNWYtNDI0OS04OTEyLWQ5NzZjNjczNDdkNyIsImp0aSI6IjEzIiwiaWF0IjoxNzUwNzQ2OTYwLCJleHAiOjg4MTUwNzQ2OTYwfQ.5r9Juu6GG_Ck9XSRdXscoftGouzEuw9d1I3Dh5Ys-kkImowiByTXQmCXQ9jSUUWBVP1cDq-T-HPqngaVvUBaWQ");
-      localStorage.setItem(REFRESH_TOKEN_KEY, "test");
-      window.location.href = LANDING || "/";
-      // const loginRes = await authApi.login({
-      //   ...loginModel,
-      //   password: encryptRSA(loginModel.password),
-      // });
-      // if (loginRes.code == API_OK) {
-      //   if (!loginRes.errorCode) {
-      //     if (typeof window !== "undefined") {
-      //       localStorage.setItem(TOKEN_KEY, loginRes.data.accessToken);
-      //       localStorage.setItem(REFRESH_TOKEN_KEY, loginRes.data.refreshToken);
-      //        window.location.href = LANDING || "/";
-      //       return;
-      //     }
-      //   }
-      // }
+      const loginRes = await authApi.login({
+        ...loginModel,
+        password: encryptRSA(loginModel.password),
+      });
+      console.error(encryptRSA(loginModel.password));
+      // console.error(loginRes);
+
+      if (loginRes.code == API_OK) {
+        if (!loginRes.errorCode) {
+          if (typeof window !== "undefined") {
+            localStorage.setItem(TOKEN_KEY, loginRes.data.accessToken);
+            localStorage.setItem(REFRESH_TOKEN_KEY, loginRes.data.refreshToken);
+            window.location.href = FE_ROOT || "/";
+            return;
+          }
+        }
+      }
       messageApi.error("Sai tên tài khoản hoặc mật khẩu!");
     } catch (e) {
       console.error(e);
@@ -67,9 +67,7 @@ export default function Login() {
   return (
     <>
       <div className={styles.login}>
-        <Row
-          className={styles.formContainer}
-        >
+        <Row className={styles.formContainer}>
           <div className={styles.loginForm}>
             <div className={styles.row}>
               <Image
