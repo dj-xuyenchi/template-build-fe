@@ -3,7 +3,7 @@ import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { BaseResponse } from "@/model/BaseResponse";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
 import { LoginRequest } from "@/model/login/LoginRequest";
-import { LoginResponse } from "@/model/login/LoginResponse";
+import { AuthResponse } from "@/model/login/LoginResponse";
 import { UserInformation } from "@/model/login/UserInformation";
 
 export const authApi = {
@@ -12,7 +12,7 @@ export const authApi = {
   //     return res.data;
   // },
 
-  login: async (requestBody: LoginRequest): Promise<LoginResponse> => {
+  login: async (requestBody: LoginRequest): Promise<BaseResponse<AuthResponse>> => {
     const res = await axiosClient.post(
       `${AUTHEN_SERVICE}/authentication/login`,
       requestBody,

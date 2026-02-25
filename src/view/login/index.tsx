@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { LoginRequest } from "@/model/login/LoginRequest";
 import { authApi } from "@/api/authApi";
 import { encryptRSA } from "@/util/authen-service/rsaEncrypt";
-import { API_OK, LOGIN_ERROR } from "@/constant/api/errorCode";
+import { API_OK } from "@/constant/api/errorCode";
 import { getMessageInstance } from "@/config/messageContext";
 import { useRouter } from "next/navigation";
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
@@ -24,8 +24,6 @@ export default function Login() {
         ...loginModel,
         password: encryptRSA(loginModel.password),
       });
-      console.error(encryptRSA(loginModel.password));
-      // console.error(loginRes);
 
       if (loginRes.code == API_OK) {
         if (!loginRes.errorCode) {
