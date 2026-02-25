@@ -5,10 +5,10 @@ import { InputCustom } from "@/component/InputCustom";
 import { SelectCustom } from "@/component/SelectCustom";
 import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
-import { ALL } from "@/model/BaseFilter";
 import { useEffect } from "react";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
+import { convertToOptionAll } from "@/model/BaseFilter";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -36,25 +36,29 @@ export const effectiveType: DefaultOptionType[] = [
 ];
 
 const statusSelect: DefaultOptionType[] = [
-  { value: "O,C", label: "Tất cả" },
-  { value: "O", label: "Đang hoạt động", tag: "green" },
-  { value: "C", label: "Đã ngừng hoạt động", tag: "red" },
+  { value: null, label: "Tất cả" },
+  { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
+  { value: "CLOSE", label: "Đã ngừng hoạt động", tag: "red" },
 ];
 
 type FilterProps = {
   handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
   filter: GetRoleFilter;
+  setFilter: (params: GetRoleFilter) => void;
 };
-export const Filter = ({ handleFilter, filter }: FilterProps) => {
+export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
   const [form] = Form.useForm();
   const onFinish = (value: GetRoleFilter) => {
+    console.error(value);
+
     const params = {
       ...value,
       pageSize: filter.pageSize,
       pageNumber: filter.pageNumber,
+      // status: convertArrayParam(value.status as ConvertArrayParam[]),
     };
 
-    handleFilter(params, null);
+    handleFilter(params as GetRoleFilter, null);
   };
   const handleOnchange = (value: string) => {
     if (value != "E") {
@@ -68,12 +72,13 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
   const handleClearFilter = () => {
     form.resetFields();
   };
+
   const effectiveTypeValue = Form.useWatch("effectiveType", form);
 
   useEffect(() => {
     form.setFieldsValue({
       ...filter,
-      status: filter.status || ALL,
+      status: filter.status,
     });
   }, []);
   return (

@@ -8,7 +8,7 @@ import { LoginRequest } from "@/model/login/LoginRequest";
 import { authApi } from "@/api/authApi";
 import { encryptRSA } from "@/util/authen-service/rsaEncrypt";
 import { API_OK } from "@/constant/api/errorCode";
-import { getMessageInstance } from "@/config/messageContext";
+import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 import { useRouter } from "next/navigation";
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
 export default function Login() {

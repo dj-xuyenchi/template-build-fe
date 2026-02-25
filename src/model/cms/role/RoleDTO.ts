@@ -19,5 +19,5 @@ export interface RoleDTO extends BaseDataTable {
     updatedBy: string
 }
 
-export const ROLE_ACTIVE = "O"
-export const ROLE_CLOSE = "C"
+export const ROLE_ACTIVE = "ACTIVE"
+export const ROLE_CLOSE = "CLOSE"

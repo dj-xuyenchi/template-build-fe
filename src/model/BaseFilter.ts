@@ -1,16 +1,28 @@
+import { DefaultOptionType } from "antd/es/select";
+
 export interface BaseFilter {
   pageSize: number | 10;
   pageNumber: number | 1;
   totalData: number | 0;
   keyword?: string;
 }
-export const ALL = "ALL";
 
-export type ConvertArrayParam = string | number | number[];
+export const convertToOptionAll = (
+  params: string[],
+  options: DefaultOptionType[],
+  optionAllValue: string | null,
+) => {
+  console.error(params);
+  console.error(options);
+  console.error(optionAllValue);
 
-export const convertArrayParam = (input: ConvertArrayParam[]) => {
-  if (!input || input.length === 0 || input.includes(ALL)) {
-    return null;
+  if (!params || params.length === 0) {
+    return true;
   }
-  return input.join(",");
+  const validValues = options
+    .map((opt) => opt.value)
+    .filter((value) => value !== optionAllValue);
+  console.error("22", validValues);
+
+  return validValues.length == params.length;
 };

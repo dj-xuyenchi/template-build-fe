@@ -7,7 +7,7 @@ import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { ROLE_CLOSE, RoleDTO } from "@/model/cms/role/RoleDTO";
+import { ROLE_ACTIVE, ROLE_CLOSE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import dayjs from "dayjs";
@@ -22,7 +22,7 @@ export const Index = () => {
     pageNumber: 0,
     pageSize: 10,
     totalData: 0,
-    status: ["O"],
+    status: ["ACTIVE"],
   } as GetRoleFilter);
   const [viewMode, setViewMode] = useState(true);
 
@@ -117,14 +117,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            effectiveType: value,
-            isEdited: true,
-            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-            isErrorRoleEffectiveFrom: false,
-            isErrorRoleEffectiveTo: false,
-          }
+              ...item,
+              effectiveType: value,
+              isEdited: true,
+              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+              isErrorRoleEffectiveFrom: false,
+              isErrorRoleEffectiveTo: false,
+            }
           : item,
       ),
     }));
@@ -155,7 +155,11 @@ export const Index = () => {
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, status: value ? "O" : "C", isEdited: true }
+          ? {
+              ...item,
+              status: value ? ROLE_ACTIVE : ROLE_CLOSE,
+              isEdited: true,
+            }
           : item,
       ),
     }));
@@ -333,7 +337,11 @@ export const Index = () => {
           borderRadius: "3px",
         }}
       >
-        <Filter handleFilter={handleGetData} filter={filter} />
+        <Filter
+          handleFilter={handleGetData}
+          filter={filter}
+          setFilter={setFilter}
+        />
       </Content>
       <TableData config={config} />
     </>

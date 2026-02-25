@@ -13,6 +13,6 @@ export const reIndexDataTable = <T extends BaseDataTable>(data: T[]): T[] => {
   }));
 }
 
-export const ACTIVE = "O"
-export const CLOSE = "C"
-export const DELETE = "D"
+export const ACTIVE = "ACTIVE";
+export const CLOSE = "CLOSE";
+export const DELETE = "DELETE";
