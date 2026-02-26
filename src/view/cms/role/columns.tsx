@@ -8,18 +8,17 @@ import { effectiveType, getStatusLabel, getStatusTag } from "./Filter";
 import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
 import { TextAreaCustom } from "@/component/TextAreaCustom";
-import { ACTIVE, CLOSE } from "@/model/BaseDataTable";
+import { ACTIVE } from "@/model/BaseDataTable";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { RoleDTO } from "@/model/cms/role/RoleDTO";
+import { ROLE_ARCHIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { SwitchCustom } from "@/component/SwitchCustom";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
 import dayjs from "dayjs";
 import { DDmmYYY, DDmmYYY_HHMMSS } from "@/constant/dateFormat";
 
 export type CallBacks = BaseTable & {
-  handleDeleteRow: (row: RoleDTO) => Promise<void>;
-  handleReopenRow?: (row: RoleDTO) => Promise<void>;
+  handleArchiveActiveRow: (row: RoleDTO) => Promise<void>;
   handleSetName: (row: RoleDTO, value: string) => void;
   handleSetDescription: (row: RoleDTO, value: string) => void;
   handleSetEffectiveType: (row: RoleDTO, value: string) => void;
@@ -30,8 +29,7 @@ export type CallBacks = BaseTable & {
 };
 
 export const getColumns = ({
-  handleDeleteRow,
-  handleReopenRow,
+  handleArchiveActiveRow,
 }: CallBacks): ColumnTypeCustom<RoleDTO>[] => [
   {
     title: "STT",
@@ -179,19 +177,17 @@ export const getColumns = ({
       >
         {record.status === ACTIVE && (
           <ArchiveBtn
-            disable={!allowBtnCode("ARCHIVE-APPLICATION")}
+            disable={!allowBtnCode("ARCHIVE_ROLE")}
             handleArchive={() => {
-              handleDeleteRow(record);
+              handleArchiveActiveRow(record);
             }}
           />
         )}
-        {record.status === CLOSE && (
+        {record.status === ROLE_ARCHIVE && (
           <ReOpenBtn
-            disable={!allowBtnCode("ARCHIVE-APPLICATION")}
+            disable={!allowBtnCode("ACTIVE_ROLE")}
             handleReopen={() => {
-              if (handleReopenRow) {
-                handleReopenRow(record);
-              }
+              handleArchiveActiveRow(record);
             }}
           />
         )}

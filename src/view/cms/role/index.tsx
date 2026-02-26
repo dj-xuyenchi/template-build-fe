@@ -7,11 +7,14 @@ import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { ROLE_ACTIVE, ROLE_CLOSE, RoleDTO } from "@/model/cms/role/RoleDTO";
+import { ROLE_ACTIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import dayjs from "dayjs";
-import { CreateRoleRequestData } from "@/model/cms/role/CreateRoleRequest";
+import {
+  CreateRoleRequestData,
+  UpdateRoleRequestData,
+} from "@/model/cms/role/AuditRoleRequest";
 import { toDateSendBE } from "@/util/date/dateUtil";
 
 export const Index = () => {
@@ -22,29 +25,20 @@ export const Index = () => {
     pageNumber: 0,
     pageSize: 10,
     totalData: 0,
-    status: ["ACTIVE"],
+    // status: ["ACTIVE"],
   } as GetRoleFilter);
   const [viewMode, setViewMode] = useState(true);
 
-  const handleDeleteRow = async (row: RoleDTO) => {
+  const handleArchiveActiveRow = async (row: RoleDTO) => {
     if (!row.roleId) {
       return;
     }
-    // const res = await roleApi.delete({
-    //   roleId: row.roleId,
-    // });
-    // console.error(res);
-
-    // handleGetData(filter, null);
-  };
-  const handleReopenRow = async (row: RoleDTO) => {
-    if (!row.roleId) {
-      return;
+    const res = await roleApi.archiveActive({
+      id: row.roleId,
+    });
+    if (res.code && res.code !== "ERROR") {
+      handleGetData(filter, null);
     }
-    // await roleApi.reopen({
-    //   roleId: row.roleId,
-    // });
-    // handleGetData(filter, null);
   };
 
   const addNewData = async () => {
@@ -66,22 +60,17 @@ export const Index = () => {
             status: item.status,
           } as CreateRoleRequestData;
         });
+      const updateDataList = data.data.filter((item) => {
+        return item.isEdited;
+      }) as UpdateRoleRequestData[];
       const request = {
-        data: newDataList || [],
+        create: newDataList || [],
+        update: updateDataList || [],
       };
-      const res = await roleApi.createRole(request);
+      const res = await roleApi.auditRole(request);
       if (res.code && res.code === "ERROR") {
         isError = true;
       }
-      // const update = data.data.filter((data) => {
-      //   return data.isEdited && !data.isNewRow;
-      // });
-
-      // if (update) {
-      //   const resUp = await RoleDTOApi.update({
-      //     updateApis: update,
-      //   });
-      // }
     } catch (e) {
       throw e;
     } finally {
@@ -157,7 +146,7 @@ export const Index = () => {
         item.rowUUID === row.rowUUID
           ? {
               ...item,
-              status: value ? ROLE_ACTIVE : ROLE_CLOSE,
+              status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
               isEdited: true,
             }
           : item,
@@ -194,7 +183,7 @@ export const Index = () => {
     handleSetStatus,
     handleSetEffectiveFrom,
     handleSetEffectiveTo,
-    handleDeleteRow,
+    handleArchiveActiveRow,
     handleSetRoleCode,
   });
 
@@ -217,7 +206,9 @@ export const Index = () => {
   };
   const config = {
     pagination: pageConfig,
-    columns: getColumns({ handleDeleteRow, handleReopenRow } as CallBacks),
+    columns: getColumns({
+      handleArchiveActiveRow,
+    } as CallBacks),
     columnsEdit: columnsEdit,
     loading: isTableLoading,
     dataSource: data.data as RoleDTO[],
@@ -235,9 +226,6 @@ export const Index = () => {
         setData({ data: [...data] });
       },
       andOn: "table",
-      callBackAddOnTable: (row: RoleDTO) => {
-        row.status = ROLE_CLOSE;
-      },
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {

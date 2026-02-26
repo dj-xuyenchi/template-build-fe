@@ -38,7 +38,7 @@ export const effectiveType: DefaultOptionType[] = [
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
-  { value: "CLOSE", label: "Đã ngừng hoạt động", tag: "red" },
+  { value: "ARCHIVE", label: "Lưu trữ", tag: "red" },
 ];
 
 type FilterProps = {

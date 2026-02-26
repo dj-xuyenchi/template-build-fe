@@ -20,4 +20,4 @@ export interface RoleDTO extends BaseDataTable {
 }
 
 export const ROLE_ACTIVE = "ACTIVE"
-export const ROLE_CLOSE = "CLOSE"
+export const ROLE_ARCHIVE = "ARCHIVE";

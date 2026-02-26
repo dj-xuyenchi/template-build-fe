@@ -54,7 +54,6 @@ export interface ExtendFunction<T> {
   andOn?: "table" | "drawer" | "page";
   formOnDrawer?: ReactNode;
   handleConfirm?: () => boolean;
-  callBackAddOnTable?: (row: object) => void;
   quickSearch?: boolean;
   handleQuickSearch?: (keyword: string) => void;
 }
@@ -273,11 +272,9 @@ export const TableCustom = <T extends BaseDataTable>({
         const newRow = {
           rowUUID: uuidv4(),
           isNewRow: true,
-        } as T
+        } as T;
 
-        if (extendFunction.callBackAddOnTable) {
-          extendFunction.callBackAddOnTable(newRow);
-        }
+      
         dataSource?.unshift(newRow);
 
         extendFunction.handleUpdateDataSource(dataSource as []);
@@ -461,54 +458,48 @@ export const TableCustom = <T extends BaseDataTable>({
             label: "Kết quả",
             children: (
               <>
-                <AnimatePresence mode="sync">
+                {/* <AnimatePresence mode="sync">
                   <motion.div
                     ref={wrapperRef}
                     layout
                     initial={false}
                     exit={{}} // không animate exit để tránh flicker
                     transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                  >
-                    <Table<T>
-                      rowKey="rowUUID"
-                      className="table-custom"
-                      loading={{
-                        spinning: loading as boolean | undefined,
-                        indicator: <Spin1 />,
-                      }}
-                      locale={
-                        loading
-                          ? {
-                            emptyText: (
-                              <div style={{ height: HEIGHT_LOADING }} />
-                            ),
-                          }
-                          : undefined
-                      }
-                      style={{ ...style }}
-                      rowSelection={
-                        isSupportMultiSelect ? rowSelection : undefined
-                      }
-                      bordered
-                      columns={visibleColumns}
-                      dataSource={dataSource?.filter((row: T) => {
-                        if (row.isDeleted) {
-                          return false;
+                  > */}
+                <Table<T>
+                  rowKey="rowUUID"
+                  className="table-custom"
+                  loading={{
+                    spinning: loading as boolean | undefined,
+                    indicator: <Spin1 />,
+                  }}
+                  locale={
+                    loading
+                      ? {
+                          emptyText: <div style={{ height: HEIGHT_LOADING }} />,
                         }
-                        if (!row.rowUUID) {
-                          row.rowUUID = uuidv4();
-                        }
-                        return true;
-                      })}
-                      sticky={{ offsetHeader: 110 }}
-                      scroll={{ x: "max-content" }}
-                      rowClassName={(record) =>
-                        record.isNewRow ? "new-data" : ""
-                      }
-                      {...restProps}
-                    />
-                  </motion.div>
-                </AnimatePresence>
+                      : undefined
+                  }
+                  style={{ ...style }}
+                  rowSelection={isSupportMultiSelect ? rowSelection : undefined}
+                  bordered
+                  columns={visibleColumns}
+                  dataSource={dataSource?.filter((row: T) => {
+                    if (row.isDeleted) {
+                      return false;
+                    }
+                    if (!row.rowUUID) {
+                      row.rowUUID = uuidv4();
+                    }
+                    return true;
+                  })}
+                  sticky={{ offsetHeader: 110 }}
+                  scroll={{ x: "max-content" }}
+                  rowClassName={(record) => (record.isNewRow ? "new-data" : "")}
+                  {...restProps}
+                />
+                {/* </motion.div>
+                </AnimatePresence> */}
               </>
             ),
             extra: (
@@ -668,7 +659,7 @@ export const TableCustom = <T extends BaseDataTable>({
                       )}
 
                       {!isEditAddBtn && (
-                        < ButtonCustom
+                        <ButtonCustom
                           icon={<FaPlus />}
                           disabled={loading as boolean | undefined}
                           size={extendFunction.size || "middle"}
