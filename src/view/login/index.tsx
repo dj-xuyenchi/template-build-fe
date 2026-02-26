@@ -14,7 +14,7 @@ import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
 export default function Login() {
   const FE_ROOT = process.env.NEXT_PUBLIC_PRODUCTION_URL;
   const [loginModel, setLoginModel] = useState({
-    channel: "WEB-CMS",
+    channel: "WEB_CMS",
   } as LoginRequest);
   const [traceModeOpen, setTraceModeOpen] = useState(false);
   const messageApi = getMessageInstance();
