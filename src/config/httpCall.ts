@@ -116,12 +116,13 @@ axiosClient.interceptors.response.use(
       return Promise.reject(error);
     }
     switch (status) {
-      case 403: {
+      case 401: {
         let message =
           error.response?.data.message || error.response?.data.error;
         if (!message) {
-          message = "Lỗi!";
+          message = "UNAUTHORIZE!";
         }
+        // sau sử lý refesh token ở đây
         messageApi.error(message);
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -130,12 +131,11 @@ axiosClient.interceptors.response.use(
         } else {
           setTimeout(() => {
             window.location.href = FE_URL + "/login";
-          }, 5000);
+          }, 3000);
         }
         break;
       }
       case 400:
-      case 401:
       case 503:
       case 500: {
         const message = error.response?.data.message;
