@@ -13,7 +13,9 @@ import { useRouter } from "next/navigation";
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
 export default function Login() {
   const FE_ROOT = process.env.NEXT_PUBLIC_PRODUCTION_URL;
-  const [loginModel, setLoginModel] = useState({} as LoginRequest);
+  const [loginModel, setLoginModel] = useState({
+    channel: "WEB-CMS",
+  } as LoginRequest);
   const [traceModeOpen, setTraceModeOpen] = useState(false);
   const messageApi = getMessageInstance();
   const router = useRouter();
