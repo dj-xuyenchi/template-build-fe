@@ -16,6 +16,7 @@ import {
   UpdateRoleRequestData,
 } from "@/model/cms/role/AuditRoleRequest";
 import { toDateSendBE } from "@/util/date/dateUtil";
+import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleDTO[] });
@@ -28,17 +29,26 @@ export const Index = () => {
     // status: ["ACTIVE"],
   } as GetRoleFilter);
   const [viewMode, setViewMode] = useState(true);
+  const modal = useGlobalModal();
+
 
   const handleArchiveActiveRow = async (row: RoleDTO) => {
     if (!row.roleId) {
       return;
     }
-    const res = await roleApi.archiveActive({
-      id: row.roleId,
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn ${row.status == ROLE_ACTIVE ? "lưu trữ" : "active lại"} quyền này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await roleApi.archiveActive({
+          id: row.roleId,
+        });
+        if (res.code && res.code !== "ERROR") {
+          handleGetData(filter, null);
+        }
+      }
     });
-    if (res.code && res.code !== "ERROR") {
-      handleGetData(filter, null);
-    }
   };
 
   const addNewData = async () => {
@@ -106,14 +116,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorRoleEffectiveFrom: false,
-              isErrorRoleEffectiveTo: false,
-            }
+            ...item,
+            effectiveType: value,
+            isEdited: true,
+            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+            isErrorRoleEffectiveFrom: false,
+            isErrorRoleEffectiveTo: false,
+          }
           : item,
       ),
     }));
@@ -145,10 +155,10 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
-              isEdited: true,
-            }
+            ...item,
+            status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
+            isEdited: true,
+          }
           : item,
       ),
     }));

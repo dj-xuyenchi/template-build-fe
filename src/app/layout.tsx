@@ -6,6 +6,7 @@ import store from "@/store/store";
 import { setMessageInstance } from "@/config/push-noti-message/messageContext";
 import { App as AntApp } from "antd";
 import { NotifyContextHolder } from "@/config/push-noti-message/notifyContext";
+import { ModalProvider } from "@/config/push-noti-message/ModalConfigHolder";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,9 +18,11 @@ export default function RootLayout({
       <body>
         <Provider store={store}>
           <AntApp>
-            <NotifyContextHolder />
-            {messageContextHolder}
-            <Wrapper>{children}</Wrapper>{" "}
+            <ModalProvider>
+              <NotifyContextHolder />
+              {messageContextHolder}
+              <Wrapper>{children}</Wrapper>
+            </ModalProvider>
           </AntApp>
         </Provider>
       </body>

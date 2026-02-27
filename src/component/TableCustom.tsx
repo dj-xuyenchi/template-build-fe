@@ -274,7 +274,7 @@ export const TableCustom = <T extends BaseDataTable>({
           isNewRow: true,
         } as T;
 
-      
+
         dataSource?.unshift(newRow);
 
         extendFunction.handleUpdateDataSource(dataSource as []);
@@ -476,8 +476,8 @@ export const TableCustom = <T extends BaseDataTable>({
                   locale={
                     loading
                       ? {
-                          emptyText: <div style={{ height: HEIGHT_LOADING }} />,
-                        }
+                        emptyText: <div style={{ height: HEIGHT_LOADING }} />,
+                      }
                       : undefined
                   }
                   style={{ ...style }}
@@ -619,6 +619,7 @@ export const TableCustom = <T extends BaseDataTable>({
                             open={isBeforeConfirmModalOpen}
                             centered
                             width={400}
+                            onCancel={handleCloseBeforeConfirm}
                             footer={
                               <>
                                 <div>
