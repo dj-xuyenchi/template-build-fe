@@ -54,6 +54,7 @@ export interface ExtendFunction<T> {
   andOn?: "table" | "drawer" | "page";
   formOnDrawer?: ReactNode;
   handleConfirm?: () => boolean;
+  triggerNewRow?: (newRow: T) => boolean;
   quickSearch?: boolean;
   handleQuickSearch?: (keyword: string) => void;
 }
@@ -273,8 +274,9 @@ export const TableCustom = <T extends BaseDataTable>({
           rowUUID: uuidv4(),
           isNewRow: true,
         } as T;
-
-
+        if (extendFunction.triggerNewRow) {
+          extendFunction.triggerNewRow(newRow);
+        }
         dataSource?.unshift(newRow);
 
         extendFunction.handleUpdateDataSource(dataSource as []);
@@ -476,8 +478,8 @@ export const TableCustom = <T extends BaseDataTable>({
                   locale={
                     loading
                       ? {
-                        emptyText: <div style={{ height: HEIGHT_LOADING }} />,
-                      }
+                          emptyText: <div style={{ height: HEIGHT_LOADING }} />,
+                        }
                       : undefined
                   }
                   style={{ ...style }}

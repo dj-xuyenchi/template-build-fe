@@ -31,7 +31,6 @@ export const Index = () => {
   const [viewMode, setViewMode] = useState(true);
   const modal = useGlobalModal();
 
-
   const handleArchiveActiveRow = async (row: RoleDTO) => {
     if (!row.roleId) {
       return;
@@ -47,7 +46,7 @@ export const Index = () => {
         if (res.code && res.code !== "ERROR") {
           handleGetData(filter, null);
         }
-      }
+      },
     });
   };
 
@@ -71,7 +70,7 @@ export const Index = () => {
           } as CreateRoleRequestData;
         });
       const updateDataList = data.data.filter((item) => {
-        return item.isEdited;
+        return item.isEdited && item.roleId;
       }) as UpdateRoleRequestData[];
       const request = {
         create: newDataList || [],
@@ -116,14 +115,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            effectiveType: value,
-            isEdited: true,
-            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-            isErrorRoleEffectiveFrom: false,
-            isErrorRoleEffectiveTo: false,
-          }
+              ...item,
+              effectiveType: value,
+              isEdited: true,
+              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+              isErrorRoleEffectiveFrom: false,
+              isErrorRoleEffectiveTo: false,
+            }
           : item,
       ),
     }));
@@ -155,10 +154,10 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
-            isEdited: true,
-          }
+              ...item,
+              status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
+              isEdited: true,
+            }
           : item,
       ),
     }));
@@ -172,6 +171,9 @@ export const Index = () => {
           : item,
       ),
     }));
+  };
+  const triggerNewRow = (row: RoleDTO) => {
+    row.status = ROLE_ACTIVE;
   };
   const handleQuickSearch = (keyword: string) => {
     setFilter({
@@ -225,13 +227,14 @@ export const Index = () => {
     viewMode: viewMode,
     tableName: "Quản lý quyền",
     extendFunction: {
+      triggerNewRow: triggerNewRow,
       quickSearch: true,
       handleQuickSearch: handleQuickSearch,
       buttonReloadFunction: () => {
         handleGetData(filter, null);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !allowBtnCode("CREATE_ROLE"),
+      disableAddData: !allowBtnCode("AUDIT_ROLE"),
       handleUpdateDataSource: (data: []) => {
         setData({ data: [...data] });
       },
