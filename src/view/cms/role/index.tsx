@@ -83,9 +83,7 @@ export const Index = () => {
     } catch (e) {
       throw e;
     } finally {
-      if (!isError) {
-        handleGetData(filter, null);
-      }
+      handleGetData(filter, null);
       setIsTableLoading(false);
     }
   };

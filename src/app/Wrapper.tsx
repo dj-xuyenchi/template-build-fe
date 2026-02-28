@@ -35,7 +35,7 @@ import { handleLogout } from "@/util/authen-service/authenService";
 import { TOKEN_KEY } from "@/constant/authen/authenConst";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
 import { FeatureAsMenu } from "@/model/feature/FeatureAsMenu";
-import { useLocation } from "react-router-dom";
+import { ItemType } from "antd/es/breadcrumb/Breadcrumb";
 
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
@@ -83,6 +83,9 @@ export default function Wrapper({
   );
   const [isLogin, setIsLogin] = useState(false);
   const [menus, setMenus] = useState([] as MenuProps["items"]);
+  const [breadcrumb, setBreadcrumb] = useState([
+    { title: "Home", href: FE_URL },
+  ] as { title: string; href: string | null }[]);
 
   const global = useSelector((state: RootState) => state.global);
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
@@ -109,15 +112,37 @@ export default function Wrapper({
       return;
     }
     console.info("handleClickMenu", menuItem);
+    console.info("menus", menus);
 
     for (const m of menus) {
       const menu = m as FeatureAsMenu;
       if (menu.key === menuItem.key) {
+        const breadsrumb = [
+          ...breadcrumb,
+          {
+            title: menu.label,
+            href: null,
+          },
+        ];
+        setBreadcrumb(breadsrumb);
         handleGoPage(menu.key, false);
       }
       if (menu.children) {
         const child = menu.children.find((child) => child.key === menuItem.key);
         if (child) {
+          const parentKey = menu.key ? goPage(menu.key, { id: 1 }) : null;
+          const breadsrumb = [
+            ...breadcrumb,
+            {
+              title: menu.label,
+              href: parentKey,
+            },
+            {
+              title: child.label,
+              href: null,
+            },
+          ];
+          setBreadcrumb(breadsrumb);
           handleGoPage(child.key, false);
         }
       }
@@ -136,7 +161,7 @@ export default function Wrapper({
       }
     }
   };
-
+  const handleSetBreadcrumb = (key: string) => {};
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -258,10 +283,11 @@ export default function Wrapper({
                       items={[
                         {
                           title: "Home",
+                          href: FE_URL,
                         },
                         {
                           title: "Quản trị hệ thống",
-                          href: "",
+                          href: FE_URL,
                         },
                       ]}
                     />
@@ -295,11 +321,7 @@ export default function Wrapper({
               </Header>
               <div className={clsx(styles.breadcrumbSubfunction)}>
                 <Breadcrumb
-                  items={[
-                    { title: "Home" },
-                    { title: "List" },
-                    { title: "App" },
-                  ]}
+                  items={breadcrumb as ItemType[]}
                   style={{ margin: "12px 0" }}
                 />
                 <div className={styles.subContainer}>
