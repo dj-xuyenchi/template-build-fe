@@ -161,7 +161,6 @@ export default function Wrapper({
       }
     }
   };
-  const handleSetBreadcrumb = (key: string) => {};
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -225,6 +224,8 @@ export default function Wrapper({
         }
         setSubMenuValue(subSelected || "");
       }
+    } else {
+      window.location.href = FE_URL + "/login";
     }
     return () => {};
   }, []);
