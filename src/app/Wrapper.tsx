@@ -83,9 +83,14 @@ export default function Wrapper({
   );
   const [isLogin, setIsLogin] = useState(false);
   const [menus, setMenus] = useState([] as MenuProps["items"]);
-  const [breadcrumb, setBreadcrumb] = useState([
-    { title: "Home", href: FE_URL },
-  ] as { title: string; href: string | null }[]);
+  const home = { title: "Home", href: FE_URL } as {
+    title: string;
+    href: string | null;
+  };
+  const [breadcrumb, setBreadcrumb] = useState([home] as {
+    title: string;
+    href: string | null;
+  }[]);
 
   const global = useSelector((state: RootState) => state.global);
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
@@ -118,7 +123,7 @@ export default function Wrapper({
       const menu = m as FeatureAsMenu;
       if (menu.key === menuItem.key) {
         const breadsrumb = [
-          ...breadcrumb,
+          home,
           {
             title: menu.label,
             href: null,
@@ -126,13 +131,24 @@ export default function Wrapper({
         ];
         setBreadcrumb(breadsrumb);
         handleGoPage(menu.key, false);
+        setSubMenuOptions([
+          { value: menu.key, label: menu.label },
+          ...(menu.subMenu?.map((item) => {
+            return {
+              value: item.key,
+              label: item.label,
+            };
+          }) as { value: string; label: string }[]),
+        ] as { value: string; label: string }[]);
       }
       if (menu.children) {
         const child = menu.children.find((child) => child.key === menuItem.key);
         if (child) {
+          console.error(child);
+
           const parentKey = menu.key ? goPage(menu.key, { id: 1 }) : null;
           const breadsrumb = [
-            ...breadcrumb,
+            home,
             {
               title: menu.label,
               href: parentKey,
@@ -144,6 +160,54 @@ export default function Wrapper({
           ];
           setBreadcrumb(breadsrumb);
           handleGoPage(child.key, false);
+
+          setSubMenuOptions([
+            { value: child.key, label: child.label },
+            ...(child.subMenu?.map((item) => {
+              return {
+                value: item.key,
+                label: item.label,
+              };
+            }) as { value: string; label: string }[]),
+          ] as { value: string; label: string }[]);
+        }
+      }
+    }
+  };
+  const handleSetBreadscumbAndSubMenu = (
+    key: string,
+    menus: MenuProps["items"],
+  ) => {
+    for (const m of menus || []) {
+      const menu = m as FeatureAsMenu;
+      if (menu.key === key) {
+        const breadsrumb = [
+          home,
+          {
+            title: menu.label,
+            href: null,
+          },
+        ];
+        setSubMenuValue(key);
+        setBreadcrumb(breadsrumb);
+      }
+      if (menu.children) {
+        const child = menu.children.find((child) => child.key === key);
+        if (child) {
+          const parentKey = menu.key ? goPage(menu.key, { id: 1 }) : null;
+          const breadsrumb = [
+            home,
+            {
+              title: menu.label,
+              href: parentKey,
+            },
+            {
+              title: child.label,
+              href: null,
+            },
+          ];
+          setSubMenuValue(key);
+          setBreadcrumb(breadsrumb);
         }
       }
     }
@@ -194,8 +258,13 @@ export default function Wrapper({
       const menuData = buildMenu(data.features || []);
 
       setMenus(menuData);
-      setSubMenuOptions([{ value: "/cms/role", label: "Quản lý quyền" }]);
       dispatch(setUserInformation(data));
+
+      const _uri = window.location.pathname.split("?")[0];
+
+      if (_uri) {
+        handleSetBreadscumbAndSubMenu(_uri, menuData);
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -225,7 +294,7 @@ export default function Wrapper({
         setSubMenuValue(subSelected || "");
       }
     } else {
-      window.location.href = FE_URL + "/login";
+      router.push(FE_URL + "/login");
     }
     return () => {};
   }, []);

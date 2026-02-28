@@ -202,7 +202,9 @@ axiosClient.interceptors.response.use(
       case 400:
       case 503:
       case 500: {
-        const message = error.response?.data.message;
+        const message =
+          error.response?.data.message ||
+          "Lỗi hệ thống vui lòng liên hệ quản trị viên!";
         messageApi.error(message);
         break;
       }
