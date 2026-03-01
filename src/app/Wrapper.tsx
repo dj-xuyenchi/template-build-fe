@@ -32,10 +32,16 @@ import { RootState } from "@/store/store";
 import { goPage } from "@/config/menu/letsGo";
 import { buildMenu } from "@/config/menu/menu";
 import { handleLogout } from "@/util/authen-service/authenService";
-import { TOKEN_KEY } from "@/constant/authen/authenConst";
+import {
+  BREADSCRUMB,
+  SUB_MENU,
+  TOKEN_KEY,
+} from "@/constant/authen/authenConst";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
 import { FeatureAsMenu } from "@/model/feature/FeatureAsMenu";
 import { ItemType } from "antd/es/breadcrumb/Breadcrumb";
+import { setBreadscrumbToLocalStorage } from "@/util/common-home/breadscrumbService";
+import { setSubmenuToLocalStorage } from "@/util/common-home/subMenuService";
 
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
@@ -112,153 +118,84 @@ export default function Wrapper({
     setShowNoti(true);
   };
 
+
+  //  chưa xong đoạn chọn submenu thiếu menu cho trong select option
   const handleClickMenu = (
-    menuItem: { key: string },
+    { key }: { key: string },
     isFromSubmenu: boolean,
   ) => {
-    if (!menus) {
-      return;
-    }
-    console.info("handleClickMenu", menuItem);
-    console.info("menus", menus);
+    const featureList = global.userApp.features;
+    handleGoPage(key, isFromSubmenu);
 
-    for (const m of menus) {
-      const menu = m as FeatureAsMenu;
-      const childrenMenu = menu.children;
-
-      if (menu.key === menuItem.key) {
-        const breadsrumb = [
-          home,
-          {
-            title: menu.label,
-            href: null,
-          },
-        ];
-        setBreadcrumb(breadsrumb);
-        handleGoPage(menu.key, isFromSubmenu);
-      }
-      if (childrenMenu) {
-        const child = childrenMenu.find((child) => child.key === menuItem.key);
-        if (child) {
-          console.error(child);
-
-          const parentKey = menu.key ? goPage(menu.key, { id: 1 }) : null;
-          const breadsrumb = [
-            home,
-            {
-              title: menu.label,
-              href: parentKey,
-            },
-            {
-              title: child.label,
-              href: null,
-            },
-          ];
-          setBreadcrumb(breadsrumb);
-          handleGoPage(child.key, isFromSubmenu);
-        }
-      }
-    }
-    if (!isFromSubmenu) {
-      handleSetSubMenu(menuItem.key);
-    }
-  };
-  const handleSetSubMenu = (key: string) => {
-    const menuList = global.userApp.features;
-    if (!menuList) {
-      alert("menu rỗng");
-    }
-    const menuSelected = menuList.find((item) => {
+    // Action submenu
+    const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
-    const subMenu = menuList.filter((item) => {
-      return item.isSubMenu && item.parentId == menuSelected?.featureId;
+    const subFeature = featureList.filter((item) => {
+      return item.isSubMenu && item.parentId == featureSelected?.featureId;
     });
-    console.error(subMenu);
+    const subFeature2Option = subFeature.map((item) => {
+      return {
+        value: item?.feUri as string,
+        label: item?.feLabel as string,
+      };
+    });
+    const submenu = [
+      {
+        value: featureSelected?.feUri as string,
+        label: featureSelected?.feLabel as string,
+      },
+      ...subFeature2Option,
+    ];
+    setSubMenuOptions(submenu);
+    setSubmenuToLocalStorage(submenu as []);
+    // Action breadscrumb
+    const ancestors = getAncestors(key);
+    const otherTab = ancestors.map((item) => {
+      return {
+        href: item.feUri,
+        title: item.feLabel,
+      };
+    });
 
-    setSubMenuOptions([
-      { value: menuSelected?.feUri, label: menuSelected?.feLabel },
-      ...(subMenu?.map((item) => {
-        return {
-          value: item.feUri,
-          label: item.feLabel,
-        };
-      }) as { value: string; label: string }[]),
-    ] as { value: string; label: string }[]);
+    const breadscumbNew = [home, ...otherTab];
+
+    setBreadcrumb(breadscumbNew);
+    setBreadscrumbToLocalStorage(breadscumbNew as []);
   };
+  const getAncestors = (key: string) => {
+    const featureList = global.userApp.features;
+    const featureSelected = featureList.find((item) => {
+      return item.feUri == key;
+    });
 
-  const handleSetBreadscumbAndSubMenu = (
-    key: string,
-    menus: MenuProps["items"],
-  ) => {
-    for (const m of menus || []) {
-      const menu = m as FeatureAsMenu;
-      if (menu.key === key) {
-        const breadsrumb = [
-          home,
-          {
-            title: menu.label,
-            href: null,
-          },
-        ];
-        const subMenu = [
-          { value: menu.key, label: menu.label },
-          ...(menu.subMenu?.map((item) => {
-            return {
-              value: item.key,
-              label: item.label,
-            };
-          }) as { value: string; label: string }[]),
-        ] as { value: string; label: string }[];
-        console.error(subMenu);
-        setSubMenuOptions(subMenu);
-        setSubMenuValue(key);
-        setBreadcrumb(breadsrumb);
-      }
-      if (menu.children) {
-        const child = menu.children.find((child) => child.key === key);
-        if (child) {
-          const parentKey = menu.key ? goPage(menu.key, { id: 1 }) : null;
-          const breadsrumb = [
-            home,
-            {
-              title: menu.label,
-              href: parentKey,
-            },
-            {
-              title: child.label,
-              href: null,
-            },
-          ];
-          const subMenu = [
-            { value: child.key, label: child.label },
-            ...(child.subMenu?.map((item) => {
-              return {
-                value: item.key,
-                label: item.label,
-              };
-            }) as { value: string; label: string }[]),
-          ] as { value: string; label: string }[];
-          console.error(subMenu);
+    const map = new Map();
 
-          setSubMenuOptions(subMenu);
-          setBreadcrumb(breadsrumb);
-          setSubMenuValue(key);
-        }
-      }
+    // Tạo lookup map cho nhanh O(1)
+    featureList.forEach((item) => {
+      map.set(item.featureId, item);
+    });
+
+    const ancestors = [];
+    let current = map.get(featureSelected?.featureId);
+
+    while (current && current.parentId != null) {
+      const parent = map.get(current.parentId);
+      if (!parent) break;
+
+      ancestors.push(parent);
+      current = parent;
     }
+
+    return ancestors.reverse();
   };
+
   const handleGoPage = (key: string, isFromSubmenu?: boolean) => {
     console.info("handleGoPage", key);
 
     if (key) {
-      if (typeof window !== "undefined") {
-        localStorage.setItem("_sub-selected", key);
-      }
-      router.push(goPage(key, { id: 1 }));
-      if (!isFromSubmenu) {
-        setSubMenuValue(key);
-      }
+      router.push(goPage(key, {}));
+      setSubMenuValue(key);
     }
   };
   const items: MenuProps["items"] = [
@@ -295,11 +232,13 @@ export default function Wrapper({
 
       setMenus(menuData);
       dispatch(setUserInformation(data));
-
-      const _uri = window.location.pathname.split("?")[0];
-
-      if (_uri) {
-        handleSetBreadscumbAndSubMenu(_uri, menuData);
+      const _b = localStorage.getItem(BREADSCRUMB);
+      const _sm = localStorage.getItem(SUB_MENU);
+      if (_b) {
+        setBreadcrumb(JSON.parse(_b));
+      }
+      if (_sm) {
+        setSubMenuOptions(JSON.parse(_sm));
       }
     } catch (e) {
       console.error(e);
