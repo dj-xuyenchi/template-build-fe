@@ -159,7 +159,9 @@ export default function Wrapper({
         }
       }
     }
-    handleSetSubMenu(menuItem.key);
+    if (!isFromSubmenu) {
+      handleSetSubMenu(menuItem.key);
+    }
   };
   const handleSetSubMenu = (key: string) => {
     const menuList = global.userApp.features;
