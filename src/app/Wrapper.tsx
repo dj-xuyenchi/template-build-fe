@@ -112,7 +112,10 @@ export default function Wrapper({
     setShowNoti(true);
   };
 
-  const handleClickMenu = (menuItem: { key: string }) => {
+  const handleClickMenu = (
+    menuItem: { key: string },
+    isFromSubmenu: boolean,
+  ) => {
     if (!menus) {
       return;
     }
@@ -121,6 +124,8 @@ export default function Wrapper({
 
     for (const m of menus) {
       const menu = m as FeatureAsMenu;
+      const childrenMenu = menu.children;
+
       if (menu.key === menuItem.key) {
         const breadsrumb = [
           home,
@@ -130,19 +135,10 @@ export default function Wrapper({
           },
         ];
         setBreadcrumb(breadsrumb);
-        handleGoPage(menu.key, false);
-        setSubMenuOptions([
-          { value: menu.key, label: menu.label },
-          ...(menu.subMenu?.map((item) => {
-            return {
-              value: item.key,
-              label: item.label,
-            };
-          }) as { value: string; label: string }[]),
-        ] as { value: string; label: string }[]);
+        handleGoPage(menu.key, isFromSubmenu);
       }
-      if (menu.children) {
-        const child = menu.children.find((child) => child.key === menuItem.key);
+      if (childrenMenu) {
+        const child = childrenMenu.find((child) => child.key === menuItem.key);
         if (child) {
           console.error(child);
 
@@ -159,21 +155,36 @@ export default function Wrapper({
             },
           ];
           setBreadcrumb(breadsrumb);
-          handleGoPage(child.key, false);
-
-          setSubMenuOptions([
-            { value: child.key, label: child.label },
-            ...(child.subMenu?.map((item) => {
-              return {
-                value: item.key,
-                label: item.label,
-              };
-            }) as { value: string; label: string }[]),
-          ] as { value: string; label: string }[]);
+          handleGoPage(child.key, isFromSubmenu);
         }
       }
     }
+    handleSetSubMenu(menuItem.key);
   };
+  const handleSetSubMenu = (key: string) => {
+    const menuList = global.userApp.features;
+    if (!menuList) {
+      alert("menu rỗng");
+    }
+    const menuSelected = menuList.find((item) => {
+      return item.feUri == key;
+    });
+    const subMenu = menuList.filter((item) => {
+      return item.isSubMenu && item.parentId == menuSelected?.featureId;
+    });
+    console.error(subMenu);
+
+    setSubMenuOptions([
+      { value: menuSelected?.feUri, label: menuSelected?.feLabel },
+      ...(subMenu?.map((item) => {
+        return {
+          value: item.feUri,
+          label: item.feLabel,
+        };
+      }) as { value: string; label: string }[]),
+    ] as { value: string; label: string }[]);
+  };
+
   const handleSetBreadscumbAndSubMenu = (
     key: string,
     menus: MenuProps["items"],
@@ -188,6 +199,17 @@ export default function Wrapper({
             href: null,
           },
         ];
+        const subMenu = [
+          { value: menu.key, label: menu.label },
+          ...(menu.subMenu?.map((item) => {
+            return {
+              value: item.key,
+              label: item.label,
+            };
+          }) as { value: string; label: string }[]),
+        ] as { value: string; label: string }[];
+        console.error(subMenu);
+        setSubMenuOptions(subMenu);
         setSubMenuValue(key);
         setBreadcrumb(breadsrumb);
       }
@@ -206,8 +228,20 @@ export default function Wrapper({
               href: null,
             },
           ];
-          setSubMenuValue(key);
+          const subMenu = [
+            { value: child.key, label: child.label },
+            ...(child.subMenu?.map((item) => {
+              return {
+                value: item.key,
+                label: item.label,
+              };
+            }) as { value: string; label: string }[]),
+          ] as { value: string; label: string }[];
+          console.error(subMenu);
+
+          setSubMenuOptions(subMenu);
           setBreadcrumb(breadsrumb);
+          setSubMenuValue(key);
         }
       }
     }
@@ -315,7 +349,9 @@ export default function Wrapper({
               mode="inline"
               defaultSelectedKeys={["1"]}
               items={menus}
-              onClick={handleClickMenu}
+              onClick={(value) => {
+                handleClickMenu(value, false);
+              }}
             />
           </Sider>
           <Layout style={{ padding: "0 24px 24px" }}>
@@ -401,8 +437,10 @@ export default function Wrapper({
                     style={{
                       minWidth: "240px",
                     }}
-                    onChange={(value) => {
-                      handleGoPage(value, true);
+                    onChange={(value: string) => {
+                      console.error(value);
+
+                      handleClickMenu({ key: value }, true);
                     }}
                     options={subMenuOptions}
                   />

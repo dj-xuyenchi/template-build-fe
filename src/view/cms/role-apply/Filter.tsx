@@ -1,0 +1,161 @@
+import { ButtonCustom } from "@/component/ButtonCustom";
+import { CollapseCustom } from "@/component/CollapseCustom";
+import { FormCustom } from "@/component/FormCustom";
+import { InputCustom } from "@/component/InputCustom";
+import { SelectCustom } from "@/component/SelectCustom";
+import { Col, Form, Row } from "antd";
+import { DefaultOptionType } from "antd/es/select";
+import { useEffect } from "react";
+import { DatePickerCustom } from "@/component/DatepickerCustom";
+import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
+import { convertToOptionAll } from "@/model/BaseFilter";
+
+export const getStatusLabel = (value: string) => {
+  return statusSelect?.find((item) => {
+    return item.value === value;
+  })?.label;
+};
+export const getStatusTag = (value: string) => {
+  return statusSelect?.find((item) => {
+    return item.value === value;
+  })?.tag;
+};
+export const getEffectiveLabel = (value: string) => {
+  return effectiveType?.find((item) => {
+    return item.value === value;
+  })?.label;
+};
+export const getEffectiveTag = (value: string) => {
+  return effectiveType?.find((item) => {
+    return item.value === value;
+  })?.tag;
+};
+export const effectiveType: DefaultOptionType[] = [
+  { value: "NE", label: "Không áp dụng", tag: "green" },
+  { value: "E", label: "Áp dụng", tag: "blue" },
+];
+
+const statusSelect: DefaultOptionType[] = [
+  { value: null, label: "Tất cả" },
+  { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
+  { value: "ARCHIVE", label: "Lưu trữ", tag: "red" },
+];
+
+type FilterProps = {
+  handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
+  filter: GetRoleFilter;
+  setFilter: (params: GetRoleFilter) => void;
+};
+export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
+  const [form] = Form.useForm();
+  const onFinish = (value: GetRoleFilter) => {
+    console.error(value);
+
+    const params = {
+      ...value,
+      pageSize: filter.pageSize,
+      pageNumber: filter.pageNumber,
+      // status: convertArrayParam(value.status as ConvertArrayParam[]),
+    };
+
+    handleFilter(params as GetRoleFilter, null);
+  };
+  const handleOnchange = (value: string) => {
+    if (value != "E") {
+      form.setFieldsValue({
+        effectiveFrom: null,
+        effectiveTo: null,
+      });
+    }
+  };
+
+  const handleClearFilter = () => {
+    form.resetFields();
+  };
+
+  const effectiveTypeValue = Form.useWatch("effectiveType", form);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      ...filter,
+      status: filter.status,
+    });
+  }, []);
+  return (
+    <>
+      <CollapseCustom
+        noBorder={true}
+        activeKey={[1]}
+        items={[
+          {
+            key: "1",
+            label: "Tìm kiếm",
+            children: (
+              <>
+                <FormCustom layout="vertical" form={form} onFinish={onFinish}>
+                  <Row gutter={16}>
+                    <Col span={12} md={8} lg={6} xl={6}>
+                      <Form.Item
+                        label="Kiểu áp dụng thời gian"
+                        name="effectiveType"
+                        tooltip="Kiểu áp dụng thời gian"
+                      >
+                        <SelectCustom
+                          placeholder="Chọn kiểu áp dụng thời gian"
+                          options={[...effectiveType]}
+                          onChange={handleOnchange}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12} md={8} lg={6} xl={6}>
+                      <Form.Item
+                        label="Áp dụng từ"
+                        name="effectiveFrom"
+                        tooltip="Áp dụng từ"
+                      >
+                        <DatePickerCustom
+                          placeholder="Chọn thời gian áp dụng từ"
+                          disabled={effectiveTypeValue != "E"}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12} md={8} lg={6} xl={6}>
+                      <Form.Item
+                        label="Áp dụng đến"
+                        name="effectiveTo"
+                        tooltip="Áp dụng đến"
+                      >
+                        <DatePickerCustom
+                          placeholder="Chọn thời gian áp dụng đến"
+                          disabled={effectiveTypeValue != "E"}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item
+                    style={{
+                      marginBottom: "unset",
+                    }}
+                  >
+                    <ButtonCustom
+                      type="primary"
+                      htmlType="submit"
+                      title="Tìm kiếm"
+                    />
+                    <ButtonCustom
+                      style={{
+                        marginLeft: "8px",
+                      }}
+                      onClick={handleClearFilter}
+                      title="Bỏ lọc"
+                    />
+                  </Form.Item>
+                </FormCustom>
+              </>
+            ),
+          },
+        ]}
+      />
+    </>
+  );
+};
