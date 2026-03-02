@@ -125,22 +125,30 @@ export default function Wrapper({
     isFromSubmenu: boolean,
   ) => {
     const featureList = global.userApp.features;
-    handleGoPage(key, isFromSubmenu);
-
-    // Action submenu
     const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
+    const parentFeature = featureList.find((item) => {
+      return item.featureId == featureSelected?.parentId;
+    });
+    let uriPage = "";
     if (!isFromSubmenu) {
+      const subMenuFisrtOrder = featureList.find((item) => {
+        return item.isSubMenu == true && item.parentId == featureSelected?.featureId;
+      })
+      uriPage = subMenuFisrtOrder?.feUri as string
+
       const subFeature = featureList.filter((item) => {
-        return item.isSubMenu && item.parentId == featureSelected?.featureId;
+        return item.isSubMenu && item.parentId == featureSelected?.parentId;
       });
+
       const subFeature2Option = subFeature.map((item) => {
         return {
           value: item?.feUri as string,
           label: item?.feLabel as string,
         };
       });
+
       const submenu = [
         {
           value: featureSelected?.feUri as string,
@@ -150,19 +158,28 @@ export default function Wrapper({
       ];
       setSubMenuOptions(submenu);
       setSubmenuToLocalStorage(submenu as []);
+    } else {
+
+      handleGoPage(key, isFromSubmenu);
+    }
+    handleGoPage(uriPage, isFromSubmenu);
+
+    // Action submenu
+    if (!isFromSubmenu) {
+
     }
 
     // Action breadscrumb
     const ancestors = getAncestors(key);
     const otherTabBreadscrumb = ancestors.map((item) => {
       return {
-        href: item.feUri,
+        href: null as string | null,
         title: item.feLabel,
       };
     });
     if (isFromSubmenu) {
       otherTabBreadscrumb.push({
-        href: featureSelected?.feUri,
+        href: featureSelected?.feUri as string | null,
         title: featureSelected?.feLabel,
       });
       setSubMenuValue(featureSelected?.feUri as string);
