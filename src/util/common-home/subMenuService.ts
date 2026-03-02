@@ -25,7 +25,7 @@ export const getSubmenuValueFromLocalStorage = () => {
   try {
     const submenu = localStorage.getItem(SELECTED_SUB_MENU);
     if (submenu) {
-      return JSON.parse(submenu);
+      return submenu;
     }
     return "";
   }
