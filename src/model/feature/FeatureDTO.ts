@@ -17,4 +17,5 @@ export interface FeatureDTO {
   feLabel: string;
   feUri: string;
   isSubMenu: boolean;
+  sortNumber?: number;
 }

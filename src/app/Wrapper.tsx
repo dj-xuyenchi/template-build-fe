@@ -132,6 +132,15 @@ export default function Wrapper({
       return item.featureId == featureSelected?.parentId;
     });
     let uriPage = "";
+
+    if (!isFromSubmenu) {
+      
+    }
+
+
+
+
+    //
     if (!isFromSubmenu) {
       const subMenuFisrtOrder = featureList.find((item) => {
         return item.isSubMenu == true && item.parentId == featureSelected?.featureId;
