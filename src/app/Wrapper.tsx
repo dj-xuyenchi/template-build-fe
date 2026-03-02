@@ -34,14 +34,14 @@ import { buildMenu } from "@/config/menu/menu";
 import { handleLogout } from "@/util/authen-service/authenService";
 import {
   BREADSCRUMB,
+  SELECTED_SUB_MENU,
   SUB_MENU,
   TOKEN_KEY,
 } from "@/constant/authen/authenConst";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
-import { FeatureAsMenu } from "@/model/feature/FeatureAsMenu";
 import { ItemType } from "antd/es/breadcrumb/Breadcrumb";
-import { setBreadscrumbToLocalStorage } from "@/util/common-home/breadscrumbService";
-import { setSubmenuToLocalStorage } from "@/util/common-home/subMenuService";
+import { getBreadscrumbFromLocalStorage, setBreadscrumbToLocalStorage } from "@/util/common-home/breadscrumbService";
+import { getSubmenuFromLocalStorage, getSubmenuValueFromLocalStorage, setSubmenuToLocalStorage, setSubmenuValueToLocalStorage } from "@/util/common-home/subMenuService";
 
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
@@ -131,34 +131,45 @@ export default function Wrapper({
     const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
-    const subFeature = featureList.filter((item) => {
-      return item.isSubMenu && item.parentId == featureSelected?.featureId;
-    });
-    const subFeature2Option = subFeature.map((item) => {
-      return {
-        value: item?.feUri as string,
-        label: item?.feLabel as string,
-      };
-    });
-    const submenu = [
-      {
-        value: featureSelected?.feUri as string,
-        label: featureSelected?.feLabel as string,
-      },
-      ...subFeature2Option,
-    ];
-    setSubMenuOptions(submenu);
-    setSubmenuToLocalStorage(submenu as []);
+    if (!isFromSubmenu) {
+      const subFeature = featureList.filter((item) => {
+        return item.isSubMenu && item.parentId == featureSelected?.featureId;
+      });
+      const subFeature2Option = subFeature.map((item) => {
+        return {
+          value: item?.feUri as string,
+          label: item?.feLabel as string,
+        };
+      });
+      const submenu = [
+        {
+          value: featureSelected?.feUri as string,
+          label: featureSelected?.feLabel as string,
+        },
+        ...subFeature2Option,
+      ];
+      setSubMenuOptions(submenu);
+      setSubmenuToLocalStorage(submenu as []);
+    }
+
     // Action breadscrumb
     const ancestors = getAncestors(key);
-    const otherTab = ancestors.map((item) => {
+    const otherTabBreadscrumb = ancestors.map((item) => {
       return {
         href: item.feUri,
         title: item.feLabel,
       };
     });
+    if (isFromSubmenu) {
+      otherTabBreadscrumb.push({
+        href: featureSelected?.feUri,
+        title: featureSelected?.feLabel,
+      });
+      setSubMenuValue(featureSelected?.feUri as string);
+      setSubmenuValueToLocalStorage(featureSelected?.feUri as string);
+    }
 
-    const breadscumbNew = [home, ...otherTab];
+    const breadscumbNew = [home, ...otherTabBreadscrumb];
 
     setBreadcrumb(breadscumbNew);
     setBreadscrumbToLocalStorage(breadscumbNew as []);
@@ -232,13 +243,19 @@ export default function Wrapper({
 
       setMenus(menuData);
       dispatch(setUserInformation(data));
-      const _b = localStorage.getItem(BREADSCRUMB);
-      const _sm = localStorage.getItem(SUB_MENU);
+
+      // Load lại breadcrumb và submenu đã lưu trước đó nếu có case user f5 website
+      const _b = getBreadscrumbFromLocalStorage();
+      const _sm = getSubmenuFromLocalStorage();
+      const _ssm = getSubmenuValueFromLocalStorage();
       if (_b) {
-        setBreadcrumb(JSON.parse(_b));
+        setBreadcrumb(_b);
       }
       if (_sm) {
-        setSubMenuOptions(JSON.parse(_sm));
+        setSubMenuOptions(_sm);
+      }
+      if (_ssm) {
+        setSubMenuValue(_ssm);
       }
     } catch (e) {
       console.error(e);
@@ -271,7 +288,7 @@ export default function Wrapper({
     } else {
       router.push(FE_URL + "/login");
     }
-    return () => {};
+    return () => { };
   }, []);
   return (
     <>
