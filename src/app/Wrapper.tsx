@@ -354,7 +354,6 @@ export default function Wrapper({
                 src={logo}
                 alt="no-permission"
               />
-              s
             </div>
             <Menu
               mode="inline"
