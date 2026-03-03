@@ -293,14 +293,23 @@ export default function Wrapper({
       const _b = getBreadscrumbFromLocalStorage();
       const _sm = getSubmenuFromLocalStorage();
       const _ssm = getSubmenuValueFromLocalStorage();
-      if (_b) {
-        setBreadcrumb(_b);
-      }
-      if (_sm) {
-        setSubMenuOptions(_sm);
-      }
-      if (_ssm) {
-        setSubMenuValue(_ssm);
+      const uri = window.location.protocol + "//" + window.location.host;
+      console.error(uri);
+
+      if (uri != FE_URL) {
+        if (_b) {
+          setBreadcrumb(_b);
+        }
+        if (_sm) {
+          setSubMenuOptions(_sm);
+        }
+        if (_ssm) {
+          setSubMenuValue(_ssm);
+        }
+      } else {
+        localStorage.removeItem(BREADSCRUMB);
+        localStorage.removeItem(SUB_MENU);
+        localStorage.removeItem(SELECTED_SUB_MENU);
       }
     } catch (e) {
       console.error(e);
@@ -432,19 +441,21 @@ export default function Wrapper({
                   style={{ margin: "12px 0" }}
                 />
                 <div className={styles.subContainer}>
-                  <SelectCustom
-                    placeholder="Chọn chức năng"
-                    value={subMenuValue}
-                    style={{
-                      minWidth: "240px",
-                    }}
-                    onChange={(value: string) => {
-                      console.error(value);
+                  {subMenuOptions && subMenuOptions.length > 0 && (
+                    <SelectCustom
+                      placeholder="Chọn chức năng"
+                      value={subMenuValue}
+                      style={{
+                        minWidth: "240px",
+                      }}
+                      onChange={(value: string) => {
+                        console.error(value);
 
-                      handleClickMenu({ key: value }, true);
-                    }}
-                    options={subMenuOptions}
-                  />
+                        handleClickMenu({ key: value }, true);
+                      }}
+                      options={subMenuOptions}
+                    />
+                  )}
                 </div>
               </div>
             </div>
