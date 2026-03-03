@@ -10,16 +10,16 @@ export const getSubmenuFromLocalStorage = () => {
       return JSON.parse(submenu);
     }
     return [];
-  }
-  catch (e) {
+  } catch (e) {
+    console.error(e);
     window.localStorage.removeItem(SUB_MENU);
     window.location.reload();
   }
-}
+};
 
 export const setSubmenuValueToLocalStorage = (value: string) => {
   localStorage.setItem(SELECTED_SUB_MENU, value);
-}
+};
 
 export const getSubmenuValueFromLocalStorage = () => {
   try {
@@ -28,9 +28,9 @@ export const getSubmenuValueFromLocalStorage = () => {
       return submenu;
     }
     return "";
-  }
-  catch (e) {
+  } catch (e) {
+    console.error(e);
     window.localStorage.removeItem(SELECTED_SUB_MENU);
     window.location.reload();
   }
-}
+};

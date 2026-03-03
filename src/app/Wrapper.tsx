@@ -40,9 +40,20 @@ import {
 } from "@/constant/authen/authenConst";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
 import { ItemType } from "antd/es/breadcrumb/Breadcrumb";
-import { getBreadscrumbFromLocalStorage, setBreadscrumbToLocalStorage } from "@/util/common-home/breadscrumbService";
-import { getSubmenuFromLocalStorage, getSubmenuValueFromLocalStorage, setSubmenuToLocalStorage, setSubmenuValueToLocalStorage } from "@/util/common-home/subMenuService";
+import {
+  getBreadscrumbFromLocalStorage,
+  setBreadscrumbToLocalStorage,
+} from "@/util/common-home/breadscrumbService";
+import {
+  getSubmenuFromLocalStorage,
+  getSubmenuValueFromLocalStorage,
+  setSubmenuToLocalStorage,
+  setSubmenuValueToLocalStorage,
+} from "@/util/common-home/subMenuService";
+import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 
+import Image from "next/image";
+import logo from "../../public/logo.png";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -69,10 +80,13 @@ const footerStyle: React.CSSProperties = {
   color: "#fff",
 };
 const logoStyle: React.CSSProperties = {
-  height: "32px",
+  height: "48px",
   margin: "16px",
   background: " rgba(255, 255, 255, .2)",
   borderRadius: "6px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 export default function Wrapper({
@@ -81,6 +95,7 @@ export default function Wrapper({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
+  const messageApi = getMessageInstance();
   const [collapsed, setCollapsed] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [subMenuValue, setSubMenuValue] = useState("");
@@ -118,67 +133,22 @@ export default function Wrapper({
     setShowNoti(true);
   };
 
-
   //  chưa xong đoạn chọn submenu thiếu menu cho trong select option
   const handleClickMenu = (
     { key }: { key: string },
     isFromSubmenu: boolean,
   ) => {
+    if (isFromSubmenu) {
+      caseSubMenu(key);
+    } else {
+      caseLeftMenu(key);
+    }
+  };
+  const caseSubMenu = (key: string) => {
     const featureList = global.userApp.features;
     const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
-    const parentFeature = featureList.find((item) => {
-      return item.featureId == featureSelected?.parentId;
-    });
-    let uriPage = "";
-
-    if (!isFromSubmenu) {
-      
-    }
-
-
-
-
-    //
-    if (!isFromSubmenu) {
-      const subMenuFisrtOrder = featureList.find((item) => {
-        return item.isSubMenu == true && item.parentId == featureSelected?.featureId;
-      })
-      uriPage = subMenuFisrtOrder?.feUri as string
-
-      const subFeature = featureList.filter((item) => {
-        return item.isSubMenu && item.parentId == featureSelected?.parentId;
-      });
-
-      const subFeature2Option = subFeature.map((item) => {
-        return {
-          value: item?.feUri as string,
-          label: item?.feLabel as string,
-        };
-      });
-
-      const submenu = [
-        {
-          value: featureSelected?.feUri as string,
-          label: featureSelected?.feLabel as string,
-        },
-        ...subFeature2Option,
-      ];
-      setSubMenuOptions(submenu);
-      setSubmenuToLocalStorage(submenu as []);
-    } else {
-
-      handleGoPage(key, isFromSubmenu);
-    }
-    handleGoPage(uriPage, isFromSubmenu);
-
-    // Action submenu
-    if (!isFromSubmenu) {
-
-    }
-
-    // Action breadscrumb
     const ancestors = getAncestors(key);
     const otherTabBreadscrumb = ancestors.map((item) => {
       return {
@@ -186,19 +156,72 @@ export default function Wrapper({
         title: item.feLabel,
       };
     });
-    if (isFromSubmenu) {
-      otherTabBreadscrumb.push({
-        href: featureSelected?.feUri as string | null,
+    const breadscumbNew = [
+      home,
+      ...otherTabBreadscrumb,
+      {
+        href: null as string | null,
         title: featureSelected?.feLabel,
-      });
-      setSubMenuValue(featureSelected?.feUri as string);
-      setSubmenuValueToLocalStorage(featureSelected?.feUri as string);
-    }
-
-    const breadscumbNew = [home, ...otherTabBreadscrumb];
-
+      },
+    ];
     setBreadcrumb(breadscumbNew);
     setBreadscrumbToLocalStorage(breadscumbNew as []);
+    handleGoPage(featureSelected?.feUri as string);
+    setSubMenuValue(key);
+    setSubmenuValueToLocalStorage(key);
+  };
+  const caseLeftMenu = (key: string) => {
+    const featureList = global.userApp.features;
+    const featureSelected = featureList.find((item) => {
+      return item.feUri == key;
+    });
+    const childrenMenu4Sub = featureList
+      .filter((m) => {
+        return m.isSubMenu && m.parentId == featureSelected?.featureId;
+      })
+      .sort((a, b) => {
+        if (a.sortNumber == null) return 1;
+        if (b.sortNumber == null) return -1;
+        return a.sortNumber - b.sortNumber;
+      })
+      .map((item) => {
+        return {
+          value: item?.feUri as string,
+          label: item?.feLabel as string,
+        };
+      });
+    if (childrenMenu4Sub.length == 0) {
+      messageApi.error("Menu không có chức năng khả dụng!");
+      return;
+    }
+
+    const ancestors = getAncestors(key);
+    const otherTabBreadscrumb = ancestors.map((item) => {
+      return {
+        href: null as string | null,
+        title: item.feLabel,
+      };
+    });
+    const firstChild = childrenMenu4Sub[0];
+    const breadscumbNew = [
+      home,
+      ...otherTabBreadscrumb,
+      {
+        href: null as string | null,
+        title: featureSelected?.feLabel,
+      },
+      {
+        href: null as string | null,
+        title: firstChild.label,
+      },
+    ];
+    setBreadcrumb(breadscumbNew);
+    setBreadscrumbToLocalStorage(breadscumbNew as []);
+    setSubMenuOptions(childrenMenu4Sub);
+    setSubmenuToLocalStorage(childrenMenu4Sub as []);
+    setSubmenuValueToLocalStorage(firstChild.value);
+    setSubMenuValue(firstChild.value);
+    handleGoPage(firstChild.value);
   };
   const getAncestors = (key: string) => {
     const featureList = global.userApp.features;
@@ -227,13 +250,9 @@ export default function Wrapper({
     return ancestors.reverse();
   };
 
-  const handleGoPage = (key: string, isFromSubmenu?: boolean) => {
+  const handleGoPage = (key: string) => {
     console.info("handleGoPage", key);
-
-    if (key) {
-      router.push(goPage(key, {}));
-      setSubMenuValue(key);
-    }
+    router.push(goPage(key, {}));
   };
   const items: MenuProps["items"] = [
     {
@@ -300,21 +319,10 @@ export default function Wrapper({
       setIsLogin(!!token);
 
       window.scrollTo(0, 0);
-      if (typeof window !== "undefined") {
-        const sub = localStorage.getItem("_sub") || "";
-        const subSelected = localStorage.getItem("_sub-selected");
-        let parsedSub = [];
-        try {
-          parsedSub = sub ? JSON.parse(sub) : [];
-        } catch (error) {
-          parsedSub = [];
-        }
-        setSubMenuValue(subSelected || "");
-      }
     } else {
       router.push(FE_URL + "/login");
     }
-    return () => { };
+    return () => {};
   }, []);
   return (
     <>
@@ -328,10 +336,19 @@ export default function Wrapper({
             width="280px"
             style={siderStyle}
           >
-            <div style={logoStyle} />
+            <div style={logoStyle}>
+              <Image
+                style={{
+                  height: "70%",
+                  width: "auto",
+                }}
+                src={logo}
+                alt="no-permission"
+              />
+              s
+            </div>
             <Menu
               mode="inline"
-              defaultSelectedKeys={["1"]}
               items={menus}
               onClick={(value) => {
                 handleClickMenu(value, false);

@@ -11,9 +11,9 @@ export const getBreadscrumbFromLocalStorage = () => {
       return JSON.parse(submenu);
     }
     return [];
-  }
-  catch (e) {
+  } catch (e) {
+    console.error(e);
     window.localStorage.removeItem(BREADSCRUMB);
     window.location.reload();
   }
-}
+};
