@@ -54,6 +54,7 @@ import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 
 import Image from "next/image";
 import logo from "../../public/logo.png";
+import logoMini from "../../public/logo-mini.png";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -346,14 +347,25 @@ export default function Wrapper({
             style={siderStyle}
           >
             <div style={logoStyle}>
-              <Image
-                style={{
-                  height: "70%",
-                  width: "auto",
-                }}
-                src={logo}
-                alt="no-permission"
-              />
+              {collapsed ? (
+                <Image
+                  style={{
+                    height: "66%",
+                    width: "auto",
+                  }}
+                  src={logoMini}
+                  alt="no-permission"
+                />
+              ) : (
+                <Image
+                  style={{
+                    height: "70%",
+                    width: "auto",
+                  }}
+                  src={logo}
+                  alt="no-permission"
+                />
+              )}
             </div>
             <Menu
               mode="inline"
