@@ -73,7 +73,6 @@ const siderStyle: React.CSSProperties = {
   top: 0,
   bottom: 0,
   scrollbarWidth: "thin",
-  scrollbarGutter: "stable",
 };
 
 const footerStyle: React.CSSProperties = {
@@ -250,6 +249,13 @@ export default function Wrapper({
 
     return ancestors.reverse();
   };
+  const handleSetBreadcrumbAndSubMenuFromUriF5Reload = (key: string) => {
+    const featureList = global.userApp.features;
+    const featureSelected = featureList.find((item) => {
+      return item.feUri == key;
+    });
+    
+  }
 
   const handleGoPage = (key: string) => {
     console.info("handleGoPage", key);
@@ -294,19 +300,11 @@ export default function Wrapper({
       const _b = getBreadscrumbFromLocalStorage();
       const _sm = getSubmenuFromLocalStorage();
       const _ssm = getSubmenuValueFromLocalStorage();
-      const uri = window.location.protocol + "//" + window.location.host;
+      const uri = window.location.origin + window.location.pathname;
       console.error(uri);
 
       if (uri != FE_URL) {
-        if (_b) {
-          setBreadcrumb(_b);
-        }
-        if (_sm) {
-          setSubMenuOptions(_sm);
-        }
-        if (_ssm) {
-          setSubMenuValue(_ssm);
-        }
+        handleSetBreadcrumbAndSubMenuFromUriF5Reload(window.location.pathname);
       } else {
         localStorage.removeItem(BREADSCRUMB);
         localStorage.removeItem(SUB_MENU);
@@ -332,7 +330,7 @@ export default function Wrapper({
     } else {
       router.push(FE_URL + "/login");
     }
-    return () => {};
+    return () => { };
   }, []);
   return (
     <>

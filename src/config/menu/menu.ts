@@ -14,13 +14,17 @@ const iconLibraries = {
 
 type IconLibraryKey = keyof typeof iconLibraries;
 const getIcon = (iconName: string) => {
-  if (!iconName) return null;
+  if (!iconName) {
+    return null;
+  }
 
   const prefix = iconName.slice(0, 2) as IconLibraryKey;
 
   const lib = iconLibraries[prefix];
 
-  if (!lib) return null;
+  if (!lib) {
+    return null;
+  }
 
   const IconComponent = lib[iconName as keyof typeof lib];
 

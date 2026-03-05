@@ -11,4 +11,8 @@ export interface UserInformation {
     btnCodes: string[];
     allowFeatureCode: string;
     features: FeatureDTO[];
+    systemConfig: GlobalSystemConfig;
+}
+export interface GlobalSystemConfig {
+    features: FeatureDTO[];
 }

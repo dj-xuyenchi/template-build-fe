@@ -130,7 +130,7 @@ body {
 }
 
 .table-custom-container .ant-collapse-header {
-    align-items: center;
+    align-items: center !important;
     padding-right: unset !important;
 }
 
