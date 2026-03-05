@@ -127,7 +127,7 @@ export const SexyNotification = ({ isShow = false }) => {
       sendTime: "4 ngày trước",
     },
     {
-      title: "XIn chaào",
+      title: "Xin chaào",
       shortContent:
         "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
       sendTime: "4 ngày trước",

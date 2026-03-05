@@ -250,11 +250,11 @@ export default function Wrapper({
     return ancestors.reverse();
   };
   const handleSetBreadcrumbAndSubMenuFromUriF5Reload = (key: string) => {
-    const featureList = global.userApp.features;
+    const featureList = global.userApp.systemConfig.features;
     const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
-    
+
   }
 
   const handleGoPage = (key: string) => {
@@ -297,9 +297,9 @@ export default function Wrapper({
       dispatch(setUserInformation(data));
 
       // Load lại breadcrumb và submenu đã lưu trước đó nếu có case user f5 website
-      const _b = getBreadscrumbFromLocalStorage();
-      const _sm = getSubmenuFromLocalStorage();
-      const _ssm = getSubmenuValueFromLocalStorage();
+      // const _b = getBreadscrumbFromLocalStorage();
+      // const _sm = getSubmenuFromLocalStorage();
+      // const _ssm = getSubmenuValueFromLocalStorage();
       const uri = window.location.origin + window.location.pathname;
       console.error(uri);
 
