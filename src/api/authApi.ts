@@ -2,10 +2,14 @@ import axiosClient from "@/config/httpCall";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { BaseResponse } from "@/model/BaseResponse";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
+import { GlobalSystemConfig } from "@/model/login/GlobalSystemConfig";
 import { LoginRequest } from "@/model/login/LoginRequest";
 import { AuthResponse } from "@/model/login/LoginResponse";
 import { UserInformation } from "@/model/login/UserInformation";
-
+export interface GetGlobalSystemConfigFilter {
+  channel: string;
+  system: string;
+}
 export const authApi = {
   // getMedia: async (payload) => {
   //     const res = await axiosIns.get(`/auth-service/media/f?filename=${payload.fileName}`)
@@ -24,6 +28,17 @@ export const authApi = {
   ): Promise<BaseResponse<UserInformation>> => {
     const res = await axiosClient.get(
       `${AUTHEN_SERVICE}/authentication/get-user-information`,
+      {
+        params: filter,
+      },
+    );
+    return res.data;
+  },
+  getGlobalSystemConfig: async (
+    filter: GetGlobalSystemConfigFilter,
+  ): Promise<BaseResponse<GlobalSystemConfig>> => {
+    const res = await axiosClient.get(
+      `${AUTHEN_SERVICE}/authentication/get-global-system-config`,
       {
         params: filter,
       },

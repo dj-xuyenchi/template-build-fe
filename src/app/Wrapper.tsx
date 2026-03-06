@@ -21,8 +21,8 @@ import Sider from "antd/es/layout/Sider";
 import { MouseEvent, useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import { authApi } from "@/api/authApi";
-import { setUserInformation } from "./globalSlice";
+import { authApi, GetGlobalSystemConfigFilter } from "@/api/authApi";
+import { setGlobalSystemConfig, setUserInformation } from "./globalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { MenuProps } from "antd";
 import { SexyNotification } from "./SexyNotification";
@@ -55,6 +55,7 @@ import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 import Image from "next/image";
 import logo from "../../public/logo.png";
 import logoMini from "../../public/logo-mini.png";
+import { LOGIN_URL } from "@/util/common-home/link";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -250,10 +251,7 @@ export default function Wrapper({
     return ancestors.reverse();
   };
   const handleSetBreadcrumbAndSubMenuFromUriF5Reload = (key: string) => {
-    const featureList = global.userApp.systemConfig.features;
-    const featureSelected = featureList.find((item) => {
-      return item.feUri == key;
-    });
+
 
   }
 
@@ -315,20 +313,43 @@ export default function Wrapper({
     } finally {
     }
   };
+  const handleGetGlobalSystemConfig = async () => {
+    try {
+      const requestParam = {
+        system: "CMS",
+      } as GetGlobalSystemConfigFilter;
+      const res = await authApi.getGlobalSystemConfig(requestParam);
+      dispatch(setGlobalSystemConfig(res.data));
+      const features = res.data?.features || [];
+
+      // dùng features ở đây
+      handleCheckUriAndSetIfPresent(features);
+    } catch (e) {
+      console.error(e);
+      window.location.href = LOGIN_URL;
+    } finally {
+    }
+  }
+  const handleCheckUriAndSetIfPresent = (features: any[]) => {
+    const uri = window.location.origin + window.location.pathname;
+    console.error(uri);
+  }
+
 
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
     const fullUrl = window.location.href;
-    if (fullUrl == FE_URL + "/login") {
+    if (fullUrl == LOGIN_URL) {
       return;
     }
     if (token) {
+      handleGetGlobalSystemConfig();
       handleGetUserInformation();
       setIsLogin(!!token);
 
       window.scrollTo(0, 0);
     } else {
-      router.push(FE_URL + "/login");
+      router.push(LOGIN_URL);
     }
     return () => { };
   }, []);

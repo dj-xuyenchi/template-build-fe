@@ -5,8 +5,8 @@ import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
 import { notify } from "./push-noti-message/notifyContext";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { FailedQueueItem } from "@/types/FailedQueueItem";
+import { LOGIN_URL } from "@/util/common-home/link";
 const ROOT_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const axiosClient = axios.create({
   baseURL: ROOT_URL,
   timeout: 30000,
@@ -133,7 +133,7 @@ axiosClient.interceptors.response.use(
         if (originalRequest._retry) {
           localStorage.removeItem(TOKEN_KEY);
           localStorage.removeItem(REFRESH_TOKEN_KEY);
-          window.location.href = FE_URL + "/login";
+          window.location.href = LOGIN_URL;
           return Promise.reject(error);
         }
 
@@ -160,7 +160,7 @@ axiosClient.interceptors.response.use(
             if (res.data.code == "ERROR") {
               messageApi.error(res.data.message);
               setTimeout(() => {
-                window.location.href = FE_URL + "/login";
+                window.location.href = LOGIN_URL;
               }, 3000);
               return;
             }
@@ -183,7 +183,7 @@ axiosClient.interceptors.response.use(
             processQueue(err, null);
             localStorage.removeItem(TOKEN_KEY);
             localStorage.removeItem(REFRESH_TOKEN_KEY);
-            window.location.href = FE_URL + "/login";
+            window.location.href = LOGIN_URL;
             reject(err);
           } finally {
             isRefreshing = false;
@@ -195,7 +195,7 @@ axiosClient.interceptors.response.use(
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(REFRESH_TOKEN_KEY);
         setTimeout(() => {
-          window.location.href = FE_URL + "/login";
+          window.location.href = LOGIN_URL;
         }, 3000);
         break;
       }
