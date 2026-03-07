@@ -32,6 +32,7 @@ export default function Login() {
           if (typeof window !== "undefined") {
             localStorage.setItem(TOKEN_KEY, loginRes.data.accessToken);
             localStorage.setItem(REFRESH_TOKEN_KEY, loginRes.data.refreshToken);
+            // Chỗ này bắt buộc dùng href để nhảy để useEffect tổng chạy lại kiểm tra token load các api tiên quyết
             window.location.href = FE_ROOT || "/";
             return;
           }

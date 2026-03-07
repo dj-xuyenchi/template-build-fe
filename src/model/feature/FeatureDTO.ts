@@ -16,6 +16,7 @@ export interface FeatureDTO {
   icon: string;
   feLabel: string;
   feUri: string;
-  isSubMenu: boolean;
+  isSubMenu?: boolean;
+  isMenu: boolean;
   sortNumber?: number;
 }

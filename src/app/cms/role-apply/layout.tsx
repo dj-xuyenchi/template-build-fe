@@ -1,14 +1,10 @@
-'use client'
+"use client";
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    // isValidToken()
-    return (
-        <>
-            {children}
-        </>
-    );
+  // isValidToken()
+  return <>{children}</>;
 }

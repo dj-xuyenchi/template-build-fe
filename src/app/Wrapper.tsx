@@ -56,6 +56,7 @@ import Image from "next/image";
 import logo from "../../public/logo.png";
 import logoMini from "../../public/logo-mini.png";
 import { LOGIN_URL } from "@/util/common-home/link";
+import { FeatureDTO } from "@/model/feature/FeatureDTO";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -139,18 +140,22 @@ export default function Wrapper({
     { key }: { key: string },
     isFromSubmenu: boolean,
   ) => {
+    const userFeatures = global.userApp.features;
     if (isFromSubmenu) {
-      caseSubMenu(key);
+      caseSubMenu(key, userFeatures);
     } else {
-      caseLeftMenu(key);
+      caseLeftMenu(key, userFeatures);
     }
   };
-  const caseSubMenu = (key: string) => {
-    const featureList = global.userApp.features;
+  const caseSubMenu = (
+    key: string,
+    featureList: FeatureDTO[],
+    fromUri?: boolean,
+  ) => {
     const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
-    const ancestors = getAncestors(key);
+    const ancestors = getAncestors(key, featureList);
     const otherTabBreadscrumb = ancestors.map((item) => {
       return {
         href: null as string | null,
@@ -167,12 +172,13 @@ export default function Wrapper({
     ];
     setBreadcrumb(breadscumbNew);
     setBreadscrumbToLocalStorage(breadscumbNew as []);
-    handleGoPage(featureSelected?.feUri as string);
     setSubMenuValue(key);
     setSubmenuValueToLocalStorage(key);
+    if (!fromUri) {
+      handleGoPage(featureSelected?.feUri as string);
+    }
   };
-  const caseLeftMenu = (key: string) => {
-    const featureList = global.userApp.features;
+  const caseLeftMenu = (key: string, featureList: FeatureDTO[]) => {
     const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
@@ -196,7 +202,7 @@ export default function Wrapper({
       return;
     }
 
-    const ancestors = getAncestors(key);
+    const ancestors = getAncestors(key, featureList);
     const otherTabBreadscrumb = ancestors.map((item) => {
       return {
         href: null as string | null,
@@ -224,8 +230,7 @@ export default function Wrapper({
     setSubMenuValue(firstChild.value);
     handleGoPage(firstChild.value);
   };
-  const getAncestors = (key: string) => {
-    const featureList = global.userApp.features;
+  const getAncestors = (key: string, featureList: FeatureDTO[]) => {
     const featureSelected = featureList.find((item) => {
       return item.feUri == key;
     });
@@ -250,10 +255,8 @@ export default function Wrapper({
 
     return ancestors.reverse();
   };
-  const handleSetBreadcrumbAndSubMenuFromUriF5Reload = (key: string) => {
 
-
-  }
+  const handleSetBreadcrumbAndSubMenuFromUriF5Reload = (key: string) => {};
 
   const handleGoPage = (key: string) => {
     console.info("handleGoPage", key);
@@ -299,7 +302,6 @@ export default function Wrapper({
       // const _sm = getSubmenuFromLocalStorage();
       // const _ssm = getSubmenuValueFromLocalStorage();
       const uri = window.location.origin + window.location.pathname;
-      console.error(uri);
 
       if (uri != FE_URL) {
         handleSetBreadcrumbAndSubMenuFromUriF5Reload(window.location.pathname);
@@ -323,18 +325,59 @@ export default function Wrapper({
       const features = res.data?.features || [];
 
       // dùng features ở đây
-      handleCheckUriAndSetIfPresent(features);
+      await handleCheckUriAndSetIfPresent(features);
     } catch (e) {
       console.error(e);
       window.location.href = LOGIN_URL;
     } finally {
     }
-  }
-  const handleCheckUriAndSetIfPresent = (features: any[]) => {
-    const uri = window.location.origin + window.location.pathname;
-    console.error(uri);
-  }
+  };
+  const handleCheckUriAndSetIfPresent = async (features: FeatureDTO[]) => {
+    // Hàm này chỉ được dùng ở logic copy dán link vào trình duyệt vì nó có đủ menu ở tham số param
 
+    const uri = window.location.pathname;
+    const selectedFeature = features.find((f) => {
+      return f.feUri == uri;
+    });
+    if (!selectedFeature) {
+      return;
+    }
+    if (selectedFeature.isMenu) {
+      if (selectedFeature.isSubMenu) {
+        caseSubMenu(uri, features);
+      } else {
+        // caseLeftMenu(uri, features);
+      }
+    } else {
+      const requestParam = {
+        isTakeAllowFeatureList: true,
+      } as GetUserInformationFilter;
+      const res = await authApi.getUserInformation(requestParam);
+      const userFeatures = res.data.features;
+      const parentMenu = userFeatures.find((f) => {
+        return f.featureId == selectedFeature.parentId;
+      });
+      caseSubMenu(parentMenu?.feUri as string, userFeatures, true);
+      const childrenMenu4Sub = userFeatures
+        .filter((m) => {
+          return m.isSubMenu && m.parentId == parentMenu?.parentId;
+        })
+        .sort((a, b) => {
+          if (a.sortNumber == null) return 1;
+          if (b.sortNumber == null) return -1;
+          return a.sortNumber - b.sortNumber;
+        })
+        .map((item) => {
+          return {
+            value: item?.feUri as string,
+            label: item?.feLabel as string,
+          };
+        });
+      setSubMenuOptions(childrenMenu4Sub);
+      setSubMenuValue(parentMenu?.feUri as string);
+    }
+    console.log(selectedFeature);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
@@ -343,15 +386,15 @@ export default function Wrapper({
       return;
     }
     if (token) {
-      handleGetGlobalSystemConfig();
       handleGetUserInformation();
+      handleGetGlobalSystemConfig();
       setIsLogin(!!token);
 
       window.scrollTo(0, 0);
     } else {
       router.push(LOGIN_URL);
     }
-    return () => { };
+    return () => {};
   }, []);
   return (
     <>
