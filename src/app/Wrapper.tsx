@@ -344,7 +344,29 @@ export default function Wrapper({
     }
     if (selectedFeature.isMenu) {
       if (selectedFeature.isSubMenu) {
-        caseSubMenu(uri, features);
+        const requestParam = {
+          isTakeAllowFeatureList: true,
+        } as GetUserInformationFilter;
+        const res = await authApi.getUserInformation(requestParam);
+        const userFeatures = res.data.features;
+        caseSubMenu(uri, userFeatures);
+        const childrenMenu4Sub = userFeatures
+          .filter((m) => {
+            return m.isSubMenu && m.parentId == selectedFeature?.parentId;
+          })
+          .sort((a, b) => {
+            if (a.sortNumber == null) return 1;
+            if (b.sortNumber == null) return -1;
+            return a.sortNumber - b.sortNumber;
+          })
+          .map((item) => {
+            return {
+              value: item?.feUri as string,
+              label: item?.feLabel as string,
+            };
+          });
+        setSubMenuOptions(childrenMenu4Sub);
+        setSubMenuValue(selectedFeature?.feUri as string);
       } else {
         // caseLeftMenu(uri, features);
       }
