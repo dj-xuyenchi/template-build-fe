@@ -38,7 +38,7 @@ export const buildMenu = (features: FeatureDTO[]) => {
     children: MenuNode[] | null;
     subMenu: MenuNode[] | null;
     parentId: number | null;
-    isSubMenu: boolean;
+    isSubMenu?: boolean;
   };
 
   const map: Record<number, MenuNode> = {};
