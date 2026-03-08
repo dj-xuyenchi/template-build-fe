@@ -5,6 +5,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // isValidToken()
   return <>{children}</>;
 }

@@ -4,69 +4,86 @@ import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
 import { ArchiveBtn } from "@/component/table-btn/ArchiveBtn";
 import { formatDateWithDayVN } from "@/util/date/dateUtil";
-import { effectiveType, getStatusLabel, getStatusTag } from "./Filter";
+import {
+  effectiveType,
+  getEffectiveLabel,
+  getEffectiveTag,
+  getStatusLabel,
+  getStatusTag,
+} from "./Filter";
 import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
 import { TextAreaCustom } from "@/component/TextAreaCustom";
 import { ACTIVE } from "@/model/BaseDataTable";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { ROLE_ARCHIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { SwitchCustom } from "@/component/SwitchCustom";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
 import dayjs from "dayjs";
+import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { ROLE_ARCHIVE } from "@/model/cms/role/RoleDTO";
 
 export type CallBacks = BaseTable & {
-  handleArchiveActiveRow: (row: RoleDTO) => Promise<void>;
-  handleSetName: (row: RoleDTO, value: string) => void;
-  handleSetDescription: (row: RoleDTO, value: string) => void;
-  handleSetEffectiveType: (row: RoleDTO, value: string) => void;
-  handleSetRoleCode: (row: RoleDTO, value: string) => void;
-  handleSetEffectiveFrom: (row: RoleDTO, value: dayjs.Dayjs | null) => void;
-  handleSetEffectiveTo: (row: RoleDTO, value: dayjs.Dayjs | null) => void;
-  handleSetStatus: (row: RoleDTO, value: boolean) => void;
+  handleArchiveActiveRow: (row: FeatureDTO) => Promise<void>;
+  handleSetName: (row: FeatureDTO, value: string) => void;
+  handleSetDescription: (row: FeatureDTO, value: string) => void;
+  handleSetEffectiveType: (row: FeatureDTO, value: string) => void;
+  handleSetRoleCode: (row: FeatureDTO, value: string) => void;
+  handleSetEffectiveFrom: (row: FeatureDTO, value: dayjs.Dayjs | null) => void;
+  handleSetEffectiveTo: (row: FeatureDTO, value: dayjs.Dayjs | null) => void;
+  handleSetStatus: (row: FeatureDTO, value: boolean) => void;
 };
 
 export const getColumns = ({
   handleArchiveActiveRow,
-}: CallBacks): ColumnTypeCustom<RoleDTO>[] => [
+}: CallBacks): ColumnTypeCustom<FeatureDTO>[] => [
   {
     title: "STT",
     dataIndex: "stt",
     key: "stt",
     fixed: "left",
     width: 80,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
     ),
     align: "center",
   },
   {
-    title: "Tên quyền",
-    dataIndex: "roleName",
-    key: "roleName",
+    title: "Tên chức năng",
+    dataIndex: "featureName",
+    key: "featureName",
     width: 240,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
   },
   {
-    title: "Mã quyền",
-    dataIndex: "roleCode",
-    key: "roleCode",
+    title: "Mã chức năng",
+    dataIndex: "featureCode",
+    key: "featureCode",
     width: 200,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
   },
   {
-    title: "Mô tả quyền",
-    dataIndex: "roleDescription",
-    key: "roleDescription",
+    title: "Chức năng cha",
+    dataIndex: "parentFeatureName",
+    key: "parentFeatureName",
     width: 240,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Hệ thống",
+    dataIndex: "systemName",
+    key: "systemName",
+    width: 240,
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -76,10 +93,10 @@ export const getColumns = ({
     dataIndex: "effectiveType",
     key: "effectiveType",
     width: 200,
-    render: (value: string, record: RoleDTO, index: number) => (
-      <TableLabelCustom>
-        {value == "NE" ? "Không áp dụng thời gian" : "Có áp dụng thời gian"}
-      </TableLabelCustom>
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TagCustom type={getEffectiveTag(value, record)}>
+        {getEffectiveLabel(value)}
+      </TagCustom>
     ),
     align: "center",
   },
@@ -88,7 +105,7 @@ export const getColumns = ({
     dataIndex: "effectiveFrom",
     key: "effectiveFrom",
     width: 200,
-    render: (value: Date, record: RoleDTO, index: number) => (
+    render: (value: Date, record: FeatureDTO, index: number) => (
       <TableLabelCustom align="left">
         {formatDateWithDayVN(value, true)}
       </TableLabelCustom>
@@ -101,10 +118,74 @@ export const getColumns = ({
     dataIndex: "effectiveTo",
     key: "effectiveTo",
     width: 200,
-    render: (value: Date, record: RoleDTO, index: number) => (
+    render: (value: Date, record: FeatureDTO, index: number) => (
       <TableLabelCustom align="left">
         {formatDateWithDayVN(value, true)}
       </TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Icon",
+    dataIndex: "icon",
+    key: "icon",
+    width: 200,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="left">{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Key đường dẫn giao diện",
+    dataIndex: "feUri",
+    key: "feUri",
+    width: 200,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="left">{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Tiêu đề hiển thị",
+    dataIndex: "feLabel",
+    key: "feLabel",
+    width: 200,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="left">{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Là menu",
+    dataIndex: "isMenu",
+    key: "isMenu",
+    width: 200,
+    render: (value: boolean, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="center">
+        {value ? "true" : "false"}
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Là menu dropdown",
+    dataIndex: "isSubMenu",
+    key: "isSubMenu",
+    width: 200,
+    render: (value: boolean, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="center">
+        {value ? "true" : "false"}
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Thứ tự sắp xếp",
+    dataIndex: "sortNumber",
+    key: "sortNumber",
+    width: 200,
+    render: (value: number, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="center">{value}</TableLabelCustom>
     ),
     align: "center",
   },
@@ -113,7 +194,7 @@ export const getColumns = ({
     dataIndex: "status",
     key: "status",
     width: 220,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>
         <TagCustom type={getStatusTag(value)}>
           {getStatusLabel(value)}
@@ -127,7 +208,7 @@ export const getColumns = ({
     dataIndex: "maker",
     key: "maker",
     width: 160,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -137,7 +218,7 @@ export const getColumns = ({
     dataIndex: "createdAt",
     key: "createdAt",
     width: 160,
-    render: (value: Date, record: RoleDTO, index: number) => (
+    render: (value: Date, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
     align: "center",
@@ -147,7 +228,7 @@ export const getColumns = ({
     dataIndex: "updatedBy",
     key: "updatedBy",
     width: 160,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -157,7 +238,7 @@ export const getColumns = ({
     dataIndex: "updatedAt",
     key: "updatedAt",
     width: 160,
-    render: (value: Date, record: RoleDTO, index: number) => (
+    render: (value: Date, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
     align: "center",
@@ -168,7 +249,7 @@ export const getColumns = ({
     key: "action",
     width: 100,
     fixed: "right",
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <div
         style={{
           padding: "8px 11px",
@@ -212,7 +293,7 @@ export const getColumnsEdit = ({
     fixed: "left",
     align: "center",
     width: 80,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{index + 1}</TableLabelCustom>
     ),
   },
@@ -222,7 +303,7 @@ export const getColumnsEdit = ({
     key: "roleName",
     align: "center",
     width: 240,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <InputCustom
         status={record.isErrorRoleName ? "error" : ""}
         defaultValue={record.roleName}
@@ -239,7 +320,7 @@ export const getColumnsEdit = ({
     key: "roleCode",
     align: "center",
     width: 240,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <InputCustom
         disabled={record.isNewRow ? false : true}
         defaultValue={record.roleCode}
@@ -257,7 +338,7 @@ export const getColumnsEdit = ({
     key: "roleDescription",
     align: "center",
     width: 240,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <TextAreaCustom
         // style={{ minHeight: 45 }}
         rows={1}
@@ -276,7 +357,7 @@ export const getColumnsEdit = ({
     key: "effectiveType",
     align: "center",
     width: 200,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <SelectCustom
         size="small"
         status={record.isErrorRoleEffectiveType ? "error" : ""}
@@ -295,7 +376,7 @@ export const getColumnsEdit = ({
     key: "effectiveFrom",
     align: "center",
     width: 200,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <DatePickerCustom
         showTime
         status={record.isErrorRoleEffectiveFrom ? "error" : ""}
@@ -315,7 +396,7 @@ export const getColumnsEdit = ({
     key: "effectiveTo",
     align: "center",
     width: 200,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <DatePickerCustom
         showTime
         status={record.isErrorRoleEffectiveTo ? "error" : ""}
@@ -335,7 +416,7 @@ export const getColumnsEdit = ({
     key: "status",
     align: "center",
     width: 110,
-    render: (value: string, record: RoleDTO, index: number) => (
+    render: (value: string, record: FeatureDTO, index: number) => (
       <SwitchCustom
         size="small"
         defaultValue={record.status === ACTIVE}

@@ -57,6 +57,8 @@ import logo from "../../public/logo.png";
 import logoMini from "../../public/logo-mini.png";
 import { LOGIN_URL } from "@/util/common-home/link";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { BaseResponse } from "@/model/BaseResponse";
+import { UserInformation } from "@/model/login/UserInformation";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -256,8 +258,6 @@ export default function Wrapper({
     return ancestors.reverse();
   };
 
-  const handleSetBreadcrumbAndSubMenuFromUriF5Reload = (key: string) => {};
-
   const handleGoPage = (key: string) => {
     console.info("handleGoPage", key);
     router.push(goPage(key, {}));
@@ -285,38 +285,28 @@ export default function Wrapper({
       onClick: handleLogout,
     },
   ];
-  const handleGetUserInformation = async () => {
+
+  const handleGetGlobalSystemConfig = async () => {
     try {
-      const requestParam = {
+      const requestParamUserInfo = {
         isTakeAllowFeatureList: true,
       } as GetUserInformationFilter;
-      const res = await authApi.getUserInformation(requestParam);
-      const data = res.data;
+      const userData = await authApi.getUserInformation(requestParamUserInfo);
+      const data = userData.data;
       const menuData = buildMenu(data.features || []);
 
       setMenus(menuData);
       dispatch(setUserInformation(data));
 
-      // Load lại breadcrumb và submenu đã lưu trước đó nếu có case user f5 website
-      // const _b = getBreadscrumbFromLocalStorage();
-      // const _sm = getSubmenuFromLocalStorage();
-      // const _ssm = getSubmenuValueFromLocalStorage();
       const uri = window.location.origin + window.location.pathname;
 
-      if (uri != FE_URL) {
-        handleSetBreadcrumbAndSubMenuFromUriF5Reload(window.location.pathname);
-      } else {
+      if (uri == FE_URL) {
         localStorage.removeItem(BREADSCRUMB);
         localStorage.removeItem(SUB_MENU);
         localStorage.removeItem(SELECTED_SUB_MENU);
+        return;
       }
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
-  };
-  const handleGetGlobalSystemConfig = async () => {
-    try {
+
       const requestParam = {
         system: "CMS",
       } as GetGlobalSystemConfigFilter;
@@ -325,14 +315,17 @@ export default function Wrapper({
       const features = res.data?.features || [];
 
       // dùng features ở đây
-      await handleCheckUriAndSetIfPresent(features);
+      await handleCheckUriAndSetIfPresent(features, userData);
     } catch (e) {
       console.error(e);
       window.location.href = LOGIN_URL;
     } finally {
     }
   };
-  const handleCheckUriAndSetIfPresent = async (features: FeatureDTO[]) => {
+  const handleCheckUriAndSetIfPresent = async (
+    features: FeatureDTO[],
+    userData: BaseResponse<UserInformation>,
+  ) => {
     // Hàm này chỉ được dùng ở logic copy dán link vào trình duyệt vì nó có đủ menu ở tham số param
 
     const uri = window.location.pathname;
@@ -344,11 +337,7 @@ export default function Wrapper({
     }
     if (selectedFeature.isMenu) {
       if (selectedFeature.isSubMenu) {
-        const requestParam = {
-          isTakeAllowFeatureList: true,
-        } as GetUserInformationFilter;
-        const res = await authApi.getUserInformation(requestParam);
-        const userFeatures = res.data.features;
+        const userFeatures = userData.data.features;
         caseSubMenu(uri, userFeatures);
         const childrenMenu4Sub = userFeatures
           .filter((m) => {
@@ -371,11 +360,7 @@ export default function Wrapper({
         // caseLeftMenu(uri, features);
       }
     } else {
-      const requestParam = {
-        isTakeAllowFeatureList: true,
-      } as GetUserInformationFilter;
-      const res = await authApi.getUserInformation(requestParam);
-      const userFeatures = res.data.features;
+      const userFeatures = userData.data.features;
       const parentMenu = userFeatures.find((f) => {
         return f.featureId == selectedFeature.parentId;
       });
@@ -408,7 +393,6 @@ export default function Wrapper({
       return;
     }
     if (token) {
-      handleGetUserInformation();
       handleGetGlobalSystemConfig();
       setIsLogin(!!token);
 
