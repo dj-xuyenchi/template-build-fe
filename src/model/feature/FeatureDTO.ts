@@ -7,9 +7,9 @@ export interface FeatureDTO extends BaseDataTable {
   parentId: number;
   systemId: number;
   menuLevel: number;
-  effectiveType: string;
-  effectiveFrom: string;
-  effectiveTo: string;
+  effectiveType: string | undefined;
+  effectiveFrom: string | undefined;
+  effectiveTo: string | undefined;
   maker: string;
   updatedBy: string;
   updatedAt: string;
@@ -22,6 +22,10 @@ export interface FeatureDTO extends BaseDataTable {
   sortNumber?: number;
   parentFeatureName?: string;
   systemName: string;
+
+  isErrorFeatureEffectiveType?: boolean;
+  isErrorFeatureEffectiveFrom?: boolean;
+  isErrorFeatureEffectiveTo?: boolean;
 }
 export const FEATURE_ACTIVE = "ACTIVE";
 export const FEATURE_ARCHIVE = "AR_CHIVE";

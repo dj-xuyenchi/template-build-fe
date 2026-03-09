@@ -59,10 +59,11 @@ type FilterProps = {
   setFilter: (params: GetRoleFilter) => void;
 };
 export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
+
   const [systemList, setSystemList] = useState([] as SystemDTO[]);
   const [form] = Form.useForm();
   const onFinish = (value: GetRoleFilter) => {
-    console.error(value);
+    console.log("Filter value: ", value);
 
     const params = {
       ...value,
@@ -119,7 +120,7 @@ export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
               <>
                 <FormCustom layout="vertical" form={form} onFinish={onFinish}>
                   <Row gutter={16}>
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Tên chức năng"
                         name="featureName"
@@ -129,7 +130,7 @@ export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
                       </Form.Item>
                     </Col>
 
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Mã chức năng"
                         name="featureCode"
@@ -138,7 +139,7 @@ export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
                         <InputCustom placeholder="Mã chức năng" />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Hệ thống"
                         name="systemId"
@@ -158,7 +159,7 @@ export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Trạng thái"
                         name="status"
@@ -171,7 +172,31 @@ export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    <Col span={12} md={12} lg={6} xl={6}>
+                      <Form.Item
+                        label="Chức năng cha"
+                        name="parentId"
+                        tooltip="Chức năng cha cần tìm"
+                      >
+                        <SelectCustom
+                          placeholder="Chọn chức năng cha"
+                          mode="multiple"
+                          options={[...statusSelect]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12} md={12} lg={6} xl={6}>
+                      <Form.Item
+                        label="URI chức năng"
+                        name="uri"
+                        tooltip="URI chức năng cần tìm"
+                      >
+                        <InputCustom
+                          placeholder="Nhập URI chức năng"
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Kiểu áp dụng thời gian"
                         name="effectiveType"
@@ -184,7 +209,7 @@ export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Áp dụng từ"
                         name="effectiveFrom"
@@ -196,7 +221,7 @@ export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Áp dụng đến"
                         name="effectiveTo"

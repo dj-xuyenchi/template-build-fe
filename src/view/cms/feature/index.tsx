@@ -10,10 +10,7 @@ import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import dayjs from "dayjs";
-import {
-  CreateRoleRequestData,
-  UpdateRoleRequestData,
-} from "@/model/cms/role/AuditRoleRequest";
+
 import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { featureApi } from "@/api/featureApi";
@@ -94,35 +91,26 @@ export const Index = () => {
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, roleName: value, isEdited: true }
+          ? { ...item, featureName: value, isEdited: true }
           : item,
       ),
     }));
   };
-  const handleSetDescription = (row: FeatureDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, roleDescription: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
+
   const handleSetEffectiveType = (row: FeatureDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorRoleEffectiveFrom: false,
-              isErrorRoleEffectiveTo: false,
-            }
+            ...item,
+            effectiveType: value,
+            isEdited: true,
+            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+            isErrorFeatureEffectiveFrom: false,
+            isErrorFeatureEffectiveTo: false,
+          }
           : item,
       ),
     }));
@@ -157,26 +145,17 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
-              isEdited: true,
-            }
+            ...item,
+            status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
+            isEdited: true,
+          }
           : item,
       ),
     }));
   };
-  const handleSetRoleCode = (row: FeatureDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, roleCode: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
+
   const triggerNewRow = (row: FeatureDTO) => {
-    row.status = ROLE_ACTIVE;
+    row.status = FEATURE_ACTIVE;
   };
   const handleQuickSearch = (keyword: string) => {
     setFilter({
@@ -193,13 +172,11 @@ export const Index = () => {
   };
   const columnsEdit = getColumnsEdit({
     handleSetName,
-    handleSetDescription,
     handleSetEffectiveType,
     handleSetStatus,
     handleSetEffectiveFrom,
     handleSetEffectiveTo,
     handleArchiveActiveRow,
-    handleSetRoleCode,
   });
 
   const toggleViewMode = (mode: boolean) => {
