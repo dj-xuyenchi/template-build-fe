@@ -15,7 +15,7 @@ export interface ApiUriFilter extends BaseFilter {
 export const featureApi = {
   getFeature: async (
     params: GetRoleFilter,
-    signal: AbortSignal,
+    signal?: AbortSignal,
   ): Promise<BaseResponse<FeatureDTO[]>> => {
     const res = await axiosClient.post(
       `${AUTHEN_SERVICE}/feature/get-feature`,

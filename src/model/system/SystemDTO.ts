@@ -9,3 +9,5 @@ export interface SystemDTO {
   updatedAt: string;
   updatedBy: string;
 }
+
+export const SYSTEM_ACTIVE = "ACTIVE";

@@ -539,7 +539,6 @@ export default function Wrapper({
               </div>
             </div>
             <div className={styles.contentWrapper}>{children}</div>
-
             <Footer style={footerStyle}>Footer</Footer>
           </Layout>
         </Layout>

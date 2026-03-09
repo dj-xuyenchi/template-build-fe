@@ -19,10 +19,13 @@ import {
   CreateFeatureRequestData,
   UpdateFeatureRequestData,
 } from "@/model/feature/AuditFeatureRequest";
+import { GetSystemFilter, systemApi } from "@/api/systemApi";
+import { SYSTEM_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: FeatureDTO[] });
-
+  const [features, setFeatures] = useState([] as FeatureDTO[]);
+  const [systems, setSystems] = useState([] as SystemDTO[]);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
@@ -86,7 +89,7 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleSetName = (row: FeatureDTO, value: string) => {
+  const handleSetFeatureName = (row: FeatureDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -96,21 +99,50 @@ export const Index = () => {
       ),
     }));
   };
-
+  const handleSetFeatureCode = (row: FeatureDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, featureCode: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
+  const handleSetFeatureParent = (row: FeatureDTO, value: number) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, parentId: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
+  const handleSetSystem = (row: FeatureDTO, value: number) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, systemId: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
   const handleSetEffectiveType = (row: FeatureDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            effectiveType: value,
-            isEdited: true,
-            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-            isErrorFeatureEffectiveFrom: false,
-            isErrorFeatureEffectiveTo: false,
-          }
+              ...item,
+              effectiveType: value,
+              isEdited: true,
+              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+              isErrorFeatureEffectiveFrom: false,
+              isErrorFeatureEffectiveTo: false,
+            }
           : item,
       ),
     }));
@@ -145,10 +177,10 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
-            isEdited: true,
-          }
+              ...item,
+              status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
+              isEdited: true,
+            }
           : item,
       ),
     }));
@@ -171,12 +203,17 @@ export const Index = () => {
     );
   };
   const columnsEdit = getColumnsEdit({
-    handleSetName,
+    handleSetFeatureName,
+    handleSetFeatureCode,
+    handleSetFeatureParent,
+    handleSetSystem,
     handleSetEffectiveType,
     handleSetStatus,
     handleSetEffectiveFrom,
     handleSetEffectiveTo,
     handleArchiveActiveRow,
+    features,
+    systems,
   });
 
   const toggleViewMode = (mode: boolean) => {
@@ -295,6 +332,25 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
+  const handleGetAllFeature = async () => {
+    try {
+      const res = await featureApi.getFeature({} as GetRoleFilter);
+      setFeatures(res.data);
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
+  const handleGetSystem = async () => {
+    try {
+      const params = {} as GetSystemFilter;
+      const res = await systemApi.getSystem(params);
+      setSystems(res.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) {
@@ -305,6 +361,8 @@ export const Index = () => {
 
       return () => controller.abort();
     }
+    handleGetSystem();
+    handleGetAllFeature();
   }, []);
 
   return (
@@ -319,6 +377,9 @@ export const Index = () => {
         }}
       >
         <Filter
+          systemList={systems.filter((s) => {
+            return s.status === SYSTEM_ACTIVE;
+          })}
           handleFilter={handleGetData}
           filter={filter}
           setFilter={setFilter}

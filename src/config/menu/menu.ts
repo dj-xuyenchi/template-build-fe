@@ -13,7 +13,7 @@ const iconLibraries = {
 };
 
 type IconLibraryKey = keyof typeof iconLibraries;
-const getIcon = (iconName: string) => {
+export const getIcon = (iconName: string) => {
   if (!iconName) {
     return null;
   }

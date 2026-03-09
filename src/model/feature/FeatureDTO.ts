@@ -4,6 +4,8 @@ export interface FeatureDTO extends BaseDataTable {
   featureId: number;
   featureCode: string;
   featureName: string;
+  isErrorFeatureName?: boolean;
+  isErrorFeatureCode?: boolean;
   parentId: number;
   systemId: number;
   menuLevel: number;
@@ -17,6 +19,7 @@ export interface FeatureDTO extends BaseDataTable {
   icon: string;
   feLabel: string;
   feUri: string;
+  isErrorFeatureFeUri?: boolean;
   isSubMenu?: boolean;
   isMenu: boolean;
   sortNumber?: number;

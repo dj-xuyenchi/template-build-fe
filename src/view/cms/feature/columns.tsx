@@ -13,7 +13,6 @@ import {
 } from "./Filter";
 import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
-import { TextAreaCustom } from "@/component/TextAreaCustom";
 import { ACTIVE } from "@/model/BaseDataTable";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
@@ -22,16 +21,23 @@ import { DatePickerCustom } from "@/component/DatepickerCustom";
 import dayjs from "dayjs";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
 import { ROLE_ARCHIVE } from "@/model/cms/role/RoleDTO";
+import { SystemDTO } from "@/model/system/SystemDTO";
+import { reactIconPool } from "@/config/icon/reactIconPool";
+import { getIcon } from "@/config/menu/menu";
 
 export type CallBacks = BaseTable & {
   handleArchiveActiveRow: (row: FeatureDTO) => Promise<void>;
-  handleSetName: (row: FeatureDTO, value: string) => void;
-  handleSetDescription: (row: FeatureDTO, value: string) => void;
+  handleSetFeatureName: (row: FeatureDTO, value: string) => void;
+  handleSetFeatureCode: (row: FeatureDTO, value: string) => void;
+  handleSetFeatureParent: (row: FeatureDTO, value: number) => void;
+  handleSetSystem: (row: FeatureDTO, value: number) => void;
   handleSetEffectiveType: (row: FeatureDTO, value: string) => void;
   handleSetRoleCode: (row: FeatureDTO, value: string) => void;
   handleSetEffectiveFrom: (row: FeatureDTO, value: dayjs.Dayjs | null) => void;
   handleSetEffectiveTo: (row: FeatureDTO, value: dayjs.Dayjs | null) => void;
   handleSetStatus: (row: FeatureDTO, value: boolean) => void;
+  features: FeatureDTO[];
+  systems: SystemDTO[];
 };
 
 export const getColumns = ({
@@ -65,6 +71,52 @@ export const getColumns = ({
     width: 200,
     render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Key đường dẫn giao diện",
+    dataIndex: "feUri",
+    key: "feUri",
+    width: 200,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="left">{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Tiêu đề hiển thị",
+    dataIndex: "feLabel",
+    key: "feLabel",
+    width: 220,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="left">{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Icon",
+    dataIndex: "icon",
+    key: "icon",
+    width: 200,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <TableLabelCustom align="left">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <span
+            style={{
+              marginRight: "4px",
+            }}
+          >
+            {getIcon(value)}
+          </span>
+          {value}
+        </div>
+      </TableLabelCustom>
     ),
     align: "center",
   },
@@ -125,36 +177,7 @@ export const getColumns = ({
     ),
     align: "center",
   },
-  {
-    title: "Icon",
-    dataIndex: "icon",
-    key: "icon",
-    width: 200,
-    render: (value: string, record: FeatureDTO, index: number) => (
-      <TableLabelCustom align="left">{value}</TableLabelCustom>
-    ),
-    align: "center",
-  },
-  {
-    title: "Key đường dẫn giao diện",
-    dataIndex: "feUri",
-    key: "feUri",
-    width: 200,
-    render: (value: string, record: FeatureDTO, index: number) => (
-      <TableLabelCustom align="left">{value}</TableLabelCustom>
-    ),
-    align: "center",
-  },
-  {
-    title: "Tiêu đề hiển thị",
-    dataIndex: "feLabel",
-    key: "feLabel",
-    width: 200,
-    render: (value: string, record: FeatureDTO, index: number) => (
-      <TableLabelCustom align="left">{value}</TableLabelCustom>
-    ),
-    align: "center",
-  },
+
   {
     title: "Là menu",
     dataIndex: "isMenu",
@@ -195,11 +218,7 @@ export const getColumns = ({
     key: "status",
     width: 220,
     render: (value: string, record: FeatureDTO, index: number) => (
-      <TableLabelCustom>
-        <TagCustom type={getStatusTag(value)}>
-          {getStatusLabel(value)}
-        </TagCustom>
-      </TableLabelCustom>
+      <TagCustom type={getStatusTag(value)}>{getStatusLabel(value)}</TagCustom>
     ),
     align: "center",
   },
@@ -217,7 +236,7 @@ export const getColumns = ({
     title: "Ngày tạo",
     dataIndex: "createdAt",
     key: "createdAt",
-    width: 160,
+    width: 240,
     render: (value: Date, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
@@ -237,7 +256,7 @@ export const getColumns = ({
     title: "Ngày cập nhật",
     dataIndex: "updatedAt",
     key: "updatedAt",
-    width: 160,
+    width: 240,
     render: (value: Date, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
@@ -278,13 +297,17 @@ export const getColumns = ({
 ];
 
 export const getColumnsEdit = ({
-  handleSetName,
-  handleSetDescription,
+  handleSetFeatureName,
+  handleSetFeatureCode,
+  handleSetFeatureParent,
+  handleSetSystem,
   handleSetEffectiveType,
   handleSetStatus,
   handleSetEffectiveFrom,
   handleSetEffectiveTo,
   handleSetRoleCode,
+  features,
+  systems,
 }: CallBacks) => [
   {
     title: "STT",
@@ -298,55 +321,157 @@ export const getColumnsEdit = ({
     ),
   },
   {
-    title: "Tên quyền",
-    dataIndex: "roleName",
-    key: "roleName",
+    title: "Tên chức năng",
+    dataIndex: "featureName",
+    key: "featureName",
     align: "center",
     width: 240,
     render: (value: string, record: FeatureDTO, index: number) => (
       <InputCustom
-        status={record.isErrorRoleName ? "error" : ""}
-        defaultValue={record.roleName}
+        status={record.isErrorFeatureName ? "error" : ""}
+        defaultValue={record.featureName}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetName(record, value);
+          handleSetFeatureName(record, value);
         }}
       />
     ),
   },
   {
-    title: "Mã quyền",
-    dataIndex: "roleCode",
-    key: "roleCode",
+    title: "Mã chức năng",
+    dataIndex: "featureCode",
+    key: "featureCode",
     align: "center",
     width: 240,
     render: (value: string, record: FeatureDTO, index: number) => (
       <InputCustom
         disabled={record.isNewRow ? false : true}
-        defaultValue={record.roleCode}
-        status={record.isErrorRoleCode ? "error" : ""}
+        defaultValue={record.featureCode}
+        status={record.isErrorFeatureCode ? "error" : ""}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetRoleCode(record, value);
+          handleSetFeatureCode(record, value);
         }}
       />
     ),
   },
   {
-    title: "Mô tả quyền",
-    dataIndex: "roleDescription",
-    key: "roleDescription",
+    title: "Key đường dẫn giao diện",
+    dataIndex: "feUri",
+    key: "feUri",
+    align: "center",
+    width: 220,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <InputCustom
+        defaultValue={record.feUri}
+        status={record.isErrorFeatureFeUri ? "error" : ""}
+        onBlur={(e) => {
+          const value = e.target.value;
+          handleSetFeatureCode(record, value);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Tiêu đề hiển thị",
+    dataIndex: "feLabel",
+    key: "feLabel",
+    align: "center",
+    width: 220,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <InputCustom
+        defaultValue={record.feLabel}
+        status={record.isErrorFeatureFeUri ? "error" : ""}
+        onBlur={(e) => {
+          const value = e.target.value;
+          handleSetFeatureCode(record, value);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Icon",
+    dataIndex: "icon",
+    key: "icon",
     align: "center",
     width: 240,
     render: (value: string, record: FeatureDTO, index: number) => (
-      <TextAreaCustom
-        // style={{ minHeight: 45 }}
-        rows={1}
-        defaultValue={value}
-        // status={record.isErrorRoleDescription ? "error" : ""}
-        onBlur={(e) => {
-          const value = e.target.value;
-          handleSetDescription(record, value);
+      <SelectCustom
+        size="small"
+        value={record.icon}
+        options={reactIconPool.map((icon) => {
+          return {
+            label: (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <span
+                    style={{
+                      marginRight: "4px",
+                    }}
+                  >
+                    {getIcon(icon.value)}
+                  </span>
+                  {icon.value}
+                </div>
+              </>
+            ),
+            value: icon.value,
+          };
+        })}
+        onChange={(e) => {
+          const value = e;
+          handleSetSystem(record, value);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Chức năng cha",
+    dataIndex: "parentId",
+    key: "parentId",
+    align: "center",
+    width: 240,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <SelectCustom
+        size="small"
+        value={record.parentId}
+        options={features.map((f) => {
+          return {
+            label: f.featureName,
+            value: f.featureId,
+          };
+        })}
+        onChange={(e) => {
+          const value = e;
+          handleSetFeatureParent(record, value);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Hệ thống",
+    dataIndex: "systemId",
+    key: "systemId",
+    align: "center",
+    width: 240,
+    render: (value: string, record: FeatureDTO, index: number) => (
+      <SelectCustom
+        size="small"
+        value={record.systemId}
+        options={systems.map((s) => {
+          return {
+            label: s.systemName,
+            value: s.systemId,
+          };
+        })}
+        onChange={(e) => {
+          const value = e;
+          handleSetSystem(record, value);
         }}
       />
     ),
@@ -410,6 +535,7 @@ export const getColumnsEdit = ({
       />
     ),
   },
+
   {
     title: "Trạng thái",
     dataIndex: "status",
