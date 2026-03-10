@@ -17,7 +17,6 @@ export interface FeatureDTO extends BaseDataTable {
   updatedAt: string;
   status: string;
   icon: string;
-  feLabel: string;
   feUri: string;
   isErrorFeatureFeUri?: boolean;
   isSubMenu?: boolean;
@@ -31,4 +30,4 @@ export interface FeatureDTO extends BaseDataTable {
   isErrorFeatureEffectiveTo?: boolean;
 }
 export const FEATURE_ACTIVE = "ACTIVE";
-export const FEATURE_ARCHIVE = "AR_CHIVE";
+export const FEATURE_ARCHIVE = "ARCHIVE";

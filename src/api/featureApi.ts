@@ -4,7 +4,10 @@ import { BaseFilter } from "@/model/BaseFilter";
 import { BaseResponse } from "@/model/BaseResponse";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
-import { AuditFeatureRequest } from "@/model/feature/AuditFeatureRequest";
+import {
+  ArchiveActiveRequest,
+  AuditFeatureRequest,
+} from "@/model/feature/AuditFeatureRequest";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
 export interface ApiUriFilter extends BaseFilter {
   applicationName?: string;
@@ -31,6 +34,15 @@ export const featureApi = {
   ): Promise<BaseResponse<RoleDTO>> => {
     const res = await axiosClient.post(
       `${AUTHEN_SERVICE}/feature/audit-feature`,
+      params,
+    );
+    return res.data;
+  },
+  archiveActive: async (
+    params: ArchiveActiveRequest,
+  ): Promise<BaseResponse<boolean>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/feature/archive-active-feature`,
       params,
     );
     return res.data;

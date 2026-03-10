@@ -161,7 +161,7 @@ export default function Wrapper({
     const otherTabBreadscrumb = ancestors.map((item) => {
       return {
         href: null as string | null,
-        title: item.feLabel,
+        title: item.featureName,
       };
     });
     const breadscumbNew = [
@@ -169,7 +169,7 @@ export default function Wrapper({
       ...otherTabBreadscrumb,
       {
         href: null as string | null,
-        title: featureSelected?.feLabel,
+        title: featureSelected?.featureName,
       },
     ];
     setBreadcrumb(breadscumbNew);
@@ -196,7 +196,7 @@ export default function Wrapper({
       .map((item) => {
         return {
           value: item?.feUri as string,
-          label: item?.feLabel as string,
+          label: item?.featureName as string,
         };
       });
     if (childrenMenu4Sub.length == 0) {
@@ -208,7 +208,7 @@ export default function Wrapper({
     const otherTabBreadscrumb = ancestors.map((item) => {
       return {
         href: null as string | null,
-        title: item.feLabel,
+        title: item.featureName,
       };
     });
     const firstChild = childrenMenu4Sub[0];
@@ -217,7 +217,7 @@ export default function Wrapper({
       ...otherTabBreadscrumb,
       {
         href: null as string | null,
-        title: featureSelected?.feLabel,
+        title: featureSelected?.featureName,
       },
       {
         href: null as string | null,
@@ -351,7 +351,7 @@ export default function Wrapper({
           .map((item) => {
             return {
               value: item?.feUri as string,
-              label: item?.feLabel as string,
+              label: item?.featureName as string,
             };
           });
         setSubMenuOptions(childrenMenu4Sub);
@@ -377,7 +377,7 @@ export default function Wrapper({
         .map((item) => {
           return {
             value: item?.feUri as string,
-            label: item?.feLabel as string,
+            label: item?.featureName as string,
           };
         });
       setSubMenuOptions(childrenMenu4Sub);

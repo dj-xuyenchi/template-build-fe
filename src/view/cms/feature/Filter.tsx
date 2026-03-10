@@ -54,20 +54,20 @@ export const effectiveType: DefaultOptionType[] = [
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
-  { value: "AR_CHIVE", label: "Lưu trữ", tag: "orange" },
+  { value: "ARCHIVE", label: "Lưu trữ", tag: "orange" },
 ];
 
 type FilterProps = {
   handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
   filter: GetRoleFilter;
-  setFilter: (params: GetRoleFilter) => void;
   systemList: SystemDTO[];
+  features: { label: string; value: number }[];
 };
 export const Filter = ({
   handleFilter,
   filter,
-  setFilter,
   systemList,
+  features,
 }: FilterProps) => {
   const [form] = Form.useForm();
   const onFinish = (value: GetRoleFilter) => {
@@ -176,8 +176,7 @@ export const Filter = ({
                       >
                         <SelectCustom
                           placeholder="Chọn chức năng cha"
-                          mode="multiple"
-                          options={[...statusSelect]}
+                          options={[...features]}
                         />
                       </Form.Item>
                     </Col>

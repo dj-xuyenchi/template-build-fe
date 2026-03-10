@@ -23,6 +23,10 @@ body {
     background: unset;
 }
 
+.ant-menu-submenu-hidden ul li svg {
+    color: #000 !important;
+}
+
 .ant-menu-submenu-popup .ant-menu-vertical .ant-menu-item span {
     color: black !important;
 }
@@ -40,9 +44,9 @@ body {
     background: #6e9bda !important;
 }
 
-.ant-menu .ant-menu-submenu-arrow,
-.ant-menu .ant-menu-item-icon,
-.ant-menu .ant-menu-title-content {
+.ant-menu .ant-menu-submenu-inline .ant-menu-submenu-arrow,
+.ant-menu .ant-menu-submenu-inline .ant-menu-item-icon,
+.ant-menu .ant-menu-submenu-inline .ant-menu-title-content {
     color: white !important;
     font-size: 15px;
     font-weight: 500;
@@ -247,6 +251,10 @@ body {
     bottom: 0;
     right: 0;
     height: 100% !important;
+}
+
+.ant-table-tbody .ant-table-cell .ant-input-number input {
+    padding-left: 8px !important;
 }
 
 .ant-table-tbody .ant-table-cell .ant-input-number .ant-input-number-input-wrap input,

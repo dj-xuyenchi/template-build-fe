@@ -5,7 +5,6 @@ export interface AuditFeatureRequest {
 
 export interface CreateFeatureRequestData {
   featureCode: string;
-  featureName: string;
   parentId: number;
   systemId: number;
   menuLevel: number;
@@ -17,7 +16,7 @@ export interface CreateFeatureRequestData {
   updatedAt: string;
   status: string;
   icon: string;
-  feLabel: string;
+  featureName: string;
   feUri: string;
   isSubMenu?: boolean;
   isMenu: boolean;
@@ -40,7 +39,6 @@ export interface UpdateFeatureRequestData {
   updatedAt: string;
   status: string;
   icon: string;
-  feLabel: string;
   feUri: string;
   isSubMenu?: boolean;
   isMenu: boolean;
@@ -50,5 +48,5 @@ export interface UpdateFeatureRequestData {
 }
 
 export interface ArchiveActiveRequest {
-  id: number;
+  featureId: number;
 }

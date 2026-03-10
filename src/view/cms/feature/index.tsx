@@ -7,14 +7,17 @@ import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import dayjs from "dayjs";
 
 import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { featureApi } from "@/api/featureApi";
-import { FEATURE_ACTIVE, FEATURE_ARCHIVE, FeatureDTO } from "@/model/feature/FeatureDTO";
+import {
+  FEATURE_ACTIVE,
+  FEATURE_ARCHIVE,
+  FeatureDTO,
+} from "@/model/feature/FeatureDTO";
 import {
   CreateFeatureRequestData,
   UpdateFeatureRequestData,
@@ -45,8 +48,8 @@ export const Index = () => {
       content: `Bạn có chắc muốn ${row.status == FEATURE_ACTIVE ? "lưu trữ" : "active lại"} chức năng này không?`,
       centered: true,
       onOk: async () => {
-        const res = await roleApi.archiveActive({
-          id: row.featureId,
+        const res = await featureApi.archiveActive({
+          featureId: row.featureId,
         });
         if (res.code && res.code !== "ERROR") {
           handleGetData(filter, null);
@@ -65,6 +68,7 @@ export const Index = () => {
         })
         .map((item: FeatureDTO) => {
           return {
+            ...item,
             effectiveType: item.effectiveType,
             effectiveFrom: item.effectiveFrom,
             effectiveTo: item.effectiveTo,
@@ -89,6 +93,7 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
+
   const handleSetFeatureName = (row: FeatureDTO, value: string) => {
     setData((prev) => ({
       ...prev,
@@ -135,14 +140,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            effectiveType: value,
-            isEdited: true,
-            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-            isErrorFeatureEffectiveFrom: false,
-            isErrorFeatureEffectiveTo: false,
-          }
+              ...item,
+              effectiveType: value,
+              isEdited: true,
+              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+              isErrorFeatureEffectiveFrom: false,
+              isErrorFeatureEffectiveTo: false,
+            }
           : item,
       ),
     }));
@@ -177,10 +182,10 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            status: value ? FEATURE_ACTIVE : FEATURE_ARCHIVE,
-            isEdited: true,
-          }
+              ...item,
+              status: value ? FEATURE_ACTIVE : FEATURE_ARCHIVE,
+              isEdited: true,
+            }
           : item,
       ),
     }));
@@ -215,6 +220,27 @@ export const Index = () => {
       ),
     }));
   };
+  const handleSetIcon = (row: FeatureDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, icon: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
+  
+  const handleSetSortNumber = (row: FeatureDTO, value: number) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, sortNumber: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
 
   const triggerNewRow = (row: FeatureDTO) => {
     row.status = FEATURE_ACTIVE;
@@ -245,8 +271,10 @@ export const Index = () => {
     handleSetFeUri,
     handleSetIsMenu,
     handleSetIsSubMenu,
+    handleSetIcon,
+    handleSetSortNumber,
     features,
-    systems
+    systems,
   } as CallBacks);
 
   const toggleViewMode = (mode: boolean) => {
@@ -292,7 +320,7 @@ export const Index = () => {
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
-
+        addNewData();
       },
     },
   } as TablePropsCustom<FeatureDTO>;
@@ -367,9 +395,14 @@ export const Index = () => {
           systemList={systems.filter((s) => {
             return s.status === SYSTEM_ACTIVE;
           })}
+          features={features.map((f) => {
+            return {
+              label: f.featureName,
+              value: f.featureId,
+            };
+          })}
           handleFilter={handleGetData}
           filter={filter}
-          setFilter={setFilter}
         />
       </Content>
       <TableData config={config} />

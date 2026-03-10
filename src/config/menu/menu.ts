@@ -49,7 +49,7 @@ export const buildMenu = (features: FeatureDTO[]) => {
     map[f.featureId] = {
       key: f.feUri,
       icon: getIcon(f.icon),
-      label: f.feLabel,
+      label: f.featureName,
       parentId: f.parentId,
       children: null, // mặc định null
       subMenu: null, // mặc định null
