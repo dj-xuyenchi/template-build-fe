@@ -185,6 +185,36 @@ export const Index = () => {
       ),
     }));
   };
+  const handleSetFeUri = (row: FeatureDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, feUri: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
+  const handleSetIsMenu = (row: FeatureDTO, value: boolean) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, isMenu: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
+  const handleSetIsSubMenu = (row: FeatureDTO, value: boolean) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, isSubMenu: value, isEdited: true }
+          : item,
+      ),
+    }));
+  };
 
   const triggerNewRow = (row: FeatureDTO) => {
     row.status = FEATURE_ACTIVE;
@@ -212,6 +242,9 @@ export const Index = () => {
     handleSetStatus,
     handleSetEffectiveFrom,
     handleSetEffectiveTo,
+    handleSetFeUri,
+    handleSetIsMenu,
+    handleSetIsSubMenu,
     features,
     systems
   } as CallBacks);

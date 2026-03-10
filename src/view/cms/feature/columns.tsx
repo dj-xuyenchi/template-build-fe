@@ -36,6 +36,9 @@ export type CallBacks = BaseTable & {
   handleSetEffectiveFrom: (row: FeatureDTO, value: dayjs.Dayjs | null) => void;
   handleSetEffectiveTo: (row: FeatureDTO, value: dayjs.Dayjs | null) => void;
   handleSetStatus: (row: FeatureDTO, value: boolean) => void;
+  handleSetFeUri: (row: FeatureDTO, value: string) => void;
+  handleSetIsMenu: (row: FeatureDTO, value: boolean) => void;
+  handleSetIsSubMenu: (row: FeatureDTO, value: boolean) => void;
   features: FeatureDTO[];
   systems: SystemDTO[];
 };
@@ -305,6 +308,9 @@ export const getColumnsEdit = ({
   handleSetStatus,
   handleSetEffectiveFrom,
   handleSetEffectiveTo,
+  handleSetFeUri,
+  handleSetIsMenu,
+  handleSetIsSubMenu,
   features,
   systems,
 }: CallBacks) => [
@@ -366,7 +372,7 @@ export const getColumnsEdit = ({
           status={record.isErrorFeatureFeUri ? "error" : ""}
           onBlur={(e) => {
             const value = e.target.value;
-            handleSetFeatureCode(record, value);
+            handleSetFeUri(record, value);
           }}
         />
       ),
@@ -534,7 +540,38 @@ export const getColumnsEdit = ({
         />
       ),
     },
-
+    {
+      title: "Là menu",
+      dataIndex: "isMenu",
+      key: "isMenu",
+      align: "center",
+      width: 160,
+      render: (value: string, record: FeatureDTO, index: number) => (
+        <SwitchCustom
+          size="small"
+          defaultValue={record.isMenu}
+          onChange={(e) => {
+            handleSetIsMenu(record, e);
+          }}
+        />
+      ),
+    },
+    {
+      title: "Là menu dropdown",
+      dataIndex: "isSubMenu",
+      key: "isSubMenu",
+      align: "center",
+      width: 160,
+      render: (value: string, record: FeatureDTO, index: number) => (
+        <SwitchCustom
+          size="small"
+          defaultValue={record.isSubMenu}
+          onChange={(e) => {
+            handleSetIsSubMenu(record, e);
+          }}
+        />
+      ),
+    },
     {
       title: "Trạng thái",
       dataIndex: "status",
