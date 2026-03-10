@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { featureApi } from "@/api/featureApi";
-import { FEATURE_ACTIVE, FeatureDTO } from "@/model/feature/FeatureDTO";
+import { FEATURE_ACTIVE, FEATURE_ARCHIVE, FeatureDTO } from "@/model/feature/FeatureDTO";
 import {
   CreateFeatureRequestData,
   UpdateFeatureRequestData,
@@ -135,14 +135,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorFeatureEffectiveFrom: false,
-              isErrorFeatureEffectiveTo: false,
-            }
+            ...item,
+            effectiveType: value,
+            isEdited: true,
+            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+            isErrorFeatureEffectiveFrom: false,
+            isErrorFeatureEffectiveTo: false,
+          }
           : item,
       ),
     }));
@@ -177,10 +177,10 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
-              isEdited: true,
-            }
+            ...item,
+            status: value ? FEATURE_ACTIVE : FEATURE_ARCHIVE,
+            isEdited: true,
+          }
           : item,
       ),
     }));
@@ -202,6 +202,7 @@ export const Index = () => {
       null,
     );
   };
+
   const columnsEdit = getColumnsEdit({
     handleSetFeatureName,
     handleSetFeatureCode,
@@ -211,10 +212,9 @@ export const Index = () => {
     handleSetStatus,
     handleSetEffectiveFrom,
     handleSetEffectiveTo,
-    handleArchiveActiveRow,
     features,
-    systems,
-  });
+    systems
+  } as CallBacks);
 
   const toggleViewMode = (mode: boolean) => {
     setViewMode(mode);
@@ -259,53 +259,7 @@ export const Index = () => {
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
-        let isError = false;
-        const validData = data.data.filter((data) => {
-          if (!data.roleName || data.roleName.trim() == "") {
-            data.isErrorRoleName = true;
-            isError = true;
-          } else {
-            data.isErrorRoleName = false;
-          }
-          if (!data.roleCode || data.roleCode.trim() == "") {
-            data.isErrorRoleCode = true;
-            isError = true;
-          } else {
-            data.isErrorRoleCode = false;
-          }
-          if (!data.effectiveType || data.effectiveType.trim() == "") {
-            data.isErrorRoleEffectiveType = true;
-            isError = true;
-          } else {
-            data.isErrorRoleEffectiveType = false;
-          }
-          if (data.effectiveType == "E") {
-            if (!data.effectiveFrom) {
-              data.isErrorRoleEffectiveFrom = true;
-              isError = true;
-            } else {
-              data.isErrorRoleEffectiveFrom = false;
-            }
-            if (!data.effectiveTo) {
-              data.isErrorRoleEffectiveTo = true;
-              isError = true;
-            } else {
-              data.isErrorRoleEffectiveTo = false;
-            }
-          }
-          return data;
-        });
-        if (isError) {
-          setData((prev) => ({
-            ...prev,
-            data: [...validData],
-          }));
-          return false;
-        } else {
-          addNewData().catch((e) => {
-            throw e;
-          });
-        }
+
       },
     },
   } as TablePropsCustom<FeatureDTO>;

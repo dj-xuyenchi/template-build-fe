@@ -190,7 +190,7 @@ export const Filter = ({
                         <InputCustom placeholder="Nhập URI chức năng" />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={12} lg={6} xl={4}>
+                    <Col span={12} md={12} lg={6} xl={5}>
                       <Form.Item
                         label="Kiểu áp dụng thời gian"
                         name="effectiveType"
@@ -203,7 +203,7 @@ export const Filter = ({
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={12} lg={6} xl={4}>
+                    <Col span={12} md={12} lg={6} xl={5}>
                       <Form.Item
                         label="Áp dụng từ"
                         name="effectiveFrom"
@@ -215,7 +215,7 @@ export const Filter = ({
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={12} lg={6} xl={4}>
+                    <Col span={12} md={12} lg={6} xl={5}>
                       <Form.Item
                         label="Áp dụng đến"
                         name="effectiveTo"
