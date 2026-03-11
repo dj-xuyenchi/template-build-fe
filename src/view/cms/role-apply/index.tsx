@@ -3,7 +3,7 @@ import { Filter } from "./Filter";
 import { TableData } from "./TableData";
 import { TablePropsCustom } from "@/component/TableCustom";
 import { useEffect, useRef, useState } from "react";
-import { CallBacks, getColumns, getColumnsEdit } from "./columns";
+import { CallBacks, getColumns } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
@@ -186,16 +186,6 @@ export const Index = () => {
       null,
     );
   };
-  const columnsEdit = getColumnsEdit({
-    handleSetName,
-    handleSetDescription,
-    handleSetEffectiveType,
-    handleSetStatus,
-    handleSetEffectiveFrom,
-    handleSetEffectiveTo,
-    handleArchiveActiveRow,
-    handleSetRoleCode,
-  });
 
   const toggleViewMode = (mode: boolean) => {
     setViewMode(mode);
@@ -219,7 +209,7 @@ export const Index = () => {
     columns: getColumns({
       handleArchiveActiveRow,
     } as CallBacks),
-    columnsEdit: columnsEdit,
+    columnsEdit: {},
     loading: isTableLoading,
     dataSource: data.data as RoleDTO[],
     viewMode: viewMode,
