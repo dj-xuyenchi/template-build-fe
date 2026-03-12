@@ -2,7 +2,7 @@ import { Content } from "antd/es/layout/layout";
 import { Filter } from "./Filter";
 import { TableData } from "./TableData";
 import { TablePropsCustom } from "@/component/TableCustom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CallBacks, getColumns } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
@@ -17,9 +17,17 @@ import {
 } from "@/model/cms/role/AuditRoleRequest";
 import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
+import { GetRoleApplyFilter, roleApplyApi } from "@/api/roleApplyApi";
+import { RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
+import { featureApi, GetFeatureFilter } from "@/api/featureApi";
+import { FeatureDTO } from "@/model/feature/FeatureDTO";
 
 export const Index = () => {
-  const [data, setData] = useState({} as { data: RoleDTO[] });
+  const [data, setData] = useState({} as { data: RoleApplyDTO[] });
+  const [roleData, setRoleData] = useState(new Map() as Map<number, RoleDTO>);
+  const [featureData, setFeatureData] = useState(
+    new Map() as Map<number, FeatureDTO>,
+  );
 
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
@@ -30,7 +38,7 @@ export const Index = () => {
   } as GetRoleFilter);
   const [viewMode, setViewMode] = useState(true);
   const modal = useGlobalModal();
-
+  const controllerRef = useRef<AbortController | null>(null);
   const handleArchiveActiveRow = async (row: RoleDTO) => {
     if (!row.roleId) {
       return;
@@ -58,11 +66,8 @@ export const Index = () => {
         .filter((item) => {
           return item.isNewRow;
         })
-        .map((item: RoleDTO) => {
+        .map((item: RoleApplyDTO) => {
           return {
-            roleCode: item.roleCode,
-            roleName: item.roleName,
-            roleDescription: item.roleDescription,
             effectiveType: item.effectiveType,
             effectiveFrom: item.effectiveFrom,
             effectiveTo: item.effectiveTo,
@@ -204,14 +209,19 @@ export const Index = () => {
       });
     },
   };
+  const columns = useMemo(() => {
+    return getColumns({
+      roleMap: roleData,
+      featureMap: featureData,
+    } as CallBacks);
+  }, [roleData, featureData]);
+
   const config = {
     pagination: pageConfig,
-    columns: getColumns({
-      handleArchiveActiveRow,
-    } as CallBacks),
+    columns: columns,
     columnsEdit: {},
     loading: isTableLoading,
-    dataSource: data.data as RoleDTO[],
+    dataSource: data.data as RoleApplyDTO[],
     viewMode: viewMode,
     tableName: "Quản lý quyền",
     extendFunction: {
@@ -232,38 +242,6 @@ export const Index = () => {
       handleConfirm: () => {
         let isError = false;
         const validData = data.data.filter((data) => {
-          if (!data.roleName || data.roleName.trim() == "") {
-            data.isErrorRoleName = true;
-            isError = true;
-          } else {
-            data.isErrorRoleName = false;
-          }
-          if (!data.roleCode || data.roleCode.trim() == "") {
-            data.isErrorRoleCode = true;
-            isError = true;
-          } else {
-            data.isErrorRoleCode = false;
-          }
-          if (!data.effectiveType || data.effectiveType.trim() == "") {
-            data.isErrorRoleEffectiveType = true;
-            isError = true;
-          } else {
-            data.isErrorRoleEffectiveType = false;
-          }
-          if (data.effectiveType == "E") {
-            if (!data.effectiveFrom) {
-              data.isErrorRoleEffectiveFrom = true;
-              isError = true;
-            } else {
-              data.isErrorRoleEffectiveFrom = false;
-            }
-            if (!data.effectiveTo) {
-              data.isErrorRoleEffectiveTo = true;
-              isError = true;
-            } else {
-              data.isErrorRoleEffectiveTo = false;
-            }
-          }
           return data;
         });
         if (isError) {
@@ -279,19 +257,40 @@ export const Index = () => {
         }
       },
     },
-  } as TablePropsCustom<RoleDTO>;
-
-  const handleGetData = async (
-    params: GetRoleFilter,
-    signal: AbortSignal | null,
-  ) => {
+  } as TablePropsCustom<RoleApplyDTO>;
+  const handleGetRoleData = async () => {
     try {
+      const res = await roleApi.getRole({} as GetRoleFilter);
+      const map = new Map(res.data.map((item) => [item.roleId, item]));
+      setRoleData(map);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  const handleGetFeatureData = async () => {
+    try {
+      const res = await featureApi.getFeature({} as GetFeatureFilter);
+      const map = new Map(res.data.map((item) => [item.featureId, item]));
+      setFeatureData(map);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  const handleGetData = async (params: GetRoleApplyFilter) => {
+    try {
+      // abort request cũ
+      controllerRef.current?.abort();
+
+      // tạo controller mới
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
       setIsTableLoading(true);
-      const res = await roleApi.getRole(
+      const res = await roleApplyApi.getRoleApply(
         {
           ...params,
         },
-        signal as AbortSignal,
+        controller.signal,
       );
 
       setData({
@@ -303,34 +302,24 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const isFirstRender = useRef(true);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-
-      const controller = new AbortController();
-      handleGetData({ ...filter }, controller.signal);
-
-      return () => controller.abort();
-    }
+    handleGetRoleData();
+    handleGetFeatureData();
+    handleGetData({ ...filter });
   }, []);
 
   return (
     <>
       <Content
         style={{
-          marginBottom: "12px !important",
+          marginBottom: "12px",
           padding: "0px 24px 0px 24px",
           margin: 0,
           background: "white",
           borderRadius: "3px",
         }}
       >
-        <Filter
-          handleFilter={handleGetData}
-          filter={filter}
-          setFilter={setFilter}
-        />
+        <Filter handleFilter={handleGetData} filter={filter} />
       </Content>
       <TableData config={config} />
     </>

@@ -1,9 +1,9 @@
 import { TableCustom, TablePropsCustom } from "@/component/TableCustom";
 import { Content } from "antd/es/layout/layout";
-import { RoleDTO } from "@/model/cms/role/RoleDTO";
+import { RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
 
 type TableFunction = {
-  config: TablePropsCustom<RoleDTO>;
+  config: TablePropsCustom<RoleApplyDTO>;
 };
 export const TableData = ({ config }: TableFunction) => {
   return (
@@ -16,10 +16,7 @@ export const TableData = ({ config }: TableFunction) => {
           borderRadius: "3px",
         }}
       >
-        <TableCustom
-          fixedCollap={true}
-          {...config}
-        />
+        <TableCustom fixedCollap={true} {...config} />
       </Content>
     </>
   );

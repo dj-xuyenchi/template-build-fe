@@ -17,7 +17,7 @@ export interface ApiUriFilter extends BaseFilter {
 export const roleApi = {
   getRole: async (
     params: GetRoleFilter,
-    signal: AbortSignal,
+    signal?: AbortSignal,
   ): Promise<BaseResponse<RoleDTO[]>> => {
     const res = await axiosClient.post(`${AUTHEN_SERVICE}/role/get-role`, {
       params: params,

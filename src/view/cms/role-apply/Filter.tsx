@@ -44,9 +44,8 @@ const statusSelect: DefaultOptionType[] = [
 type FilterProps = {
   handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
   filter: GetRoleFilter;
-  setFilter: (params: GetRoleFilter) => void;
 };
-export const Filter = ({ handleFilter, filter, setFilter }: FilterProps) => {
+export const Filter = ({ handleFilter, filter }: FilterProps) => {
   const [form] = Form.useForm();
   const onFinish = (value: GetRoleFilter) => {
     console.error(value);
