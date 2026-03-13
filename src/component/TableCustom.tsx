@@ -1,5 +1,4 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   Table,
   TableProps,
@@ -36,7 +35,6 @@ import { BaseDataTable } from "@/model/BaseDataTable";
 import { Key } from "antd/es/table/interface";
 
 import Spin1 from "./spin/Spin1";
-const MotionTh = motion.th;
 const HEIGHT_LOADING = 280;
 // Interface mở rộng props
 export interface ExtendFunction<T> {
@@ -397,56 +395,35 @@ export const TableCustom = <T extends BaseDataTable>({
           open={isZoomOut}
           footer={null}
         >
-          <AnimatePresence mode="wait">
-            <motion.div>
-              <Table<T>
-                rowKey="rowUUID"
-                className={clsx("table-custom")}
-                loading={{
-                  spinning: loading as boolean | undefined,
-                  indicator: <Spin1 />,
-                }}
-                locale={
-                  loading
-                    ? { emptyText: <div style={{ height: HEIGHT_LOADING }} /> }
-                    : undefined
-                }
-                style={{ ...style }}
-                bordered
-                columns={visibleColumns}
-                dataSource={dataSource?.filter((row: T) => {
-                  if (row.isDeleted) {
-                    return false;
-                  }
-                  if (!row.rowUUID) {
-                    row.rowUUID = uuidv4();
-                  }
-                  return true;
-                })}
-                scroll={{ x: "max-content" }}
-                components={{
-                  header: {
-                    cell: (props: object) => (
-                      <AnimatePresence mode="popLayout">
-                        <MotionTh
-                          {...props}
-                          layout
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 20 }}
-                          transition={{
-                            duration: 0.5,
-                            ease: "easeInOut",
-                          }}
-                        />
-                      </AnimatePresence>
-                    ),
-                  },
-                }}
-                {...restProps}
-              />
-            </motion.div>
-          </AnimatePresence>
+
+          <Table<T>
+            rowKey="rowUUID"
+            className={clsx("table-custom")}
+            loading={{
+              spinning: loading as boolean | undefined,
+              indicator: <Spin1 />,
+            }}
+            locale={
+              loading
+                ? { emptyText: <div style={{ height: HEIGHT_LOADING }} /> }
+                : undefined
+            }
+            style={{ ...style }}
+            bordered
+            columns={visibleColumns}
+            dataSource={dataSource?.filter((row: T) => {
+              if (row.isDeleted) {
+                return false;
+              }
+              if (!row.rowUUID) {
+                row.rowUUID = uuidv4();
+              }
+              return true;
+            })}
+            scroll={{ x: "max-content" }}
+
+            {...restProps}
+          />
         </Modal>
       )}
       {/* ZoomOut */}
@@ -460,14 +437,7 @@ export const TableCustom = <T extends BaseDataTable>({
             label: "Kết quả",
             children: (
               <>
-                {/* <AnimatePresence mode="sync">
-                  <motion.div
-                    ref={wrapperRef}
-                    layout
-                    initial={false}
-                    exit={{}} // không animate exit để tránh flicker
-                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                  > */}
+
                 <Table<T>
                   rowKey="rowUUID"
                   className="table-custom"
@@ -478,8 +448,8 @@ export const TableCustom = <T extends BaseDataTable>({
                   locale={
                     loading
                       ? {
-                          emptyText: <div style={{ height: HEIGHT_LOADING }} />,
-                        }
+                        emptyText: <div style={{ height: HEIGHT_LOADING }} />,
+                      }
                       : undefined
                   }
                   style={{ ...style }}
@@ -500,8 +470,7 @@ export const TableCustom = <T extends BaseDataTable>({
                   rowClassName={(record) => (record.isNewRow ? "new-data" : "")}
                   {...restProps}
                 />
-                {/* </motion.div>
-                </AnimatePresence> */}
+
               </>
             ),
             extra: (

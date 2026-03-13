@@ -3,7 +3,7 @@ import { Filter } from "./Filter";
 import { TableData } from "./TableData";
 import { TablePropsCustom } from "@/component/TableCustom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CallBacks, getColumns } from "./columns";
+import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
@@ -21,6 +21,7 @@ import { GetRoleApplyFilter, roleApplyApi } from "@/api/roleApplyApi";
 import { RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
 import { featureApi, GetFeatureFilter } from "@/api/featureApi";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { TableProps } from "antd";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
@@ -88,49 +89,29 @@ export const Index = () => {
     } catch (e) {
       throw e;
     } finally {
-      handleGetData(filter, null);
+      handleGetData(filter);
       setIsTableLoading(false);
     }
   };
-  const handleSetName = (row: RoleDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, roleName: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetDescription = (row: RoleDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, roleDescription: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetEffectiveType = (row: RoleDTO, value: string) => {
+  const handleSetEffectiveType = (row: RoleApplyDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorRoleEffectiveFrom: false,
-              isErrorRoleEffectiveTo: false,
-            }
+            ...item,
+            effectiveType: value,
+            isEdited: true,
+            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+            isErrorRoleEffectiveFrom: false,
+            isErrorRoleEffectiveTo: false,
+          }
           : item,
       ),
     }));
   };
-  const handleSetEffectiveFrom = (row: RoleDTO, value: dayjs.Dayjs | null) => {
+  const handleSetEffectiveFrom = (row: RoleApplyDTO, value: dayjs.Dayjs | null) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -141,7 +122,7 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetEffectiveTo = (row: RoleDTO, value: dayjs.Dayjs | null) => {
+  const handleSetEffectiveTo = (row: RoleApplyDTO, value: dayjs.Dayjs | null) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -151,32 +132,53 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetStatus = (row: RoleDTO, value: boolean) => {
+  const handleSetStatus = (row: RoleApplyDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? {
-              ...item,
-              status: value ? ROLE_ACTIVE : ROLE_ACTIVE,
-              isEdited: true,
-            }
+          ? { ...item, status: value, isEdited: true }
           : item,
       ),
     }));
+    return;
   };
-  const handleSetRoleCode = (row: RoleDTO, value: string) => {
+  const handleSetRole = (row: RoleApplyDTO, value: number) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, roleCode: value, isEdited: true }
+          ? { ...item, roleId: value, isEdited: true }
           : item,
       ),
     }));
+    return;
   };
-  const triggerNewRow = (row: RoleDTO) => {
+  const handleSetApplyType = (row: RoleApplyDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, applyType: value, isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const handleSetApplyValue = (row: RoleApplyDTO, value: number) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, applyId: value, isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const triggerNewRow = (row: RoleApplyDTO) => {
     row.status = ROLE_ACTIVE;
+    return true;
   };
   const handleQuickSearch = (keyword: string) => {
     setFilter({
@@ -187,8 +189,7 @@ export const Index = () => {
       {
         ...filter,
         keyword: keyword,
-      },
-      null,
+      }
     );
   };
 
@@ -219,45 +220,51 @@ export const Index = () => {
   const config = {
     pagination: pageConfig,
     columns: columns,
-    columnsEdit: {},
+    columnsEdit: getColumnsEdit(
+      {
+        handleSetApplyValue,
+        handleSetApplyType,
+        handleSetRole,
+        handleSetEffectiveFrom,
+        handleSetEffectiveTo,
+        handleSetEffectiveType,
+        handleSetStatus
+      }
+    ),
     loading: isTableLoading,
     dataSource: data.data as RoleApplyDTO[],
     viewMode: viewMode,
-    tableName: "Quản lý quyền",
+    tableName: "Quản lý phân quyền",
     extendFunction: {
       triggerNewRow: triggerNewRow,
       quickSearch: true,
       handleQuickSearch: handleQuickSearch,
       buttonReloadFunction: () => {
-        handleGetData(filter, null);
+        handleGetData(filter);
       },
       toggleViewMode: toggleViewMode,
       disableAddData: !allowBtnCode("AUDIT_ROLE"),
-      handleUpdateDataSource: (data: []) => {
-        setData({ data: [...data] });
+      handleUpdateDataSource: (data: RoleApplyDTO[]) => {
       },
       andOn: "table",
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
-        let isError = false;
-        const validData = data.data.filter((data) => {
-          return data;
-        });
-        if (isError) {
-          setData((prev) => ({
-            ...prev,
-            data: [...validData],
-          }));
-          return false;
-        } else {
-          addNewData().catch((e) => {
-            throw e;
-          });
-        }
+        return true;
       },
     },
+    rowSelection: {
+      type: "checkbox",
+      onChange: (selectedRowKeys: React.Key[], selectedRows: RoleApplyDTO[]) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      getCheckboxProps: (record: RoleApplyDTO) => ({
+        disabled: record.rowUUID === 'Disabled User', // Column configuration not to be checked
+        name: record.applyType,
+      }),
+    } as TableProps<RoleApplyDTO>['rowSelection'],
   } as TablePropsCustom<RoleApplyDTO>;
+
   const handleGetRoleData = async () => {
     try {
       const res = await roleApi.getRole({} as GetRoleFilter);
