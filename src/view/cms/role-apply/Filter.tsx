@@ -74,13 +74,14 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
   };
 
   const effectiveTypeValue = Form.useWatch("effectiveType", form);
+  const applyTypeValue = Form.useWatch("effectiveType", form);
 
   useEffect(() => {
     form.setFieldsValue({
       ...filter,
       status: filter.status,
     });
-  }, []);
+  }, [applyTypeValue]);
   return (
     <>
       <CollapseCustom
@@ -110,7 +111,7 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
                         label="Kiểu áp dụng dữ liệu"
-                        name="effectiveType"
+                        name="applyType"
                         tooltip="Kiểu áp dụng thời gian"
                       >
                         <SelectCustom
@@ -125,6 +126,19 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
                         label="Dữ liệu áp dụng"
                         name="effectiveType"
                         tooltip="Kiểu áp dụng thời gian"
+                      >
+                        <SelectCustom
+                          placeholder="Chọn kiểu áp dụng dữ liệu"
+                          options={[...effectiveType]}
+                          onChange={handleOnchange}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12} md={8} lg={6} xl={6}>
+                      <Form.Item
+                        label="Trạng thái"
+                        name="stauts"
+                        tooltip="Trạng thái dữ liệu"
                       >
                         <SelectCustom
                           placeholder="Chọn kiểu áp dụng dữ liệu"
