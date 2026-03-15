@@ -44,6 +44,7 @@ export interface ExtendFunction<T> {
   disableAddData?: boolean;
   handleUpdateDataSource?: (data: T[]) => void;
   buttonReloadFunction?: () => void;
+  extendComponents?: ReactNode[];
   isSupportExport?: boolean;
   isSupportZoom?: boolean;
   isExportFromServer?: boolean;
@@ -395,7 +396,6 @@ export const TableCustom = <T extends BaseDataTable>({
           open={isZoomOut}
           footer={null}
         >
-
           <Table<T>
             rowKey="rowUUID"
             className={clsx("table-custom")}
@@ -421,7 +421,6 @@ export const TableCustom = <T extends BaseDataTable>({
               return true;
             })}
             scroll={{ x: "max-content" }}
-
             {...restProps}
           />
         </Modal>
@@ -437,7 +436,6 @@ export const TableCustom = <T extends BaseDataTable>({
             label: "Kết quả",
             children: (
               <>
-
                 <Table<T>
                   rowKey="rowUUID"
                   className="table-custom"
@@ -448,8 +446,8 @@ export const TableCustom = <T extends BaseDataTable>({
                   locale={
                     loading
                       ? {
-                        emptyText: <div style={{ height: HEIGHT_LOADING }} />,
-                      }
+                          emptyText: <div style={{ height: HEIGHT_LOADING }} />,
+                        }
                       : undefined
                   }
                   style={{ ...style }}
@@ -470,7 +468,6 @@ export const TableCustom = <T extends BaseDataTable>({
                   rowClassName={(record) => (record.isNewRow ? "new-data" : "")}
                   {...restProps}
                 />
-
               </>
             ),
             extra: (
@@ -645,6 +642,11 @@ export const TableCustom = <T extends BaseDataTable>({
                           }}
                         />
                       )}
+
+                      {extendFunction.extendComponents &&
+                        extendFunction.extendComponents.map((node) => {
+                          return <>{node}</>;
+                        })}
                       {extendFunction.isSupportExport && !isEditAddBtn && (
                         <ButtonCustom
                           size={extendFunction.size || "middle"}

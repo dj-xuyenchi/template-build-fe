@@ -38,7 +38,8 @@ export const effectiveType: DefaultOptionType[] = [
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
-  { value: "ARCHIVE", label: "Lưu trữ", tag: "red" },
+  { value: "IN_ACTIVE", label: "Tạm ngưng hoạt động", tag: "warning" },
+  { value: "DELETED", label: "Đã xóa", tag: "red" },
 ];
 
 type FilterProps = {
@@ -93,6 +94,45 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
               <>
                 <FormCustom layout="vertical" form={form} onFinish={onFinish}>
                   <Row gutter={16}>
+                    <Col span={12} md={8} lg={6} xl={6}>
+                      <Form.Item
+                        label="Quyền"
+                        name="roleId"
+                        tooltip="Quyền áp dụng"
+                      >
+                        <SelectCustom
+                          placeholder="Chọn kiểu áp dụng thời gian"
+                          options={[...effectiveType]}
+                          onChange={handleOnchange}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12} md={8} lg={6} xl={6}>
+                      <Form.Item
+                        label="Kiểu áp dụng dữ liệu"
+                        name="effectiveType"
+                        tooltip="Kiểu áp dụng thời gian"
+                      >
+                        <SelectCustom
+                          placeholder="Chọn kiểu áp dụng dữ liệu"
+                          options={[...effectiveType]}
+                          onChange={handleOnchange}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12} md={8} lg={6} xl={6}>
+                      <Form.Item
+                        label="Dữ liệu áp dụng"
+                        name="effectiveType"
+                        tooltip="Kiểu áp dụng thời gian"
+                      >
+                        <SelectCustom
+                          placeholder="Chọn kiểu áp dụng dữ liệu"
+                          options={[...effectiveType]}
+                          onChange={handleOnchange}
+                        />
+                      </Form.Item>
+                    </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
                         label="Kiểu áp dụng thời gian"

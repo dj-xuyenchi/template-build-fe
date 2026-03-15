@@ -4,7 +4,7 @@ import { TableData } from "./TableData";
 import { TablePropsCustom } from "@/component/TableCustom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
-
+import { AiFillDelete } from "react-icons/ai";
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { ROLE_ACTIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
@@ -22,6 +22,7 @@ import { RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
 import { featureApi, GetFeatureFilter } from "@/api/featureApi";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
 import { TableProps } from "antd";
+import { ButtonCustom } from "@/component/ButtonCustom";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
@@ -38,8 +39,12 @@ export const Index = () => {
     // status: ["ACTIVE"],
   } as GetRoleFilter);
   const [viewMode, setViewMode] = useState(true);
+  const [checkBoxSelectedData, setCheckBoxSelectedData] = useState(
+    [] as number[],
+  );
   const modal = useGlobalModal();
   const controllerRef = useRef<AbortController | null>(null);
+
   const handleArchiveActiveRow = async (row: RoleDTO) => {
     if (!row.roleId) {
       return;
@@ -53,7 +58,7 @@ export const Index = () => {
           id: row.roleId,
         });
         if (res.code && res.code !== "ERROR") {
-          handleGetData(filter, null);
+          handleGetData(filter);
         }
       },
     });
@@ -77,7 +82,7 @@ export const Index = () => {
         });
       const updateDataList = data.data.filter((item) => {
         return item.isEdited && item.roleId;
-      }) as UpdateRoleRequestData[];
+      }) as RoleApplyDTO[];
       const request = {
         create: newDataList || [],
         update: updateDataList || [],
@@ -99,19 +104,22 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            effectiveType: value,
-            isEdited: true,
-            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-            isErrorRoleEffectiveFrom: false,
-            isErrorRoleEffectiveTo: false,
-          }
+              ...item,
+              effectiveType: value,
+              isEdited: true,
+              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+              isErrorRoleEffectiveFrom: false,
+              isErrorRoleEffectiveTo: false,
+            }
           : item,
       ),
     }));
   };
-  const handleSetEffectiveFrom = (row: RoleApplyDTO, value: dayjs.Dayjs | null) => {
+  const handleSetEffectiveFrom = (
+    row: RoleApplyDTO,
+    value: dayjs.Dayjs | null,
+  ) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -122,7 +130,10 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetEffectiveTo = (row: RoleApplyDTO, value: dayjs.Dayjs | null) => {
+  const handleSetEffectiveTo = (
+    row: RoleApplyDTO,
+    value: dayjs.Dayjs | null,
+  ) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -185,12 +196,25 @@ export const Index = () => {
       ...filter,
       keyword: keyword,
     });
-    handleGetData(
-      {
-        ...filter,
-        keyword: keyword,
-      }
-    );
+    handleGetData({
+      ...filter,
+      keyword: keyword,
+    });
+  };
+  const handleDeleteBatch = () => {
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn xóa phân quyền này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await roleApplyApi.deleteRoleApply({
+          roleApplyIds: checkBoxSelectedData,
+        });
+        if (res.code == "SUCCESS") {
+          handleGetData(filter);
+        }
+      },
+    });
   };
 
   const toggleViewMode = (mode: boolean) => {
@@ -216,21 +240,31 @@ export const Index = () => {
       featureMap: featureData,
     } as CallBacks);
   }, [roleData, featureData]);
-
+  const deleteBtn = (
+    <>
+      <ButtonCustom
+        danger
+        title="Xóa dữ liệu"
+        style={{
+          marginLeft: "8px",
+        }}
+        icon={<AiFillDelete />}
+        onClick={handleDeleteBatch}
+      />
+    </>
+  );
   const config = {
     pagination: pageConfig,
     columns: columns,
-    columnsEdit: getColumnsEdit(
-      {
-        handleSetApplyValue,
-        handleSetApplyType,
-        handleSetRole,
-        handleSetEffectiveFrom,
-        handleSetEffectiveTo,
-        handleSetEffectiveType,
-        handleSetStatus
-      }
-    ),
+    columnsEdit: getColumnsEdit({
+      handleSetApplyValue,
+      handleSetApplyType,
+      handleSetRole,
+      handleSetEffectiveFrom,
+      handleSetEffectiveTo,
+      handleSetEffectiveType,
+      handleSetStatus,
+    }),
     loading: isTableLoading,
     dataSource: data.data as RoleApplyDTO[],
     viewMode: viewMode,
@@ -244,25 +278,31 @@ export const Index = () => {
       },
       toggleViewMode: toggleViewMode,
       disableAddData: !allowBtnCode("AUDIT_ROLE"),
-      handleUpdateDataSource: (data: RoleApplyDTO[]) => {
-      },
+      handleUpdateDataSource: (data: RoleApplyDTO[]) => {},
       andOn: "table",
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
         return true;
       },
+      extendComponents: [deleteBtn],
     },
     rowSelection: {
       type: "checkbox",
-      onChange: (selectedRowKeys: React.Key[], selectedRows: RoleApplyDTO[]) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      onChange: (
+        selectedRowKeys: React.Key[],
+        selectedRows: RoleApplyDTO[],
+      ) => {
+        console.log("selected -> ", selectedRows);
+        const selectedIds = selectedRows.map((r) => {
+          return r.roleApplyId;
+        });
+        setCheckBoxSelectedData(selectedIds);
       },
       getCheckboxProps: (record: RoleApplyDTO) => ({
-        disabled: record.rowUUID === 'Disabled User', // Column configuration not to be checked
-        name: record.applyType,
+        disabled: record.isNewRow,
       }),
-    } as TableProps<RoleApplyDTO>['rowSelection'],
+    } as TableProps<RoleApplyDTO>["rowSelection"],
   } as TablePropsCustom<RoleApplyDTO>;
 
   const handleGetRoleData = async () => {

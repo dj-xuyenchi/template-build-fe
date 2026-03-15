@@ -37,149 +37,149 @@ export const getColumns = ({
   roleMap,
   featureMap,
 }: CallBacks): ColumnTypeCustom<RoleApplyDTO>[] => [
-    {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
-      fixed: "left",
-      width: 80,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Tên quyền",
-      dataIndex: "roleId",
-      key: "roleId",
-      width: 200,
-      render: (value: number, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{roleMap?.get(value)?.roleName}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Mã quyền",
-      dataIndex: "roleId",
-      key: "roleId",
-      width: 160,
-      render: (value: number, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{roleMap?.get(value)?.roleCode}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Dạng áp dụng dữ liệu",
-      dataIndex: "applyTypeName",
-      key: "applyTypeName",
-      width: 280,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Dữ liệu áp dụng",
-      dataIndex: "applyValue",
-      key: "applyValue",
-      width: 260,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Kiểu áp dụng thời gian",
-      dataIndex: "effectiveType",
-      key: "effectiveType",
-      width: 200,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TagCustom type={getEffectiveTag(value)}>
-          {getEffectiveLabel(value)}
-        </TagCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Áp dụng từ",
-      dataIndex: "effectiveFrom",
-      key: "effectiveFrom",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom align="left">
-          {formatDateWithDayVN(value, true)}
-        </TableLabelCustom>
-      ),
-      align: "center",
-    },
+  {
+    title: "STT",
+    dataIndex: "stt",
+    key: "stt",
+    fixed: "left",
+    width: 80,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Tên quyền",
+    dataIndex: "roleId",
+    key: "roleId",
+    width: 200,
+    render: (value: number, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{roleMap?.get(value)?.roleName}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Mã quyền",
+    dataIndex: "roleId",
+    key: "roleId",
+    width: 160,
+    render: (value: number, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{roleMap?.get(value)?.roleCode}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Kiểu áp dụng dữ liệu",
+    dataIndex: "applyTypeName",
+    key: "applyTypeName",
+    width: 280,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Dữ liệu áp dụng",
+    dataIndex: "applyValue",
+    key: "applyValue",
+    width: 260,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Kiểu áp dụng thời gian",
+    dataIndex: "effectiveType",
+    key: "effectiveType",
+    width: 200,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TagCustom type={getEffectiveTag(value)}>
+        {getEffectiveLabel(value)}
+      </TagCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Áp dụng từ",
+    dataIndex: "effectiveFrom",
+    key: "effectiveFrom",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom align="left">
+        {formatDateWithDayVN(value, true)}
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
 
-    {
-      title: "Áp dụng đến",
-      dataIndex: "effectiveTo",
-      key: "effectiveTo",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom align="left">
-          {formatDateWithDayVN(value, true)}
-        </TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      width: 220,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>
-          <TagCustom type={getStatusTag(value)}>
-            {getStatusLabel(value)}
-          </TagCustom>
-        </TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Người tạo",
-      dataIndex: "maker",
-      key: "maker",
-      width: 160,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Người cập nhật",
-      dataIndex: "updatedBy",
-      key: "updatedBy",
-      width: 160,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Ngày cập nhật",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
-      ),
-      align: "center",
-    }
-  ];
+  {
+    title: "Áp dụng đến",
+    dataIndex: "effectiveTo",
+    key: "effectiveTo",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom align="left">
+        {formatDateWithDayVN(value, true)}
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Trạng thái",
+    dataIndex: "status",
+    key: "status",
+    width: 220,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>
+        <TagCustom type={getStatusTag(value)}>
+          {getStatusLabel(value)}
+        </TagCustom>
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Người tạo",
+    dataIndex: "maker",
+    key: "maker",
+    width: 160,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Ngày tạo",
+    dataIndex: "createdAt",
+    key: "createdAt",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Người cập nhật",
+    dataIndex: "updatedBy",
+    key: "updatedBy",
+    width: 160,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Ngày cập nhật",
+    dataIndex: "updatedAt",
+    key: "updatedAt",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+];
 
 export const getColumnsEdit = ({
   handleSetApplyType,
