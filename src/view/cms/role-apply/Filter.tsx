@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import { convertToOptionAll } from "@/model/BaseFilter";
+import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -45,8 +46,13 @@ const statusSelect: DefaultOptionType[] = [
 type FilterProps = {
   handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
   filter: GetRoleFilter;
+  applyTypeList: GlobalConfigData[];
 };
-export const Filter = ({ handleFilter, filter }: FilterProps) => {
+export const Filter = ({
+  handleFilter,
+  filter,
+  applyTypeList,
+}: FilterProps) => {
   const [form] = Form.useForm();
   const onFinish = (value: GetRoleFilter) => {
     console.error(value);
@@ -116,7 +122,14 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
                       >
                         <SelectCustom
                           placeholder="Chọn kiểu áp dụng dữ liệu"
-                          options={[...effectiveType]}
+                          options={[
+                            ...applyTypeList.map((a) => {
+                              return {
+                                value: a.globalConfigDataCode,
+                                label: a.globalConfigDataName,
+                              };
+                            }),
+                          ]}
                           onChange={handleOnchange}
                         />
                       </Form.Item>

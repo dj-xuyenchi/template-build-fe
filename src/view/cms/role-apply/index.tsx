@@ -12,6 +12,7 @@ import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import dayjs from "dayjs";
 import {
+  AuditRoleRequest,
   CreateRoleRequestData,
   UpdateRoleRequestData,
 } from "@/model/cms/role/AuditRoleRequest";
@@ -23,6 +24,8 @@ import { featureApi, GetFeatureFilter } from "@/api/featureApi";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
 import { TableProps } from "antd";
 import { ButtonCustom } from "@/component/ButtonCustom";
+import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
+import { GetGlobalConfigRequest, globalConfigApi } from "@/api/globalConfigApi";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
@@ -30,7 +33,7 @@ export const Index = () => {
   const [featureData, setFeatureData] = useState(
     new Map() as Map<number, FeatureDTO>,
   );
-
+  const [applyTypeList, setApplyTypeList] = useState([] as GlobalConfigData[]);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
@@ -86,7 +89,7 @@ export const Index = () => {
       const request = {
         create: newDataList || [],
         update: updateDataList || [],
-      };
+      } as AuditRoleRequest;
       const res = await roleApi.auditRole(request);
       if (res.code && res.code === "ERROR") {
         isError = true;
@@ -349,10 +352,26 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
+  const handleGetApplyType = async () => {
+    try {
+      const request = {
+        globalConfigCode: "APPLY_TYPE_ROLE",
+        isTakeGlobalConfigData: true,
+      } as GetGlobalConfigRequest;
+      const res = await globalConfigApi.getGlobalConfig(request);
+      if (res.code == "SUCCESS") {
+        setApplyTypeList(res.data.globalConfigData);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     handleGetRoleData();
     handleGetFeatureData();
     handleGetData({ ...filter });
+    handleGetApplyType();
   }, []);
 
   return (
@@ -366,7 +385,11 @@ export const Index = () => {
           borderRadius: "3px",
         }}
       >
-        <Filter handleFilter={handleGetData} filter={filter} />
+        <Filter
+          handleFilter={handleGetData}
+          filter={filter}
+          applyTypeList={applyTypeList}
+        />
       </Content>
       <TableData config={config} />
     </>
