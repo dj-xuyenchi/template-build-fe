@@ -124,11 +124,11 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
                         label="Dữ liệu áp dụng"
-                        name="effectiveType"
-                        tooltip="Kiểu áp dụng thời gian"
+                        name="applyValue"
+                        tooltip="Dữ liệu áp dụng"
                       >
                         <SelectCustom
-                          placeholder="Chọn kiểu áp dụng dữ liệu"
+                          placeholder="Chọn dữ liệu áp dụng"
                           options={[...effectiveType]}
                           onChange={handleOnchange}
                         />
