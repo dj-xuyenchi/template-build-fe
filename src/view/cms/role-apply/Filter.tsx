@@ -1,15 +1,15 @@
 import { ButtonCustom } from "@/component/ButtonCustom";
 import { CollapseCustom } from "@/component/CollapseCustom";
 import { FormCustom } from "@/component/FormCustom";
-import { InputCustom } from "@/component/InputCustom";
 import { SelectCustom } from "@/component/SelectCustom";
 import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
-import { convertToOptionAll } from "@/model/BaseFilter";
 import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
+import { featureApi } from "@/api/featureApi";
+import { GetSystemUserFilter, sysUserApi } from "@/api/sysUserApi";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -54,6 +54,10 @@ export const Filter = ({
   applyTypeList,
 }: FilterProps) => {
   const [form] = Form.useForm();
+  const [applyValue, setApplyValue] = useState(
+    [] as { value: string; label: string }[],
+  );
+  const [loadingApplyValue, setLoadingApplyValue] = useState(false);
   const onFinish = (value: GetRoleFilter) => {
     console.error(value);
 
@@ -66,12 +70,41 @@ export const Filter = ({
 
     handleFilter(params as GetRoleFilter, null);
   };
-  const handleOnchange = (value: string) => {
-    if (value != "E") {
-      form.setFieldsValue({
-        effectiveFrom: null,
-        effectiveTo: null,
-      });
+  const handleOnchange = async (value: string) => {
+    try {
+      setLoadingApplyValue(true);
+      switch (value) {
+        case "APPLY_FEATURE": {
+          const features = await featureApi.getFeature({});
+          if (features.code == "SUCCESS") {
+            setApplyValue(
+              features.data.map((f) => {
+                return {
+                  value: `${f.featureId}`,
+                  label: f.featureName,
+                };
+              }),
+            );
+          }
+        }
+        case "APPLY_USER": {
+          const users = await sysUserApi.getUser({} as GetSystemUserFilter);
+          if (users.code == "SUCCESS") {
+            setApplyValue(
+              users.data.map((u) => {
+                return {
+                  value: `${u.userId}`,
+                  label: u.userName,
+                };
+              }),
+            );
+          }
+        }
+        default: {
+        }
+      }
+    } finally {
+      setLoadingApplyValue(false);
     }
   };
 
@@ -80,14 +113,13 @@ export const Filter = ({
   };
 
   const effectiveTypeValue = Form.useWatch("effectiveType", form);
-  const applyTypeValue = Form.useWatch("effectiveType", form);
 
   useEffect(() => {
     form.setFieldsValue({
       ...filter,
       status: filter.status,
     });
-  }, [applyTypeValue]);
+  }, []);
   return (
     <>
       <CollapseCustom
@@ -123,12 +155,17 @@ export const Filter = ({
                         <SelectCustom
                           placeholder="Chọn kiểu áp dụng dữ liệu"
                           options={[
-                            ...applyTypeList.map((a) => {
-                              return {
-                                value: a.globalConfigDataCode,
-                                label: a.globalConfigDataName,
-                              };
-                            }),
+                            ...[...applyTypeList]
+                              .sort(
+                                (a, b) =>
+                                  (a.sortNumber ?? 0) - (b.sortNumber ?? 0),
+                              )
+                              .map((a) => {
+                                return {
+                                  value: a.globalConfigDataCode,
+                                  label: a.globalConfigDataName,
+                                };
+                              }),
                           ]}
                           onChange={handleOnchange}
                         />
@@ -142,7 +179,8 @@ export const Filter = ({
                       >
                         <SelectCustom
                           placeholder="Chọn dữ liệu áp dụng"
-                          options={[...effectiveType]}
+                          options={[...applyValue]}
+                          loading={loadingApplyValue}
                           onChange={handleOnchange}
                         />
                       </Form.Item>

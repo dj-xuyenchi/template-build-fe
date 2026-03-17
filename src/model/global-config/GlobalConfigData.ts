@@ -5,6 +5,7 @@ export interface GlobalConfigData {
   globalConfigDataCode: string;
   globalConfigDataDescription: string;
   globalConfigDataValue: string;
+  sortNumber?: number;
   status: string;
   createdAt: string;
   maker: string;
