@@ -26,6 +26,7 @@ import { TableProps } from "antd";
 import { ButtonCustom } from "@/component/ButtonCustom";
 import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 import { GetGlobalConfigRequest, globalConfigApi } from "@/api/globalConfigApi";
+import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
@@ -47,7 +48,7 @@ export const Index = () => {
   );
   const modal = useGlobalModal();
   const controllerRef = useRef<AbortController | null>(null);
-
+  const messageApi = getMessageInstance();
   const handleArchiveActiveRow = async (row: RoleDTO) => {
     if (!row.roleId) {
       return;
@@ -210,6 +211,9 @@ export const Index = () => {
       content: `Bạn có chắc muốn xóa phân quyền này không?`,
       centered: true,
       onOk: async () => {
+        if (checkBoxSelectedData && checkBoxSelectedData.length < 1) {
+          messageApi.warning("Chọn ít nhất 1 bản ghi dữ liệu!");
+        }
         const res = await roleApplyApi.deleteRoleApply({
           roleApplyIds: checkBoxSelectedData,
         });
@@ -252,6 +256,7 @@ export const Index = () => {
           marginLeft: "8px",
         }}
         icon={<AiFillDelete />}
+        disabled={checkBoxSelectedData.length < 1}
         onClick={handleDeleteBatch}
       />
     </>
