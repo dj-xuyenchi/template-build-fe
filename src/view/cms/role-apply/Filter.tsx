@@ -10,6 +10,9 @@ import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 import { featureApi } from "@/api/featureApi";
 import { GetSystemUserFilter, sysUserApi } from "@/api/sysUserApi";
+import { apiApi, GetApiFilter } from "@/api/apiApi";
+import { btnApi, GetBtnFilter } from "@/api/btnApi";
+import { GetSystemFilter, systemApi } from "@/api/systemApi";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -103,6 +106,45 @@ export const Filter = ({
           break;
         }
         case "APPLY_API": {
+          const apis = await apiApi.getApi({} as GetApiFilter);
+          if (apis.code == "SUCCESS") {
+            setApplyValue(
+              apis.data.map((a) => {
+                return {
+                  value: `${a.apiId}`,
+                  label: a.apiName + `- ${a.uri} `,
+                };
+              }),
+            );
+          }
+          break;
+        }
+        case "APPLY_BTN": {
+          const btns = await btnApi.getBtn({} as GetBtnFilter);
+          if (btns.code == "SUCCESS") {
+            setApplyValue(
+              btns.data.map((b) => {
+                return {
+                  value: `${b.btnId}`,
+                  label: b.btnName + ` - ${b.btnCode}`,
+                };
+              }),
+            );
+          }
+          break;
+        }
+        case "APPLY_SYSTEM": {
+          const systems = await systemApi.getSystem({} as GetSystemFilter);
+          if (systems.code == "SUCCESS") {
+            setApplyValue(
+              systems.data.map((s) => {
+                return {
+                  value: `${s.systemId}`,
+                  label: s.systemName,
+                };
+              }),
+            );
+          }
           break;
         }
         default: {
