@@ -100,6 +100,19 @@ export const Filter = ({
             );
           }
         }
+        case "APPLY_FEATURE": {
+          const users = await sysUserApi.getUser({} as GetSystemUserFilter);
+          if (users.code == "SUCCESS") {
+            setApplyValue(
+              users.data.map((u) => {
+                return {
+                  value: `${u.userId}`,
+                  label: u.userName,
+                };
+              }),
+            );
+          }
+        }
         default: {
         }
       }
