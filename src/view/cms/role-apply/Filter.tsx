@@ -86,6 +86,7 @@ export const Filter = ({
               }),
             );
           }
+          break;
         }
         case "APPLY_USER": {
           const users = await sysUserApi.getUser({} as GetSystemUserFilter);
@@ -99,19 +100,10 @@ export const Filter = ({
               }),
             );
           }
+          break;
         }
-        case "APPLY_FEATURE": {
-          const users = await sysUserApi.getUser({} as GetSystemUserFilter);
-          if (users.code == "SUCCESS") {
-            setApplyValue(
-              users.data.map((u) => {
-                return {
-                  value: `${u.userId}`,
-                  label: u.userName,
-                };
-              }),
-            );
-          }
+        case "APPLY_API": {
+          break;
         }
         default: {
         }
