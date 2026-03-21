@@ -5,6 +5,7 @@ export interface RoleApplyDTO extends BaseDataTable {
   roleId: number;
   applyId: number;
   applyType: string;
+  applyValue: string;
   effectiveType: string;
   effectiveFrom?: string;
   effectiveTo?: string;
@@ -13,7 +14,6 @@ export interface RoleApplyDTO extends BaseDataTable {
   updatedAt: string;
   updatedBy: string;
 }
-
 
 export const ROLE_APPLY_ACTIVE = "ACTIVE";
 export const ROLE_APPLY_INACTIVE = "INACTIVE";

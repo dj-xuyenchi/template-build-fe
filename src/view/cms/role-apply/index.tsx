@@ -27,14 +27,25 @@ import { ButtonCustom } from "@/component/ButtonCustom";
 import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 import { GetGlobalConfigRequest, globalConfigApi } from "@/api/globalConfigApi";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
+import {
+  AuthorizeDataRequest,
+  RoleApplyCreate,
+} from "@/model/roleApply/AuthorizeDataRequest";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
   const [roleData, setRoleData] = useState(new Map() as Map<number, RoleDTO>);
+  const [roleList, setRoleList] = useState([] as RoleDTO[]);
   const [featureData, setFeatureData] = useState(
     new Map() as Map<number, FeatureDTO>,
   );
   const [applyTypeList, setApplyTypeList] = useState([] as GlobalConfigData[]);
+  const [applyValueList, setApplyValueList] = useState(
+    [] as {
+      value: string;
+      label: string;
+    }[],
+  );
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
@@ -72,26 +83,18 @@ export const Index = () => {
     let isError = false;
     try {
       setIsTableLoading(true);
-      const newDataList = data.data
-        .filter((item) => {
-          return item.isNewRow;
-        })
-        .map((item: RoleApplyDTO) => {
-          return {
-            effectiveType: item.effectiveType,
-            effectiveFrom: item.effectiveFrom,
-            effectiveTo: item.effectiveTo,
-            status: item.status,
-          } as CreateRoleRequestData;
-        });
+      const newDataList = data.data.filter((item) => {
+        return item.isNewRow;
+      });
       const updateDataList = data.data.filter((item) => {
         return item.isEdited && item.roleId;
-      }) as RoleApplyDTO[];
+      });
+
       const request = {
-        create: newDataList || [],
-        update: updateDataList || [],
-      } as AuditRoleRequest;
-      const res = await roleApi.auditRole(request);
+        create: newDataList,
+        update: updateDataList,
+      } as AuthorizeDataRequest;
+      const res = await roleApplyApi.authorizeData(request);
       if (res.code && res.code === "ERROR") {
         isError = true;
       }
@@ -170,6 +173,14 @@ export const Index = () => {
     return;
   };
   const handleSetApplyType = (row: RoleApplyDTO, value: string) => {
+    switch (value) {
+      case "APPLY_API": {
+        break;
+      }
+      default: {
+      }
+    }
+
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -272,6 +283,9 @@ export const Index = () => {
       handleSetEffectiveTo,
       handleSetEffectiveType,
       handleSetStatus,
+      roleList,
+      applyTypeList,
+      applyValueList,
     }),
     loading: isTableLoading,
     dataSource: data.data as RoleApplyDTO[],
@@ -286,31 +300,37 @@ export const Index = () => {
       },
       toggleViewMode: toggleViewMode,
       disableAddData: !allowBtnCode("AUDIT_ROLE"),
-      handleUpdateDataSource: (data: RoleApplyDTO[]) => {},
+      handleUpdateDataSource: (data: RoleApplyDTO[]) => {
+        setData({ data: [...data] });
+      },
       andOn: "table",
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
-        return true;
+        addNewData().catch((e) => {
+          throw e;
+        });
       },
       extendComponents: [deleteBtn],
     },
-    rowSelection: {
-      type: "checkbox",
-      onChange: (
-        selectedRowKeys: React.Key[],
-        selectedRows: RoleApplyDTO[],
-      ) => {
-        console.log("selected -> ", selectedRows);
-        const selectedIds = selectedRows.map((r) => {
-          return r.roleApplyId;
-        });
-        setCheckBoxSelectedData(selectedIds);
-      },
-      getCheckboxProps: (record: RoleApplyDTO) => ({
-        disabled: record.isNewRow,
-      }),
-    } as TableProps<RoleApplyDTO>["rowSelection"],
+    rowSelection:
+      viewMode &&
+      ({
+        type: "checkbox",
+        onChange: (
+          selectedRowKeys: React.Key[],
+          selectedRows: RoleApplyDTO[],
+        ) => {
+          console.log("selected -> ", selectedRows);
+          const selectedIds = selectedRows.map((r) => {
+            return r.roleApplyId;
+          });
+          setCheckBoxSelectedData(selectedIds);
+        },
+        getCheckboxProps: (record: RoleApplyDTO) => ({
+          disabled: record.isNewRow,
+        }),
+      } as TableProps<RoleApplyDTO>["rowSelection"]),
   } as TablePropsCustom<RoleApplyDTO>;
 
   const handleGetRoleData = async () => {
@@ -318,6 +338,7 @@ export const Index = () => {
       const res = await roleApi.getRole({} as GetRoleFilter);
       const map = new Map(res.data.map((item) => [item.roleId, item]));
       setRoleData(map);
+      setRoleList(res.data);
     } catch (e) {
       console.error(e);
     }
