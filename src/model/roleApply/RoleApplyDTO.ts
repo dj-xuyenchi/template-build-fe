@@ -11,10 +11,13 @@ export interface RoleApplyDTO extends BaseDataTable {
   effectiveTo?: string;
   status: string;
   maker: string;
-  updatedAt: string;
   updatedBy: string;
+  optionApplyValue?: OptionAsSelect[];
 }
-
+export interface OptionAsSelect {
+  label: string;
+  value: string;
+}
 export const ROLE_APPLY_ACTIVE = "ACTIVE";
 export const ROLE_APPLY_INACTIVE = "INACTIVE";
 export const ROLE_APPLY_DELETE = "DELETE";

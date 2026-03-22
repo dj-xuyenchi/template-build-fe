@@ -5,7 +5,11 @@ import { TablePropsCustom } from "@/component/TableCustom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 import { AiFillDelete } from "react-icons/ai";
-import { orderByCreatedAt } from "@/util/orderBaseTableData";
+import {
+  orderByCreatedAt,
+  orderByField,
+  orderByUpdatedAt,
+} from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { ROLE_ACTIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
@@ -18,7 +22,11 @@ import {
 } from "@/model/cms/role/AuditRoleRequest";
 import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
-import { GetRoleApplyFilter, roleApplyApi } from "@/api/roleApplyApi";
+import {
+  GetOptionAsSelectRequest,
+  GetRoleApplyFilter,
+  roleApplyApi,
+} from "@/api/roleApplyApi";
 import { RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
 import { featureApi, GetFeatureFilter } from "@/api/featureApi";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
@@ -48,11 +56,8 @@ export const Index = () => {
   );
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
-    pageNumber: 0,
-    pageSize: 10,
-    totalData: 0,
     // status: ["ACTIVE"],
-  } as GetRoleFilter);
+  } as GetRoleApplyFilter);
   const [viewMode, setViewMode] = useState(true);
   const [checkBoxSelectedData, setCheckBoxSelectedData] = useState(
     [] as number[],
@@ -80,23 +85,21 @@ export const Index = () => {
   };
 
   const addNewData = async () => {
-    let isError = false;
     try {
       setIsTableLoading(true);
       const newDataList = data.data.filter((item) => {
         return item.isNewRow;
       });
       const updateDataList = data.data.filter((item) => {
-        return item.isEdited && item.roleId;
+        return item.isEdited && item.roleApplyId;
       });
 
       const request = {
-        create: newDataList,
-        update: updateDataList,
+        createData: newDataList,
+        updateData: updateDataList,
       } as AuthorizeDataRequest;
       const res = await roleApplyApi.authorizeData(request);
       if (res.code && res.code === "ERROR") {
-        isError = true;
       }
     } catch (e) {
       throw e;
@@ -172,20 +175,20 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetApplyType = (row: RoleApplyDTO, value: string) => {
-    switch (value) {
-      case "APPLY_API": {
-        break;
-      }
-      default: {
-      }
-    }
-
+  const handleSetApplyType = async (row: RoleApplyDTO, value: string) => {
+    const request = {} as GetOptionAsSelectRequest;
+    request.applyType = value;
+    const option = await roleApplyApi.optionAsSelect(request);
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, applyType: value, isEdited: true }
+          ? {
+              ...item,
+              applyType: value,
+              optionApplyValue: option.data || [],
+              isEdited: true,
+            }
           : item,
       ),
     }));
@@ -204,6 +207,7 @@ export const Index = () => {
   };
   const triggerNewRow = (row: RoleApplyDTO) => {
     row.status = ROLE_ACTIVE;
+    row.effectiveType = "NE";
     return true;
   };
   const handleQuickSearch = (keyword: string) => {
@@ -239,16 +243,12 @@ export const Index = () => {
     setViewMode(mode);
   };
   const pageConfig = {
-    current: filter.pageNumber + 1, // Trang hiện tại
-    pageSize: filter.pageSize, // Số phần tử/trang
     total: data?.data?.length, // Tổng số phần tử
     showSizeChanger: true, // Cho phép chọn số phần tử/trang
     pageSizeOptions: ["10", "20", "50", "100", "500"], // Tuỳ chọn pageSize
     onChange: (page: number, pageSize: number) => {
       setFilter({
         ...filter,
-        pageNumber: page - 1,
-        pageSize: pageSize,
       });
     },
   };
@@ -368,9 +368,10 @@ export const Index = () => {
         },
         controller.signal,
       );
+      setFilter(params);
 
       setData({
-        data: orderByCreatedAt(res.data),
+        data: orderByField(res.data, "roleApplyId"),
       });
     } catch (e) {
       console.error(e);
@@ -414,6 +415,7 @@ export const Index = () => {
         <Filter
           handleFilter={handleGetData}
           filter={filter}
+          roleList={roleList}
           applyTypeList={applyTypeList}
         />
       </Content>

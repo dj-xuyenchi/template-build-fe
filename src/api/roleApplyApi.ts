@@ -1,17 +1,23 @@
 import axiosClient from "@/config/httpCall";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
-import { BaseFilter } from "@/model/BaseFilter";
 import { BaseResponse } from "@/model/BaseResponse";
 import { AuthorizeDataRequest } from "@/model/roleApply/AuthorizeDataRequest";
 import { RoleApplyRequest } from "@/model/roleApply/DeleteRoleApplyRequest";
-import { RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
-export interface ApiUriFilter extends BaseFilter {
-  applicationName?: string;
-  action?: string;
-  applicationId?: string | null | number[];
-  status?: string[];
+import { OptionAsSelect, RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
+
+export interface GetRoleApplyFilter {
+  roleId: number[];
+  applyType: string;
+  applyValue: number;
+  effectiveType: string;
+  effectiveFrom: string;
+  effectiveTo: string;
+  keyword: string;
 }
-export interface GetRoleApplyFilter {}
+export interface GetOptionAsSelectRequest {
+  applyType: string;
+  keyword: string;
+}
 export const roleApplyApi = {
   getRoleApply: async (
     params: GetRoleApplyFilter,
@@ -42,6 +48,17 @@ export const roleApplyApi = {
   ): Promise<BaseResponse<boolean>> => {
     const res = await axiosClient.post(
       `${AUTHEN_SERVICE}/role-apply/authorize-data`,
+      {
+        params: params,
+      },
+    );
+    return res.data;
+  },
+  optionAsSelect: async (
+    params: GetOptionAsSelectRequest,
+  ): Promise<BaseResponse<OptionAsSelect[]>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/role-apply/get-option-as-select`,
       {
         params: params,
       },

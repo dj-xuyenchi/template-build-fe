@@ -1,10 +1,13 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import qs from "qs";
 import { getMessageInstance } from "./push-noti-message/messageContext";
-import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
+import {
+  REFRESH_TOKEN_KEY,
+  TOKEN_EXPIRED_KEY,
+  TOKEN_KEY,
+} from "@/constant/authen/authenConst";
 import { notify } from "./push-noti-message/notifyContext";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
-import { FailedQueueItem } from "@/types/FailedQueueItem";
 import { LOGIN_URL } from "@/util/common-home/link";
 const ROOT_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const axiosClient = axios.create({
@@ -14,24 +17,76 @@ const axiosClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-let isRefreshing = false;
-let failedQueue: FailedQueueItem[] = [];
+let refreshPromise: Promise<string> | null = null;
 
-const processQueue = (error: unknown, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
+const refreshToken = async (): Promise<string> => {
+  const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+  const messageApi = getMessageInstance();
+  if (!refreshToken) {
+    throw new Error("Refresh Token không tồn tại!");
+  }
+  const call = axios.create({
+    baseURL: ROOT_URL,
+    timeout: 30000,
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
-  failedQueue = [];
+  const res = await call.post(`${AUTHEN_SERVICE}/authentication/refresh`, {
+    refreshToken,
+  });
+  if (res.data.code === "ERROR") {
+    // refresh thất bại → logout
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(TOKEN_EXPIRED_KEY);
+    window.location.href = LOGIN_URL;
+    throw new Error("Refresh token failed");
+  }
+
+  const newToken = res.data.data.accessToken;
+  const accessTokenExpiredAt = res.data.data.accessTokenExpiredAt;
+
+  // Cập nhật localStorage
+  localStorage.setItem(TOKEN_KEY, newToken);
+  localStorage.setItem(TOKEN_EXPIRED_KEY, accessTokenExpiredAt);
+  messageApi.success(res.data.message);
+  return newToken;
 };
 // Interceptor cho request
-
 axiosClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem("_t");
+  async (config: InternalAxiosRequestConfig) => {
+    const SKIP_REFRESH_URLS = [
+      "/authentication/login",
+      "/authentication/refresh",
+    ];
+
+    // Nếu request hiện tại là login/refresh → bỏ qua refresh token
+    if (config.url && SKIP_REFRESH_URLS.some((u) => config.url?.includes(u))) {
+      return config;
+    }
+    let token = localStorage.getItem(TOKEN_KEY);
+    const accessTokenExpiredAt = Number(
+      localStorage.getItem(TOKEN_EXPIRED_KEY),
+    );
+    const rightNow = Date.now();
+    const offset = accessTokenExpiredAt - rightNow;
+    const BUFFER = 60 * 1000;
+    if (offset < BUFFER) {
+      // Token sắp hết hạn → refresh
+      if (!refreshPromise) {
+        refreshPromise = refreshToken().finally(() => {
+          refreshPromise = null;
+        });
+      }
+
+      try {
+        token = await refreshPromise;
+      } catch (err) {
+        return Promise.reject(err); // refresh fail → reject request
+      }
+    }
+
     if (token) {
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
@@ -128,68 +183,7 @@ axiosClient.interceptors.response.use(
       return Promise.reject(error);
     }
     switch (status) {
-      case 401: {
-        const originalRequest = error.config;
-        if (originalRequest._retry) {
-          localStorage.removeItem(TOKEN_KEY);
-          localStorage.removeItem(REFRESH_TOKEN_KEY);
-          window.location.href = LOGIN_URL;
-          return Promise.reject(error);
-        }
-
-        if (isRefreshing) {
-          return new Promise(function (resolve, reject) {
-            failedQueue.push({ resolve, reject });
-          })
-            .then((token) => {
-              originalRequest.headers["Authorization"] = "Bearer " + token;
-              return axiosClient(originalRequest);
-            })
-            .catch((err) => {
-              return Promise.reject(err);
-            });
-        }
-
-        originalRequest._retry = true;
-        isRefreshing = true;
-
-        return new Promise(async (resolve, reject) => {
-          try {
-            const res = await refreshToken();
-
-            if (res.data.code == "ERROR") {
-              messageApi.error(res.data.message);
-              setTimeout(() => {
-                window.location.href = LOGIN_URL;
-              }, 3000);
-              return;
-            }
-
-            const newToken = res.data.data.accessToken;
-
-            localStorage.setItem(TOKEN_KEY, newToken);
-            messageApi.success(res.data.message);
-            axiosClient.defaults.headers.common["Authorization"] =
-              "Bearer " + newToken;
-
-            processQueue(null, newToken);
-
-            originalRequest.headers["Authorization"] = "Bearer " + newToken;
-            resolve(axiosClient(originalRequest));
-          } catch (err) {
-            messageApi.error("Lỗi!");
-            console.error(err);
-
-            processQueue(err, null);
-            localStorage.removeItem(TOKEN_KEY);
-            localStorage.removeItem(REFRESH_TOKEN_KEY);
-            window.location.href = LOGIN_URL;
-            reject(err);
-          } finally {
-            isRefreshing = false;
-          }
-        });
-      }
+      case 401:
       case 406: {
         messageApi.warning("Vui lòng đăng nhập lại!");
         localStorage.removeItem(TOKEN_KEY);
@@ -217,18 +211,5 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-const refreshToken = async () => {
-  const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-  const call = axios.create({
-    baseURL: ROOT_URL,
-    timeout: 30000,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const res = call.post(`${AUTHEN_SERVICE}/authentication/refresh`, {
-    refreshToken,
-  });
-  return res;
-};
+
 export default axiosClient;

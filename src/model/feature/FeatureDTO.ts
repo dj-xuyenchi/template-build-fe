@@ -14,7 +14,6 @@ export interface FeatureDTO extends BaseDataTable {
   effectiveTo: string | undefined;
   maker: string;
   updatedBy: string;
-  updatedAt: string;
   status: string;
   icon: string;
   feUri: string;

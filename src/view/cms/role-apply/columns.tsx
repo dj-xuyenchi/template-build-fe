@@ -275,11 +275,11 @@ export const getColumnsEdit = ({
       <SelectCustom
         size="small"
         disabled={!record.isNewRow}
-        value={record.isNewRow ? "" : record.applyValue}
-        options={applyValueList}
+        value={record.isNewRow ? record.applyId : record.applyValue}
+        options={record.optionApplyValue}
         onChange={(e) => {
           const value = e;
-          handleSetApplyType(record, value);
+          handleSetApplyValue(record, value);
         }}
       />
     ),

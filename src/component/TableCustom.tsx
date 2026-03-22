@@ -482,6 +482,7 @@ export const TableCustom = <T extends BaseDataTable>({
                           }}
                           prefix={<IoSearchSharp />}
                           placeholder="Tìm kiếm nhanh..."
+                          disabled={!viewMode}
                           onPressEnter={(
                             e: KeyboardEvent<HTMLInputElement>,
                           ) => {

@@ -10,7 +10,11 @@ import { encryptRSA } from "@/util/authen-service/rsaEncrypt";
 import { API_OK } from "@/constant/api/errorCode";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 import { useRouter } from "next/navigation";
-import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/constant/authen/authenConst";
+import {
+  REFRESH_TOKEN_KEY,
+  TOKEN_EXPIRED_KEY,
+  TOKEN_KEY,
+} from "@/constant/authen/authenConst";
 export default function Login() {
   const FE_ROOT = process.env.NEXT_PUBLIC_PRODUCTION_URL;
   const [loginModel, setLoginModel] = useState({
@@ -32,6 +36,10 @@ export default function Login() {
           if (typeof window !== "undefined") {
             localStorage.setItem(TOKEN_KEY, loginRes.data.accessToken);
             localStorage.setItem(REFRESH_TOKEN_KEY, loginRes.data.refreshToken);
+            localStorage.setItem(
+              TOKEN_EXPIRED_KEY,
+              String(loginRes.data.accessTokenExpiredAt),
+            );
             // Chỗ này bắt buộc dùng href để nhảy để useEffect tổng chạy lại kiểm tra token load các api tiên quyết
             window.location.href = FE_ROOT || "/";
             return;

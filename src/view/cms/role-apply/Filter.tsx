@@ -6,13 +6,14 @@ import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import { useEffect, useState } from "react";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
-import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 import { featureApi } from "@/api/featureApi";
 import { GetSystemUserFilter, sysUserApi } from "@/api/sysUserApi";
 import { apiApi, GetApiFilter } from "@/api/apiApi";
 import { btnApi, GetBtnFilter } from "@/api/btnApi";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
+import { RoleDTO } from "@/model/cms/role/RoleDTO";
+import { GetRoleApplyFilter } from "@/api/roleApplyApi";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -47,31 +48,36 @@ const statusSelect: DefaultOptionType[] = [
 ];
 
 type FilterProps = {
-  handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
-  filter: GetRoleFilter;
+  handleFilter: (
+    params: GetRoleApplyFilter,
+    signal: AbortSignal | null,
+  ) => void;
+  filter: GetRoleApplyFilter;
   applyTypeList: GlobalConfigData[];
+  roleList: RoleDTO[];
 };
 export const Filter = ({
   handleFilter,
   filter,
   applyTypeList,
+  roleList,
 }: FilterProps) => {
   const [form] = Form.useForm();
   const [applyValue, setApplyValue] = useState(
     [] as { value: string; label: string }[],
   );
   const [loadingApplyValue, setLoadingApplyValue] = useState(false);
-  const onFinish = (value: GetRoleFilter) => {
+  const onFinish = (value: GetRoleApplyFilter) => {
     console.error(value);
 
     const params = {
       ...value,
-      pageSize: filter.pageSize,
-      pageNumber: filter.pageNumber,
-      // status: convertArrayParam(value.status as ConvertArrayParam[]),
     };
 
-    handleFilter(params as GetRoleFilter, null);
+    handleFilter(params as GetRoleApplyFilter, null);
+  };
+  const handleOnchangeRole = (value: number) => {
+    console.error(value);
   };
   const handleOnchange = async (value: string) => {
     try {
@@ -164,7 +170,6 @@ export const Filter = ({
   useEffect(() => {
     form.setFieldsValue({
       ...filter,
-      status: filter.status,
     });
   }, []);
   return (
@@ -187,9 +192,15 @@ export const Filter = ({
                         tooltip="Quyền áp dụng"
                       >
                         <SelectCustom
-                          placeholder="Chọn kiểu áp dụng thời gian"
-                          options={[...effectiveType]}
-                          onChange={handleOnchange}
+                          placeholder="Chọn quyền sẽ áp dụng cho dữ liệu"
+                          mode="multiple"
+                          options={roleList.map((r) => {
+                            return {
+                              label: r.roleName,
+                              value: r.roleId,
+                            };
+                          })}
+                          onChange={handleOnchangeRole}
                         />
                       </Form.Item>
                     </Col>
