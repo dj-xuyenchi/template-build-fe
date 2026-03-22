@@ -311,6 +311,7 @@ export const getColumnsEdit = ({
     render: (value: string, record: RoleApplyDTO, index: number) => (
       <DatePickerCustom
         showTime
+        value={value ? dayjs(value) : null}
         disabled={record.effectiveType != "E"}
         placeholder="Chọn thời gian áp dụng từ"
         onChange={(e) => {
