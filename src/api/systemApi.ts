@@ -5,9 +5,9 @@ import { BaseResponse } from "@/model/BaseResponse";
 import { SystemDTO } from "@/model/system/SystemDTO";
 export interface GetSystemFilter extends BaseFilter {
   systemName?: string;
-  action?: string;
-  systemId?: string | null | number[];
-  status?: string[];
+  systemCode?: string;
+  systemId?: string | null | number[] | number;
+  status?: string;
 }
 export const systemApi = {
   getSystem: async (

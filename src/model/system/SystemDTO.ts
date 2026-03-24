@@ -1,12 +1,12 @@
-export interface SystemDTO {
+import { BaseDataTable } from "../BaseDataTable";
+
+export interface SystemDTO extends BaseDataTable {
   systemId: number;
   systemCode: string;
   systemName: string;
   systemUriGateway: string;
   status: string;
-  createdAt: string;
   maker: string;
-  updatedAt: string;
   updatedBy: string;
 }
 

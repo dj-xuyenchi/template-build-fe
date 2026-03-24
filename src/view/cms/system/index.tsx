@@ -13,11 +13,7 @@ import dayjs from "dayjs";
 import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { featureApi } from "@/api/featureApi";
-import {
-  FEATURE_ACTIVE,
-  FEATURE_ARCHIVE,
-  FeatureDTO,
-} from "@/model/feature/FeatureDTO";
+
 import {
   CreateFeatureRequestData,
   UpdateFeatureRequestData,
@@ -26,8 +22,8 @@ import { GetSystemFilter, systemApi } from "@/api/systemApi";
 import { SYSTEM_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
 
 export const Index = () => {
-  const [data, setData] = useState({} as { data: FeatureDTO[] });
-  const [features, setFeatures] = useState([] as FeatureDTO[]);
+  const [data, setData] = useState({} as { data: SystemDTO[] });
+  const [features, setFeatures] = useState([] as SystemDTO[]);
   const [systems, setSystems] = useState([] as SystemDTO[]);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
@@ -35,53 +31,16 @@ export const Index = () => {
     pageSize: 10,
     totalData: 0,
     // status: ["ACTIVE"],
-  } as GetRoleFilter);
+  } as GetSystemFilter);
   const [viewMode, setViewMode] = useState(true);
   const modal = useGlobalModal();
-
-  const handleArchiveActiveRow = async (row: FeatureDTO) => {
-    if (!row.featureId) {
-      return;
-    }
-    modal.confirm({
-      title: "Xác nhận",
-      content: `Bạn có chắc muốn ${row.status == FEATURE_ACTIVE ? "lưu trữ" : "active lại"} chức năng này không?`,
-      centered: true,
-      onOk: async () => {
-        const res = await featureApi.archiveActive({
-          featureId: row.featureId,
-        });
-        if (res.code && res.code !== "ERROR") {
-          handleGetData(filter, null);
-        }
-      },
-    });
-  };
 
   const addNewData = async () => {
     let isError = false;
     try {
       setIsTableLoading(true);
-      const newDataList = data.data
-        .filter((item) => {
-          return item.isNewRow;
-        })
-        .map((item: FeatureDTO) => {
-          return {
-            ...item,
-            effectiveType: item.effectiveType,
-            effectiveFrom: item.effectiveFrom,
-            effectiveTo: item.effectiveTo,
-            status: item.status,
-          } as CreateFeatureRequestData;
-        });
-      const updateDataList = data.data.filter((item) => {
-        return item.isEdited && item.featureId;
-      }) as UpdateFeatureRequestData[];
-      const request = {
-        create: newDataList || [],
-        update: updateDataList || [],
-      };
+
+      const request = {};
       const res = await featureApi.auditFeature(request);
       if (res.code && res.code === "ERROR") {
         isError = true;
@@ -94,7 +53,7 @@ export const Index = () => {
     }
   };
 
-  const handleSetFeatureName = (row: FeatureDTO, value: string) => {
+  const handleSetFeatureName = (row: SystemDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -104,7 +63,7 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetFeatureCode = (row: FeatureDTO, value: string) => {
+  const handleSetFeatureCode = (row: SystemDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -114,69 +73,7 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetFeatureParent = (row: FeatureDTO, value: number) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, parentId: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetSystem = (row: FeatureDTO, value: number) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, systemId: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetEffectiveType = (row: FeatureDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorFeatureEffectiveFrom: false,
-              isErrorFeatureEffectiveTo: false,
-            }
-          : item,
-      ),
-    }));
-  };
-  const handleSetEffectiveFrom = (
-    row: FeatureDTO,
-    value: dayjs.Dayjs | null,
-  ) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, effectiveFrom: toDateSendBE(value), isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetEffectiveTo = (row: FeatureDTO, value: dayjs.Dayjs | null) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, effectiveTo: toDateSendBE(value), isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetStatus = (row: FeatureDTO, value: boolean) => {
+  const handleSetStatus = (row: SystemDTO, value: boolean) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -190,7 +87,7 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetFeUri = (row: FeatureDTO, value: string) => {
+  const handleSetFeUri = (row: SystemDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -200,7 +97,7 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetIsMenu = (row: FeatureDTO, value: boolean) => {
+  const handleSetIsMenu = (row: SystemDTO, value: boolean) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -210,7 +107,7 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetIsSubMenu = (row: FeatureDTO, value: boolean) => {
+  const handleSetIsSubMenu = (row: SystemDTO, value: boolean) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -220,7 +117,7 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetIcon = (row: FeatureDTO, value: string) => {
+  const handleSetIcon = (row: SystemDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -230,8 +127,8 @@ export const Index = () => {
       ),
     }));
   };
-  
-  const handleSetSortNumber = (row: FeatureDTO, value: number) => {
+
+  const handleSetSortNumber = (row: SystemDTO, value: number) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -242,8 +139,8 @@ export const Index = () => {
     }));
   };
 
-  const triggerNewRow = (row: FeatureDTO) => {
-    row.status = FEATURE_ACTIVE;
+  const triggerNewRow = (row: SystemDTO) => {
+    row.status = SYSTEM_ACTIVE;
   };
   const handleQuickSearch = (keyword: string) => {
     setFilter({
@@ -259,23 +156,7 @@ export const Index = () => {
     );
   };
 
-  const columnsEdit = getColumnsEdit({
-    handleSetFeatureName,
-    handleSetFeatureCode,
-    handleSetFeatureParent,
-    handleSetSystem,
-    handleSetEffectiveType,
-    handleSetStatus,
-    handleSetEffectiveFrom,
-    handleSetEffectiveTo,
-    handleSetFeUri,
-    handleSetIsMenu,
-    handleSetIsSubMenu,
-    handleSetIcon,
-    handleSetSortNumber,
-    features,
-    systems,
-  } as CallBacks);
+  const columnsEdit = getColumnsEdit({} as CallBacks);
 
   const toggleViewMode = (mode: boolean) => {
     setViewMode(mode);
@@ -296,12 +177,10 @@ export const Index = () => {
   };
   const config = {
     pagination: pageConfig,
-    columns: getColumns({
-      handleArchiveActiveRow,
-    } as CallBacks),
+    columns: getColumns({} as CallBacks),
     columnsEdit: columnsEdit,
     loading: isTableLoading,
-    dataSource: data.data as FeatureDTO[],
+    dataSource: data.data as SystemDTO[],
     viewMode: viewMode,
     tableName: "Quản lý quyền",
     extendFunction: {
@@ -323,15 +202,15 @@ export const Index = () => {
         addNewData();
       },
     },
-  } as TablePropsCustom<FeatureDTO>;
+  } as TablePropsCustom<SystemDTO>;
 
   const handleGetData = async (
-    params: GetRoleFilter,
+    params: GetSystemFilter,
     signal: AbortSignal | null,
   ) => {
     try {
       setIsTableLoading(true);
-      const res = await featureApi.getFeature(
+      const res = await systemApi.getSystem(
         {
           ...params,
         },
@@ -347,24 +226,6 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleGetAllFeature = async () => {
-    try {
-      const res = await featureApi.getFeature({} as GetRoleFilter);
-      setFeatures(res.data);
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
-  };
-  const handleGetSystem = async () => {
-    try {
-      const params = {} as GetSystemFilter;
-      const res = await systemApi.getSystem(params);
-      setSystems(res.data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const isFirstRender = useRef(true);
   useEffect(() => {
@@ -376,8 +237,6 @@ export const Index = () => {
 
       return () => controller.abort();
     }
-    handleGetSystem();
-    handleGetAllFeature();
   }, []);
 
   return (
@@ -394,12 +253,6 @@ export const Index = () => {
         <Filter
           systemList={systems.filter((s) => {
             return s.status === SYSTEM_ACTIVE;
-          })}
-          features={features.map((f) => {
-            return {
-              label: f.featureName,
-              value: f.featureId,
-            };
           })}
           handleFilter={handleGetData}
           filter={filter}

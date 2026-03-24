@@ -10,6 +10,7 @@ import { DatePickerCustom } from "@/component/DatepickerCustom";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
 import { SystemDTO } from "@/model/system/SystemDTO";
+import { GetSystemFilter } from "@/api/systemApi";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -54,23 +55,16 @@ export const effectiveType: DefaultOptionType[] = [
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
-  { value: "ARCHIVE", label: "Lưu trữ", tag: "orange" },
+  { value: "IN_ACTIVE", label: "Tạm ngưng hoạt động", tag: "orange" },
 ];
 
 type FilterProps = {
-  handleFilter: (params: GetRoleFilter, signal: AbortSignal | null) => void;
-  filter: GetRoleFilter;
-  systemList: SystemDTO[];
-  features: { label: string; value: number }[];
+  handleFilter: (params: GetSystemFilter, signal: AbortSignal | null) => void;
+  filter: GetSystemFilter;
 };
-export const Filter = ({
-  handleFilter,
-  filter,
-  systemList,
-  features,
-}: FilterProps) => {
+export const Filter = ({ handleFilter, filter }: FilterProps) => {
   const [form] = Form.useForm();
-  const onFinish = (value: GetRoleFilter) => {
+  const onFinish = (value: GetSystemFilter) => {
     console.log("Filter value: ", value);
 
     const params = {
@@ -80,22 +74,12 @@ export const Filter = ({
       // status: convertArrayParam(value.status as ConvertArrayParam[]),
     };
 
-    handleFilter(params as GetRoleFilter, null);
-  };
-  const handleOnchange = (value: string) => {
-    if (value != "E") {
-      form.setFieldsValue({
-        effectiveFrom: null,
-        effectiveTo: null,
-      });
-    }
+    handleFilter(params as GetSystemFilter, null);
   };
 
   const handleClearFilter = () => {
     form.resetFields();
   };
-
-  const effectiveTypeValue = Form.useWatch("effectiveType", form);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -119,7 +103,7 @@ export const Filter = ({
                     <Col span={12} md={12} lg={6} xl={4}>
                       <Form.Item
                         label="Tên chức năng"
-                        name="featureName"
+                        name="systemName"
                         tooltip="Tên chức năng cần tìm"
                       >
                         <InputCustom placeholder="Tên chức năng" />
@@ -129,32 +113,13 @@ export const Filter = ({
                     <Col span={12} md={12} lg={6} xl={4}>
                       <Form.Item
                         label="Mã chức năng"
-                        name="featureCode"
+                        name="systemCode"
                         tooltip="Mã chức năng cần tìm"
                       >
                         <InputCustom placeholder="Mã chức năng" />
                       </Form.Item>
                     </Col>
-                    <Col span={12} md={12} lg={6} xl={4}>
-                      <Form.Item
-                        label="Hệ thống"
-                        name="systemId"
-                        tooltip="Hệ thống cần tìm"
-                      >
-                        <SelectCustom
-                          placeholder="Chọn hệ thống"
-                          mode="multiple"
-                          options={[
-                            ...systemList.map((s) => {
-                              return {
-                                label: s.systemName,
-                                value: s.systemId,
-                              };
-                            }),
-                          ]}
-                        />
-                      </Form.Item>
-                    </Col>
+
                     <Col span={12} md={12} lg={6} xl={4}>
                       <Form.Item
                         label="Trạng thái"
@@ -163,66 +128,7 @@ export const Filter = ({
                       >
                         <SelectCustom
                           placeholder="Chọn trạng thái"
-                          mode="multiple"
                           options={[...statusSelect]}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={12} lg={6} xl={4}>
-                      <Form.Item
-                        label="Chức năng cha"
-                        name="parentId"
-                        tooltip="Chức năng cha cần tìm"
-                      >
-                        <SelectCustom
-                          placeholder="Chọn chức năng cha"
-                          options={[...features]}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={12} lg={6} xl={4}>
-                      <Form.Item
-                        label="URI chức năng"
-                        name="feUri"
-                        tooltip="URI chức năng cần tìm"
-                      >
-                        <InputCustom placeholder="Nhập URI chức năng" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={12} lg={6} xl={5}>
-                      <Form.Item
-                        label="Kiểu áp dụng thời gian"
-                        name="effectiveType"
-                        tooltip="Kiểu áp dụng thời gian"
-                      >
-                        <SelectCustom
-                          placeholder="Chọn kiểu áp dụng thời gian"
-                          options={[...effectiveType]}
-                          onChange={handleOnchange}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={12} lg={6} xl={5}>
-                      <Form.Item
-                        label="Áp dụng từ"
-                        name="effectiveFrom"
-                        tooltip="Áp dụng từ"
-                      >
-                        <DatePickerCustom
-                          placeholder="Chọn thời gian áp dụng từ"
-                          disabled={effectiveTypeValue != "E"}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={12} lg={6} xl={5}>
-                      <Form.Item
-                        label="Áp dụng đến"
-                        name="effectiveTo"
-                        tooltip="Áp dụng đến"
-                      >
-                        <DatePickerCustom
-                          placeholder="Chọn thời gian áp dụng đến"
-                          disabled={effectiveTypeValue != "E"}
                         />
                       </Form.Item>
                     </Col>
