@@ -7,24 +7,13 @@ import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 
 import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
-import dayjs from "dayjs";
-
-import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
-import { featureApi } from "@/api/featureApi";
-
-import {
-  CreateFeatureRequestData,
-  UpdateFeatureRequestData,
-} from "@/model/feature/AuditFeatureRequest";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
-import { SYSTEM_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
+import { SYSTEM_ACTIVE, SYSTEM_IN_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
+import { AuditSystemData } from "@/model/system/AuditSystemData";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: SystemDTO[] });
-  const [features, setFeatures] = useState([] as SystemDTO[]);
-  const [systems, setSystems] = useState([] as SystemDTO[]);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     pageNumber: 0,
@@ -39,9 +28,14 @@ export const Index = () => {
     let isError = false;
     try {
       setIsTableLoading(true);
+      const newData = data.data.filter((item) => item.isNewRow);
+      const updateData = data.data.filter((item) => item.isEdited && !item.isNewRow);
 
-      const request = {};
-      const res = await featureApi.auditFeature(request);
+      const request = {
+        createData: newData,
+        updateData: updateData
+      } as AuditSystemData;
+      const res = await systemApi.auditSystem(request);
       if (res.code && res.code === "ERROR") {
         isError = true;
       }
@@ -53,22 +47,22 @@ export const Index = () => {
     }
   };
 
-  const handleSetFeatureName = (row: SystemDTO, value: string) => {
+  const handleSetSystemName = (row: SystemDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, featureName: value, isEdited: true }
+          ? { ...item, systemName: value, isEdited: true }
           : item,
       ),
     }));
   };
-  const handleSetFeatureCode = (row: SystemDTO, value: string) => {
+  const handleSetSystemCode = (row: SystemDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, featureCode: value, isEdited: true }
+          ? { ...item, systemCode: value, isEdited: true }
           : item,
       ),
     }));
@@ -79,65 +73,25 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              status: value ? FEATURE_ACTIVE : FEATURE_ARCHIVE,
-              isEdited: true,
-            }
+            ...item,
+            status: value ? SYSTEM_ACTIVE : SYSTEM_IN_ACTIVE,
+            isEdited: true,
+          }
           : item,
       ),
     }));
   };
-  const handleSetFeUri = (row: SystemDTO, value: string) => {
+  const handleSetUriGateway = (row: SystemDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, feUri: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetIsMenu = (row: SystemDTO, value: boolean) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, isMenu: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetIsSubMenu = (row: SystemDTO, value: boolean) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, isSubMenu: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
-  const handleSetIcon = (row: SystemDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, icon: value, isEdited: true }
+          ? { ...item, systemUriGateway: value, isEdited: true }
           : item,
       ),
     }));
   };
 
-  const handleSetSortNumber = (row: SystemDTO, value: number) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, sortNumber: value, isEdited: true }
-          : item,
-      ),
-    }));
-  };
 
   const triggerNewRow = (row: SystemDTO) => {
     row.status = SYSTEM_ACTIVE;
@@ -156,7 +110,7 @@ export const Index = () => {
     );
   };
 
-  const columnsEdit = getColumnsEdit({} as CallBacks);
+  const columnsEdit = getColumnsEdit({ handleSetSystemName, handleSetSystemCode, handleSetUriGateway, handleSetStatus } as CallBacks);
 
   const toggleViewMode = (mode: boolean) => {
     setViewMode(mode);
@@ -251,9 +205,6 @@ export const Index = () => {
         }}
       >
         <Filter
-          systemList={systems.filter((s) => {
-            return s.status === SYSTEM_ACTIVE;
-          })}
           handleFilter={handleGetData}
           filter={filter}
         />

@@ -1,33 +1,24 @@
 import { InputCustom } from "@/component/InputCustom";
-import { SelectCustom } from "@/component/SelectCustom";
 import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
-import { ArchiveBtn } from "@/component/table-btn/ArchiveBtn";
 import { formatDateWithDayVN } from "@/util/date/dateUtil";
 import {
-  effectiveType,
-  getEffectiveLabel,
-  getEffectiveTag,
   getStatusLabel,
   getStatusTag,
 } from "./Filter";
 import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
-import { ACTIVE } from "@/model/BaseDataTable";
-import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
-import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { SwitchCustom } from "@/component/SwitchCustom";
-import { DatePickerCustom } from "@/component/DatepickerCustom";
-import dayjs from "dayjs";
-import { ROLE_ARCHIVE } from "@/model/cms/role/RoleDTO";
-import { reactIconPool } from "@/config/icon/reactIconPool";
-import { getIcon } from "@/config/menu/menu";
-import { InputNumberCustom } from "@/component/InputNumberCustom";
-import { SystemDTO } from "@/model/system/SystemDTO";
+import { SYSTEM_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
 
-export type CallBacks = BaseTable & {};
+export type CallBacks = BaseTable & {
+  handleSetSystemName: (row: SystemDTO, value: string) => void;
+  handleSetSystemCode: (row: SystemDTO, value: string) => void;
+  handleSetUriGateway: (row: SystemDTO, value: string) => void;
+  handleSetStatus: (row: SystemDTO, value: boolean) => void;
+};
 
-export const getColumns = ({}: CallBacks): ColumnTypeCustom<SystemDTO>[] => [
+export const getColumns = ({ }: CallBacks): ColumnTypeCustom<SystemDTO>[] => [
   {
     title: "STT",
     dataIndex: "stt",
@@ -122,7 +113,7 @@ export const getColumns = ({}: CallBacks): ColumnTypeCustom<SystemDTO>[] => [
   },
 ];
 
-export const getColumnsEdit = ({}: CallBacks) => [
+export const getColumnsEdit = (callBack: CallBacks) => [
   {
     title: "STT",
     dataIndex: "stt",
@@ -145,7 +136,7 @@ export const getColumnsEdit = ({}: CallBacks) => [
         defaultValue={record.systemName}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetFeatureName(record, value);
+          callBack.handleSetSystemName(record, value);
         }}
       />
     ),
@@ -163,7 +154,7 @@ export const getColumnsEdit = ({}: CallBacks) => [
         defaultValue={record.systemCode}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetFeatureCode(record, value);
+          callBack.handleSetSystemCode(record, value);
         }}
       />
     ),
@@ -180,7 +171,7 @@ export const getColumnsEdit = ({}: CallBacks) => [
         defaultValue={record.systemUriGateway}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetFeUri(record, value);
+          callBack.handleSetUriGateway(record, value);
         }}
       />
     ),
@@ -192,7 +183,13 @@ export const getColumnsEdit = ({}: CallBacks) => [
     key: "status",
     width: 220,
     render: (value: string, record: SystemDTO, index: number) => (
-      <TagCustom type={getStatusTag(value)}>{getStatusLabel(value)}</TagCustom>
+      <SwitchCustom
+        size="small"
+        defaultValue={record.status == SYSTEM_ACTIVE ? true : false}
+        onChange={(e) => {
+          callBack.handleSetStatus(record, e);
+        }}
+      />
     ),
     align: "center",
   },

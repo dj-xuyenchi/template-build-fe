@@ -1,9 +1,9 @@
 import { TableCustom, TablePropsCustom } from "@/component/TableCustom";
 import { Content } from "antd/es/layout/layout";
-import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { SystemDTO } from "@/model/system/SystemDTO";
 
 type TableFunction = {
-  config: TablePropsCustom<FeatureDTO>;
+  config: TablePropsCustom<SystemDTO>;
 };
 export const TableData = ({ config }: TableFunction) => {
   return (

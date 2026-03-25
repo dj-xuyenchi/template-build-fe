@@ -11,3 +11,4 @@ export interface SystemDTO extends BaseDataTable {
 }
 
 export const SYSTEM_ACTIVE = "ACTIVE";
+export const SYSTEM_IN_ACTIVE = "IN_ACTIVE";

@@ -5,11 +5,8 @@ import { InputCustom } from "@/component/InputCustom";
 import { SelectCustom } from "@/component/SelectCustom";
 import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
-import { useEffect, useState } from "react";
-import { DatePickerCustom } from "@/component/DatepickerCustom";
-import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
+import { useEffect } from "react";
 import { FeatureDTO } from "@/model/feature/FeatureDTO";
-import { SystemDTO } from "@/model/system/SystemDTO";
 import { GetSystemFilter } from "@/api/systemApi";
 
 export const getStatusLabel = (value: string) => {
@@ -100,7 +97,7 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
               <>
                 <FormCustom layout="vertical" form={form} onFinish={onFinish}>
                   <Row gutter={16}>
-                    <Col span={12} md={12} lg={6} xl={4}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Tên chức năng"
                         name="systemName"
@@ -110,7 +107,7 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
                       </Form.Item>
                     </Col>
 
-                    <Col span={12} md={12} lg={6} xl={4}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Mã chức năng"
                         name="systemCode"
@@ -120,7 +117,7 @@ export const Filter = ({ handleFilter, filter }: FilterProps) => {
                       </Form.Item>
                     </Col>
 
-                    <Col span={12} md={12} lg={6} xl={4}>
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
                         label="Trạng thái"
                         name="status"
