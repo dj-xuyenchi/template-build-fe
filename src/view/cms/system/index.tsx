@@ -9,8 +9,12 @@ import { orderByCreatedAt } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
-import { SYSTEM_ACTIVE, SYSTEM_IN_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
-import { AuditSystemData } from "@/model/system/AuditSystemData";
+import {
+  SYSTEM_ACTIVE,
+  SYSTEM_IN_ACTIVE,
+  SystemDTO,
+} from "@/model/cms/system/SystemDTO";
+import { AuditSystemData } from "@/model/cms/system/AuditSystemData";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: SystemDTO[] });
@@ -29,11 +33,13 @@ export const Index = () => {
     try {
       setIsTableLoading(true);
       const newData = data.data.filter((item) => item.isNewRow);
-      const updateData = data.data.filter((item) => item.isEdited && !item.isNewRow);
+      const updateData = data.data.filter(
+        (item) => item.isEdited && !item.isNewRow,
+      );
 
       const request = {
         createData: newData,
-        updateData: updateData
+        updateData: updateData,
       } as AuditSystemData;
       const res = await systemApi.auditSystem(request);
       if (res.code && res.code === "ERROR") {
@@ -73,10 +79,10 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-            ...item,
-            status: value ? SYSTEM_ACTIVE : SYSTEM_IN_ACTIVE,
-            isEdited: true,
-          }
+              ...item,
+              status: value ? SYSTEM_ACTIVE : SYSTEM_IN_ACTIVE,
+              isEdited: true,
+            }
           : item,
       ),
     }));
@@ -91,7 +97,6 @@ export const Index = () => {
       ),
     }));
   };
-
 
   const triggerNewRow = (row: SystemDTO) => {
     row.status = SYSTEM_ACTIVE;
@@ -110,7 +115,12 @@ export const Index = () => {
     );
   };
 
-  const columnsEdit = getColumnsEdit({ handleSetSystemName, handleSetSystemCode, handleSetUriGateway, handleSetStatus } as CallBacks);
+  const columnsEdit = getColumnsEdit({
+    handleSetSystemName,
+    handleSetSystemCode,
+    handleSetUriGateway,
+    handleSetStatus,
+  } as CallBacks);
 
   const toggleViewMode = (mode: boolean) => {
     setViewMode(mode);
@@ -204,10 +214,7 @@ export const Index = () => {
           borderRadius: "3px",
         }}
       >
-        <Filter
-          handleFilter={handleGetData}
-          filter={filter}
-        />
+        <Filter handleFilter={handleGetData} filter={filter} />
       </Content>
       <TableData config={config} />
     </>

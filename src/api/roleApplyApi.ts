@@ -1,9 +1,12 @@
 import axiosClient from "@/config/httpCall";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { BaseResponse } from "@/model/BaseResponse";
-import { AuthorizeDataRequest } from "@/model/roleApply/AuthorizeDataRequest";
-import { RoleApplyRequest } from "@/model/roleApply/DeleteRoleApplyRequest";
-import { OptionAsSelect, RoleApplyDTO } from "@/model/roleApply/RoleApplyDTO";
+import { AuthorizeDataRequest } from "@/model/cms/roleApply/AuthorizeDataRequest";
+import { RoleApplyRequest } from "@/model/cms/roleApply/DeleteRoleApplyRequest";
+import {
+  OptionAsSelect,
+  RoleApplyDTO,
+} from "@/model/cms/roleApply/RoleApplyDTO";
 
 export interface GetRoleApplyFilter {
   roleId: number[];

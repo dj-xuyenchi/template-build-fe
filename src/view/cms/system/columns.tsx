@@ -2,14 +2,11 @@ import { InputCustom } from "@/component/InputCustom";
 import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
 import { formatDateWithDayVN } from "@/util/date/dateUtil";
-import {
-  getStatusLabel,
-  getStatusTag,
-} from "./Filter";
+import { getStatusLabel, getStatusTag } from "./Filter";
 import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
 import { SwitchCustom } from "@/component/SwitchCustom";
-import { SYSTEM_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
+import { SYSTEM_ACTIVE, SystemDTO } from "@/model/cms/system/SystemDTO";
 
 export type CallBacks = BaseTable & {
   handleSetSystemName: (row: SystemDTO, value: string) => void;
@@ -18,7 +15,7 @@ export type CallBacks = BaseTable & {
   handleSetStatus: (row: SystemDTO, value: boolean) => void;
 };
 
-export const getColumns = ({ }: CallBacks): ColumnTypeCustom<SystemDTO>[] => [
+export const getColumns = ({}: CallBacks): ColumnTypeCustom<SystemDTO>[] => [
   {
     title: "STT",
     dataIndex: "stt",
@@ -67,7 +64,7 @@ export const getColumns = ({ }: CallBacks): ColumnTypeCustom<SystemDTO>[] => [
     key: "status",
     width: 220,
     render: (value: string, record: SystemDTO, index: number) => (
-      <TagCustom type={getStatusTag(value)}>{getStatusLabel(value)}</TagCustom>
+      <TagCustom color={getStatusTag(value)}>{getStatusLabel(value)}</TagCustom>
     ),
     align: "center",
   },

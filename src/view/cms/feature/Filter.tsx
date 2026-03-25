@@ -8,8 +8,8 @@ import { DefaultOptionType } from "antd/es/select";
 import { useEffect, useState } from "react";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
-import { FeatureDTO } from "@/model/feature/FeatureDTO";
-import { SystemDTO } from "@/model/system/SystemDTO";
+import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
+import { SystemDTO } from "@/model/cms/system/SystemDTO";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {

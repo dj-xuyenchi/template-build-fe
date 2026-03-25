@@ -1,4 +1,4 @@
-import { BaseDataTable } from "../BaseDataTable";
+import { BaseDataTable } from "../../BaseDataTable";
 
 export interface RoleApplyDTO extends BaseDataTable {
   roleApplyId: number;
@@ -6,6 +6,8 @@ export interface RoleApplyDTO extends BaseDataTable {
   applyId: number;
   applyType: string;
   applyValue: string;
+  applyName: string;
+  roleName: string;
   effectiveType: string;
   effectiveFrom?: string;
   effectiveTo?: string;
@@ -16,7 +18,7 @@ export interface RoleApplyDTO extends BaseDataTable {
 }
 export interface OptionAsSelect {
   label: string;
-  value: string;
+  value: number;
 }
 export const ROLE_APPLY_ACTIVE = "ACTIVE";
 export const ROLE_APPLY_INACTIVE = "INACTIVE";

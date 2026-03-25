@@ -17,13 +17,14 @@ import {
   FEATURE_ACTIVE,
   FEATURE_ARCHIVE,
   FeatureDTO,
-} from "@/model/feature/FeatureDTO";
+} from "@/model/cms/feature/FeatureDTO";
 import {
   CreateFeatureRequestData,
   UpdateFeatureRequestData,
-} from "@/model/feature/AuditFeatureRequest";
+} from "@/model/cms/feature/AuditFeatureRequest";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
-import { SYSTEM_ACTIVE, SystemDTO } from "@/model/system/SystemDTO";
+import { GetFeatureRequest } from "@/model/cms/feature/GetFeatureRequest";
+import { SYSTEM_ACTIVE, SystemDTO } from "@/model/cms/system/SystemDTO";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: FeatureDTO[] });
@@ -230,7 +231,7 @@ export const Index = () => {
       ),
     }));
   };
-  
+
   const handleSetSortNumber = (row: FeatureDTO, value: number) => {
     setData((prev) => ({
       ...prev,
@@ -244,6 +245,7 @@ export const Index = () => {
 
   const triggerNewRow = (row: FeatureDTO) => {
     row.status = FEATURE_ACTIVE;
+    row.isMenu = false;
   };
   const handleQuickSearch = (keyword: string) => {
     setFilter({
@@ -326,7 +328,7 @@ export const Index = () => {
   } as TablePropsCustom<FeatureDTO>;
 
   const handleGetData = async (
-    params: GetRoleFilter,
+    params: GetFeatureRequest,
     signal: AbortSignal | null,
   ) => {
     try {
@@ -334,6 +336,7 @@ export const Index = () => {
       const res = await featureApi.getFeature(
         {
           ...params,
+          isTakeRoleApply: true,
         },
         signal as AbortSignal,
       );

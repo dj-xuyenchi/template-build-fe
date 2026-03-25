@@ -6,8 +6,8 @@ import { RoleDTO } from "@/model/cms/role/RoleDTO";
 import {
   ArchiveActiveRequest,
   AuditFeatureRequest,
-} from "@/model/feature/AuditFeatureRequest";
-import { FeatureDTO } from "@/model/feature/FeatureDTO";
+} from "@/model/cms/feature/AuditFeatureRequest";
+import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 export interface GetFeatureFilter {}
 export const featureApi = {
   getFeature: async (

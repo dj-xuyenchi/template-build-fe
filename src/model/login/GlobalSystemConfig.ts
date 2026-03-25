@@ -1,6 +1,6 @@
-import { FeatureDTO } from "../feature/FeatureDTO";
+import { FeatureDTO } from "../cms/feature/FeatureDTO";
 
 export interface GlobalSystemConfig {
-    features: FeatureDTO[];
-    uiPushCode: Map<string, string>;
+  features: FeatureDTO[];
+  uiPushCode: Map<string, string>;
 }

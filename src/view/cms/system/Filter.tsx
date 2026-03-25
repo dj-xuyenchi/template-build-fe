@@ -6,7 +6,7 @@ import { SelectCustom } from "@/component/SelectCustom";
 import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import { useEffect } from "react";
-import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { GetSystemFilter } from "@/api/systemApi";
 
 export const getStatusLabel = (value: string) => {

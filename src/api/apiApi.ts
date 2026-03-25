@@ -2,7 +2,7 @@ import axiosClient from "@/config/httpCall";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { BaseFilter } from "@/model/BaseFilter";
 import { BaseResponse } from "@/model/BaseResponse";
-import { CatApiDTO } from "@/view/cms/cat-api/CatApiDTO";
+import { CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
 export interface GetApiFilter extends BaseFilter {}
 export const apiApi = {
   getApi: async (

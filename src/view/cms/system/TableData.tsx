@@ -1,6 +1,6 @@
 import { TableCustom, TablePropsCustom } from "@/component/TableCustom";
+import { SystemDTO } from "@/model/cms/system/SystemDTO";
 import { Content } from "antd/es/layout/layout";
-import { SystemDTO } from "@/model/system/SystemDTO";
 
 type TableFunction = {
   config: TablePropsCustom<SystemDTO>;

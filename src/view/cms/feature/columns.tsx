@@ -19,12 +19,13 @@ import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { SwitchCustom } from "@/component/SwitchCustom";
 import { DatePickerCustom } from "@/component/DatepickerCustom";
 import dayjs from "dayjs";
-import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { ROLE_ARCHIVE } from "@/model/cms/role/RoleDTO";
-import { SystemDTO } from "@/model/system/SystemDTO";
 import { reactIconPool } from "@/config/icon/reactIconPool";
 import { getIcon } from "@/config/menu/menu";
 import { InputNumberCustom } from "@/component/InputNumberCustom";
+import { RoleApplyDTO } from "@/model/cms/roleApply/RoleApplyDTO";
+import { SystemDTO } from "@/model/cms/system/SystemDTO";
 
 export type CallBacks = BaseTable & {
   handleArchiveActiveRow: (row: FeatureDTO) => Promise<void>;
@@ -79,6 +80,35 @@ export const getColumns = ({
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
+  },
+  {
+    title: "Quyền truy cập",
+    dataIndex: "roleApply",
+    key: "roleApply",
+    align: "center",
+    width: 240,
+    render: (value: RoleApplyDTO[], record: FeatureDTO, index: number) => (
+      <>
+        {value && value.length > 0 ? (
+          value.map((r) => {
+            return (
+              <TagCustom
+                key={"cyan"}
+                color={"cyan"}
+                variant={"solid"}
+                style={{ marginRight: "4px" }}
+              >
+                {r.roleName}
+              </TagCustom>
+            );
+          })
+        ) : (
+          <TagCustom key={"orange"} color={"orange"} variant={"solid"}>
+            Chưa áp dụng quyền
+          </TagCustom>
+        )}
+      </>
+    ),
   },
   {
     title: "Key đường dẫn giao diện",
@@ -143,7 +173,7 @@ export const getColumns = ({
     key: "effectiveType",
     width: 200,
     render: (value: string, record: FeatureDTO, index: number) => (
-      <TagCustom type={getEffectiveTag(value, record)}>
+      <TagCustom color={getEffectiveTag(value, record)}>
         {getEffectiveLabel(value)}
       </TagCustom>
     ),
@@ -161,7 +191,6 @@ export const getColumns = ({
     ),
     align: "center",
   },
-
   {
     title: "Áp dụng đến",
     dataIndex: "effectiveTo",
@@ -183,9 +212,9 @@ export const getColumns = ({
     render: (value: boolean, record: FeatureDTO, index: number) => (
       <TableLabelCustom align="center">
         {value ? (
-          <TagCustom type="green">Là Menu</TagCustom>
+          <TagCustom color="green">Là Menu</TagCustom>
         ) : (
-          <TagCustom type="orange">Không phải menu</TagCustom>
+          <TagCustom color="orange">Không phải menu</TagCustom>
         )}
       </TableLabelCustom>
     ),
@@ -199,9 +228,9 @@ export const getColumns = ({
     render: (value: boolean, record: FeatureDTO, index: number) => (
       <TableLabelCustom align="center">
         {value ? (
-          <TagCustom type="green">Là menu dropdown</TagCustom>
+          <TagCustom color="green">Là menu dropdown</TagCustom>
         ) : (
-          <TagCustom type="orange">Không phải menu dropdown</TagCustom>
+          <TagCustom color="orange">Không phải menu dropdown</TagCustom>
         )}
       </TableLabelCustom>
     ),
@@ -223,7 +252,7 @@ export const getColumns = ({
     key: "status",
     width: 220,
     render: (value: string, record: FeatureDTO, index: number) => (
-      <TagCustom type={getStatusTag(value)}>{getStatusLabel(value)}</TagCustom>
+      <TagCustom color={getStatusTag(value)}>{getStatusLabel(value)}</TagCustom>
     ),
     align: "center",
   },
@@ -346,7 +375,6 @@ export const getColumnsEdit = ({
       />
     ),
   },
-  
   {
     title: "Mã chức năng",
     dataIndex: "featureCode",
@@ -365,6 +393,7 @@ export const getColumnsEdit = ({
       />
     ),
   },
+
   {
     title: "Key đường dẫn giao diện",
     dataIndex: "feUri",
@@ -436,7 +465,7 @@ export const getColumnsEdit = ({
         value={record.parentId}
         options={features.map((f) => {
           return {
-            label: f.featureName,
+            label: f.featureName + ` (${f.featureCode})`,
             value: f.featureId,
           };
         })}

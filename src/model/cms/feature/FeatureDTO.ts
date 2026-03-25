@@ -1,4 +1,5 @@
-import { BaseDataTable } from "../BaseDataTable";
+import { BaseDataTable } from "../../BaseDataTable";
+import { RoleApplyDTO } from "../roleApply/RoleApplyDTO";
 
 export interface FeatureDTO extends BaseDataTable {
   featureId: number;
@@ -23,10 +24,12 @@ export interface FeatureDTO extends BaseDataTable {
   sortNumber?: number;
   parentFeatureName?: string;
   systemName: string;
+  roleApply: RoleApplyDTO[];
 
   isErrorFeatureEffectiveType?: boolean;
   isErrorFeatureEffectiveFrom?: boolean;
   isErrorFeatureEffectiveTo?: boolean;
 }
+
 export const FEATURE_ACTIVE = "ACTIVE";
 export const FEATURE_ARCHIVE = "ARCHIVE";

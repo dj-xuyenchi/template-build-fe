@@ -2,8 +2,8 @@ import axiosClient from "@/config/httpCall";
 import { AUTHEN_SERVICE } from "@/constant/serviceUrl";
 import { BaseFilter } from "@/model/BaseFilter";
 import { BaseResponse } from "@/model/BaseResponse";
-import { AuditSystemData } from "@/model/system/AuditSystemData";
-import { SystemDTO } from "@/model/system/SystemDTO";
+import { AuditSystemData } from "@/model/cms/system/AuditSystemData";
+import { SystemDTO } from "@/model/cms/system/SystemDTO";
 export interface GetSystemFilter extends BaseFilter {
   systemName?: string;
   systemCode?: string;
@@ -21,10 +21,15 @@ export const systemApi = {
     });
     return res.data;
   },
-  auditSystem: async (request: AuditSystemData): Promise<BaseResponse<boolean>> => {
-    const res = await axiosClient.post(`${AUTHEN_SERVICE}/system/audit-system`, {
-      ...request,
-    });
+  auditSystem: async (
+    request: AuditSystemData,
+  ): Promise<BaseResponse<boolean>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/system/audit-system`,
+      {
+        ...request,
+      },
+    );
     return res.data;
-  }
+  },
 };

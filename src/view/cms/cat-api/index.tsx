@@ -27,10 +27,7 @@ import {
   GetRoleApplyFilter,
   roleApplyApi,
 } from "@/api/roleApplyApi";
-import {
-  OptionAsSelect,
-  RoleApplyDTO,
-} from "@/model/cms/roleApply/RoleApplyDTO";
+import { RoleApplyDTO } from "@/model/cms/roleApply/RoleApplyDTO";
 import { featureApi, GetFeatureFilter } from "@/api/featureApi";
 import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { TableProps } from "antd";
@@ -38,7 +35,10 @@ import { ButtonCustom } from "@/component/ButtonCustom";
 import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 import { GetGlobalConfigRequest, globalConfigApi } from "@/api/globalConfigApi";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
-import { AuthorizeDataRequest } from "@/model/cms/roleApply/AuthorizeDataRequest";
+import {
+  AuthorizeDataRequest,
+  RoleApplyCreate,
+} from "@/model/cms/roleApply/AuthorizeDataRequest";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
@@ -65,6 +65,24 @@ export const Index = () => {
   const modal = useGlobalModal();
   const controllerRef = useRef<AbortController | null>(null);
   const messageApi = getMessageInstance();
+  const handleArchiveActiveRow = async (row: RoleDTO) => {
+    if (!row.roleId) {
+      return;
+    }
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn ${row.status == ROLE_ACTIVE ? "lưu trữ" : "active lại"} quyền này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await roleApi.archiveActive({
+          id: row.roleId,
+        });
+        if (res.code && res.code !== "ERROR") {
+          handleGetData(filter);
+        }
+      },
+    });
+  };
 
   const addNewData = async () => {
     try {
@@ -146,17 +164,12 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetRole = (row: RoleApplyDTO, option: OptionAsSelect) => {
+  const handleSetRole = (row: RoleApplyDTO, value: number) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? {
-              ...item,
-              roleId: option.value,
-              roleName: option.label,
-              isEdited: true,
-            }
+          ? { ...item, roleId: value, isEdited: true }
           : item,
       ),
     }));
@@ -181,17 +194,12 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetApplyValue = (row: RoleApplyDTO, option: OptionAsSelect) => {
+  const handleSetApplyValue = (row: RoleApplyDTO, value: number) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? {
-              ...item,
-              applyId: option.value,
-              applyName: option.label,
-              isEdited: true,
-            }
+          ? { ...item, applyId: value, isEdited: true }
           : item,
       ),
     }));

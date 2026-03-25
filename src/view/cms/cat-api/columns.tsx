@@ -21,17 +21,14 @@ import { DatePickerCustom } from "@/component/DatepickerCustom";
 import dayjs from "dayjs";
 import { DDmmYYY, DDmmYYY_HHMMSS } from "@/constant/dateFormat";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
-import {
-  OptionAsSelect,
-  RoleApplyDTO,
-} from "@/model/cms/roleApply/RoleApplyDTO";
+import { RoleApplyDTO } from "@/model/cms/roleApply/RoleApplyDTO";
 import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 
 export type CallBacks = BaseTable & {
-  handleSetRole: (row: RoleApplyDTO, option: OptionAsSelect) => void;
+  handleSetRole: (row: RoleApplyDTO, value: number) => void;
   handleSetApplyType: (row: RoleApplyDTO, value: string) => void;
-  handleSetApplyValue: (row: RoleApplyDTO, option: OptionAsSelect) => void;
+  handleSetApplyValue: (row: RoleApplyDTO, value: number) => void;
   handleSetEffectiveType: (row: RoleApplyDTO, value: string) => void;
   handleSetEffectiveFrom: (
     row: RoleApplyDTO,
@@ -238,14 +235,8 @@ export const getColumnsEdit = ({
           };
         })}
         onChange={(e) => {
-          const objectRole = roleList?.find((o) => {
-            return o.roleId == e;
-          });
-
-          handleSetRole(record, {
-            value: objectRole?.roleId,
-            label: objectRole?.roleName + " (" + objectRole?.roleCode + ")",
-          } as OptionAsSelect);
+          const value = e;
+          handleSetRole(record, value);
         }}
       />
     ),
@@ -287,11 +278,8 @@ export const getColumnsEdit = ({
         value={record.isNewRow ? record.applyId : record.applyValue}
         options={record.optionApplyValue}
         onChange={(e) => {
-          const objectApply = record.optionApplyValue?.find((o) => {
-            return o.value == e;
-          });
-
-          handleSetApplyValue(record, objectApply as OptionAsSelect);
+          const value = e;
+          handleSetApplyValue(record, value);
         }}
       />
     ),

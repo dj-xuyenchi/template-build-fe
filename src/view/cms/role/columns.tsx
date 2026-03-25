@@ -115,7 +115,7 @@ export const getColumns = ({
     width: 220,
     render: (value: string, record: RoleDTO, index: number) => (
       <TableLabelCustom>
-        <TagCustom type={getStatusTag(value)}>
+        <TagCustom color={getStatusTag(value)}>
           {getStatusLabel(value)}
         </TagCustom>
       </TableLabelCustom>

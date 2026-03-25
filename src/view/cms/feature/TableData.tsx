@@ -1,6 +1,6 @@
 import { TableCustom, TablePropsCustom } from "@/component/TableCustom";
 import { Content } from "antd/es/layout/layout";
-import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 
 type TableFunction = {
   config: TablePropsCustom<FeatureDTO>;
@@ -16,10 +16,7 @@ export const TableData = ({ config }: TableFunction) => {
           borderRadius: "3px",
         }}
       >
-        <TableCustom
-          fixedCollap={true}
-          {...config}
-        />
+        <TableCustom fixedCollap={true} {...config} />
       </Content>
     </>
   );

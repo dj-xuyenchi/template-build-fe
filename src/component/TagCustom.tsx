@@ -1,15 +1,7 @@
 import "@/config/styleOverride.css";
 import { Tag, TagProps } from "antd";
-export interface TagPropsCustom extends TagProps {
-    type: 'green' | 'red' | 'orange'
-}
+export interface TagPropsCustom extends TagProps {}
 
-
-
-export const TagCustom = ({ type, ...restProps }: TagPropsCustom) => {
-    return (
-        <Tag color={type} {...restProps} />
-    );
+export const TagCustom = ({ ...restProps }: TagPropsCustom) => {
+  return <Tag {...restProps} />;
 };
-
-

@@ -56,7 +56,7 @@ import Image from "next/image";
 import logo from "../../public/logo.png";
 import logoMini from "../../public/logo-mini.png";
 import { LOGIN_URL } from "@/util/common-home/link";
-import { FeatureDTO } from "@/model/feature/FeatureDTO";
+import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { BaseResponse } from "@/model/BaseResponse";
 import { UserInformation } from "@/model/login/UserInformation";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;

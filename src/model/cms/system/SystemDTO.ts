@@ -1,4 +1,4 @@
-import { BaseDataTable } from "../BaseDataTable";
+import { BaseDataTable } from "@/model/BaseDataTable";
 
 export interface SystemDTO extends BaseDataTable {
   systemId: number;
