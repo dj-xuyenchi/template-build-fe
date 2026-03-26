@@ -246,12 +246,12 @@ export const Filter = ({
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
                         label="Trạng thái"
-                        name="stauts"
+                        name="status"
                         tooltip="Trạng thái dữ liệu"
                       >
                         <SelectCustom
                           placeholder="Chọn kiểu áp dụng dữ liệu"
-                          options={[...effectiveType]}
+                          options={[...statusSelect]}
                           onChange={handleOnchange}
                         />
                       </Form.Item>
