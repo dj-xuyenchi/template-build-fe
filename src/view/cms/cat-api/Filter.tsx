@@ -14,6 +14,7 @@ import { btnApi, GetBtnFilter } from "@/api/btnApi";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
 import { RoleDTO } from "@/model/cms/role/RoleDTO";
 import { GetRoleApplyFilter } from "@/api/roleApplyApi";
+import { InputCustom } from "@/component/InputCustom";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -79,87 +80,6 @@ export const Filter = ({
   const handleOnchangeRole = (value: number) => {
     console.error(value);
   };
-  const handleOnchange = async (value: string) => {
-    try {
-      setLoadingApplyValue(true);
-      switch (value) {
-        case "APPLY_FEATURE": {
-          const features = await featureApi.getFeature({});
-          if (features.code == "SUCCESS") {
-            setApplyValue(
-              features.data.map((f) => {
-                return {
-                  value: `${f.featureId}`,
-                  label: f.featureName,
-                };
-              }),
-            );
-          }
-          break;
-        }
-        case "APPLY_USER": {
-          const users = await sysUserApi.getUser({} as GetSystemUserFilter);
-          if (users.code == "SUCCESS") {
-            setApplyValue(
-              users.data.map((u) => {
-                return {
-                  value: `${u.userId}`,
-                  label: u.userName,
-                };
-              }),
-            );
-          }
-          break;
-        }
-        case "APPLY_API": {
-          const apis = await apiApi.getApi({} as GetApiFilter);
-          if (apis.code == "SUCCESS") {
-            setApplyValue(
-              apis.data.map((a) => {
-                return {
-                  value: `${a.apiId}`,
-                  label: a.apiName + `- ${a.uri} `,
-                };
-              }),
-            );
-          }
-          break;
-        }
-        case "APPLY_BTN": {
-          const btns = await btnApi.getBtn({} as GetBtnFilter);
-          if (btns.code == "SUCCESS") {
-            setApplyValue(
-              btns.data.map((b) => {
-                return {
-                  value: `${b.btnId}`,
-                  label: b.btnName + ` - ${b.btnCode}`,
-                };
-              }),
-            );
-          }
-          break;
-        }
-        case "APPLY_SYSTEM": {
-          const systems = await systemApi.getSystem({} as GetSystemFilter);
-          if (systems.code == "SUCCESS") {
-            setApplyValue(
-              systems.data.map((s) => {
-                return {
-                  value: `${s.systemId}`,
-                  label: s.systemName,
-                };
-              }),
-            );
-          }
-          break;
-        }
-        default: {
-        }
-      }
-    } finally {
-      setLoadingApplyValue(false);
-    }
-  };
 
   const handleClearFilter = () => {
     form.resetFields();
@@ -187,110 +107,44 @@ export const Filter = ({
                   <Row gutter={16}>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
-                        label="Quyền"
-                        name="roleId"
-                        tooltip="Quyền áp dụng"
+                        label="Tên API"
+                        name="apiName"
+                        tooltip="Tên API"
                       >
-                        <SelectCustom
-                          placeholder="Chọn quyền sẽ áp dụng cho dữ liệu"
-                          mode="multiple"
-                          options={roleList.map((r) => {
-                            return {
-                              label: r.roleName,
-                              value: r.roleId,
-                            };
-                          })}
-                          onChange={handleOnchangeRole}
-                        />
+                        <InputCustom placeholder="Tên API" />
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
-                        label="Kiểu áp dụng dữ liệu"
-                        name="applyType"
-                        tooltip="Kiểu áp dụng thời gian"
+                        label="Mã Code API"
+                        name="apiCode"
+                        tooltip="Mã Code API"
                       >
-                        <SelectCustom
-                          placeholder="Chọn kiểu áp dụng dữ liệu"
-                          options={[
-                            ...[...applyTypeList]
-                              .sort(
-                                (a, b) =>
-                                  (a.sortNumber ?? 0) - (b.sortNumber ?? 0),
-                              )
-                              .map((a) => {
-                                return {
-                                  value: a.globalConfigDataCode,
-                                  label: a.globalConfigDataName,
-                                };
-                              }),
-                          ]}
-                          onChange={handleOnchange}
-                        />
+                        <InputCustom placeholder="Mã Code API" />
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
-                        label="Dữ liệu áp dụng"
-                        name="applyValue"
-                        tooltip="Dữ liệu áp dụng"
+                        label="URI"
+                        tooltip="Đường dẫn endpoint đến server"
                       >
-                        <SelectCustom
-                          placeholder="Chọn dữ liệu áp dụng"
-                          options={[...applyValue]}
-                          loading={loadingApplyValue}
-                          onChange={handleOnchange}
-                        />
+                        <InputCustom placeholder="Đường dẫn endpoint đến server" />
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
-                        label="Trạng thái"
-                        name="stauts"
-                        tooltip="Trạng thái dữ liệu"
+                        label="Service hệ thống"
+                        tooltip="API thuộc service hệ thống nào"
                       >
-                        <SelectCustom
-                          placeholder="Chọn kiểu áp dụng dữ liệu"
-                          options={[...effectiveType]}
-                          onChange={handleOnchange}
-                        />
+                        <InputCustom placeholder="Đường dẫn endpoint đến server" />
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
-                        label="Kiểu áp dụng thời gian"
-                        name="effectiveType"
-                        tooltip="Kiểu áp dụng thời gian"
+                        label="Phương thức API"
+                        tooltip="API thuộc phương thức nào"
                       >
-                        <SelectCustom
-                          placeholder="Chọn kiểu áp dụng thời gian"
-                          options={[...effectiveType]}
-                          onChange={handleOnchange}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
-                      <Form.Item
-                        label="Áp dụng từ"
-                        name="effectiveFrom"
-                        tooltip="Áp dụng từ"
-                      >
-                        <DatePickerCustom
-                          placeholder="Chọn thời gian áp dụng từ"
-                          disabled={effectiveTypeValue != "E"}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
-                      <Form.Item
-                        label="Áp dụng đến"
-                        name="effectiveTo"
-                        tooltip="Áp dụng đến"
-                      >
-                        <DatePickerCustom
-                          placeholder="Chọn thời gian áp dụng đến"
-                          disabled={effectiveTypeValue != "E"}
-                        />
+                        <InputCustom placeholder="Đường dẫn endpoint đến server" />
                       </Form.Item>
                     </Col>
                   </Row>

@@ -27,7 +27,6 @@ import {
   GetRoleApplyFilter,
   roleApplyApi,
 } from "@/api/roleApplyApi";
-import { RoleApplyDTO } from "@/model/cms/roleApply/RoleApplyDTO";
 import { featureApi, GetFeatureFilter } from "@/api/featureApi";
 import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { TableProps } from "antd";
@@ -39,9 +38,11 @@ import {
   AuthorizeDataRequest,
   RoleApplyCreate,
 } from "@/model/cms/roleApply/AuthorizeDataRequest";
+import { CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
+import { apiApi, GetApiFilter } from "@/api/apiApi";
 
 export const Index = () => {
-  const [data, setData] = useState({} as { data: RoleApplyDTO[] });
+  const [data, setData] = useState({} as { data: CatApiDTO[] });
   const [roleData, setRoleData] = useState(new Map() as Map<number, RoleDTO>);
   const [roleList, setRoleList] = useState([] as RoleDTO[]);
   const [featureData, setFeatureData] = useState(
@@ -108,7 +109,7 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleSetEffectiveType = (row: RoleApplyDTO, value: string) => {
+  const handleSetEffectiveType = (row: CatApiDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -127,7 +128,7 @@ export const Index = () => {
     }));
   };
   const handleSetEffectiveFrom = (
-    row: RoleApplyDTO,
+    row: CatApiDTO,
     value: dayjs.Dayjs | null,
   ) => {
     setData((prev) => ({
@@ -140,10 +141,7 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetEffectiveTo = (
-    row: RoleApplyDTO,
-    value: dayjs.Dayjs | null,
-  ) => {
+  const handleSetEffectiveTo = (row: CatApiDTO, value: dayjs.Dayjs | null) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -153,7 +151,7 @@ export const Index = () => {
       ),
     }));
   };
-  const handleSetStatus = (row: RoleApplyDTO, value: string) => {
+  const handleSetStatus = (row: CatApiDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -164,7 +162,7 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetRole = (row: RoleApplyDTO, value: number) => {
+  const handleSetRole = (row: CatApiDTO, value: number) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -175,7 +173,7 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetApplyType = async (row: RoleApplyDTO, value: string) => {
+  const handleSetApplyType = async (row: CatApiDTO, value: string) => {
     const request = {} as GetOptionAsSelectRequest;
     request.applyType = value;
     const option = await roleApplyApi.optionAsSelect(request);
@@ -194,7 +192,7 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetApplyValue = (row: RoleApplyDTO, value: number) => {
+  const handleSetApplyValue = (row: CatApiDTO, value: number) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -205,7 +203,7 @@ export const Index = () => {
     }));
     return;
   };
-  const triggerNewRow = (row: RoleApplyDTO) => {
+  const triggerNewRow = (row: CatApiDTO) => {
     row.status = ROLE_ACTIVE;
     row.effectiveType = "NE";
     return true;
@@ -288,7 +286,7 @@ export const Index = () => {
       applyValueList,
     }),
     loading: isTableLoading,
-    dataSource: data.data as RoleApplyDTO[],
+    dataSource: data.data as CatApiDTO[],
     viewMode: viewMode,
     tableName: "Quản lý phân quyền",
     extendFunction: {
@@ -300,7 +298,7 @@ export const Index = () => {
       },
       toggleViewMode: toggleViewMode,
       disableAddData: !allowBtnCode("AUDIT_ROLE"),
-      handleUpdateDataSource: (data: RoleApplyDTO[]) => {
+      handleUpdateDataSource: (data: CatApiDTO[]) => {
         setData({ data: [...data] });
       },
       andOn: "table",
@@ -313,25 +311,7 @@ export const Index = () => {
       },
       extendComponents: [deleteBtn],
     },
-    rowSelection:
-      viewMode &&
-      ({
-        type: "checkbox",
-        onChange: (
-          selectedRowKeys: React.Key[],
-          selectedRows: RoleApplyDTO[],
-        ) => {
-          console.log("selected -> ", selectedRows);
-          const selectedIds = selectedRows.map((r) => {
-            return r.roleApplyId;
-          });
-          setCheckBoxSelectedData(selectedIds);
-        },
-        getCheckboxProps: (record: RoleApplyDTO) => ({
-          disabled: record.isNewRow,
-        }),
-      } as TableProps<RoleApplyDTO>["rowSelection"]),
-  } as TablePropsCustom<RoleApplyDTO>;
+  } as TablePropsCustom<CatApiDTO>;
 
   const handleGetRoleData = async () => {
     try {
@@ -362,10 +342,10 @@ export const Index = () => {
       controllerRef.current = controller;
 
       setIsTableLoading(true);
-      const res = await roleApplyApi.getRoleApply(
+      const res = await apiApi.getApi(
         {
           ...params,
-        },
+        } as GetApiFilter,
         controller.signal,
       );
       setFilter(params);

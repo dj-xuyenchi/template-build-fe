@@ -1,4 +1,6 @@
-export interface CatApiDTO {
+import { BaseDataTable } from "@/model/BaseDataTable";
+
+export interface CatApiDTO extends BaseDataTable {
   apiId: string;
   apiCode: string;
   apiName: string;
@@ -6,9 +8,7 @@ export interface CatApiDTO {
   uri: string;
   systemId: string;
   method: string;
-  createdAt: string;
   maker: string;
-  updatedAt: string;
   updatedBy: string;
   isWhiteEndPoint: string;
   status: string;
