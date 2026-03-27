@@ -250,7 +250,7 @@ export const Filter = ({
                         tooltip="Trạng thái dữ liệu"
                       >
                         <SelectCustom
-                          placeholder="Chọn kiểu áp dụng dữ liệu"
+                          placeholder="Chọn trạng thái"
                           options={[...statusSelect]}
                           onChange={handleOnchange}
                         />
