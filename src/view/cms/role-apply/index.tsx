@@ -226,6 +226,7 @@ export const Index = () => {
         });
         if (res.code == "SUCCESS") {
           handleGetData(filter);
+          setCheckBoxSelectedData([]);
         }
       },
     });

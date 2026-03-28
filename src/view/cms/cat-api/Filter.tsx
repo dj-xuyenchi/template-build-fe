@@ -4,17 +4,10 @@ import { FormCustom } from "@/component/FormCustom";
 import { SelectCustom } from "@/component/SelectCustom";
 import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
-import { useEffect, useState } from "react";
-import { DatePickerCustom } from "@/component/DatepickerCustom";
-import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
-import { featureApi } from "@/api/featureApi";
-import { GetSystemUserFilter, sysUserApi } from "@/api/sysUserApi";
-import { apiApi, GetApiFilter } from "@/api/apiApi";
-import { btnApi, GetBtnFilter } from "@/api/btnApi";
-import { GetSystemFilter, systemApi } from "@/api/systemApi";
-import { RoleDTO } from "@/model/cms/role/RoleDTO";
-import { GetRoleApplyFilter } from "@/api/roleApplyApi";
+import { useEffect } from "react";
+import { GetApiFilter } from "@/api/apiApi";
 import { InputCustom } from "@/component/InputCustom";
+import { SystemDTO } from "@/model/cms/system/SystemDTO";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -26,20 +19,6 @@ export const getStatusTag = (value: string) => {
     return item.value === value;
   })?.tag;
 };
-export const getEffectiveLabel = (value: string) => {
-  return effectiveType?.find((item) => {
-    return item.value === value;
-  })?.label;
-};
-export const getEffectiveTag = (value: string) => {
-  return effectiveType?.find((item) => {
-    return item.value === value;
-  })?.tag;
-};
-export const effectiveType: DefaultOptionType[] = [
-  { value: "NE", label: "Không áp dụng", tag: "green" },
-  { value: "E", label: "Áp dụng", tag: "blue" },
-];
 
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
@@ -49,43 +28,22 @@ const statusSelect: DefaultOptionType[] = [
 ];
 
 type FilterProps = {
-  handleFilter: (
-    params: GetRoleApplyFilter,
-    signal: AbortSignal | null,
-  ) => void;
-  filter: GetRoleApplyFilter;
-  applyTypeList: GlobalConfigData[];
-  roleList: RoleDTO[];
+  handleFilter: (params: GetApiFilter, signal: AbortSignal | null) => void;
+  filter: GetApiFilter;
+  systemList: SystemDTO[];
 };
-export const Filter = ({
-  handleFilter,
-  filter,
-  applyTypeList,
-  roleList,
-}: FilterProps) => {
+export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
   const [form] = Form.useForm();
-  const [applyValue, setApplyValue] = useState(
-    [] as { value: string; label: string }[],
-  );
-  const [loadingApplyValue, setLoadingApplyValue] = useState(false);
-  const onFinish = (value: GetRoleApplyFilter) => {
-    console.error(value);
-
+  const onFinish = (value: GetApiFilter) => {
     const params = {
       ...value,
     };
 
-    handleFilter(params as GetRoleApplyFilter, null);
+    handleFilter(params as GetApiFilter, null);
   };
-  const handleOnchangeRole = (value: number) => {
-    console.error(value);
-  };
-
   const handleClearFilter = () => {
     form.resetFields();
   };
-
-  const effectiveTypeValue = Form.useWatch("effectiveType", form);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -126,6 +84,7 @@ export const Filter = ({
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
                         label="URI"
+                        name="uri"
                         tooltip="Đường dẫn endpoint đến server"
                       >
                         <InputCustom placeholder="Đường dẫn endpoint đến server" />
@@ -134,9 +93,19 @@ export const Filter = ({
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
                         label="Service hệ thống"
-                        tooltip="API thuộc service hệ thống nào"
+                        tooltip="Chọn service API sẽ forward đến"
                       >
-                        <InputCustom placeholder="Đường dẫn endpoint đến server" />
+                        <SelectCustom
+                          placeholder="Chọn service hệ thống"
+                          options={[
+                            ...systemList?.map((s) => {
+                              return {
+                                label: s.systemName,
+                                value: s.systemId,
+                              };
+                            }),
+                          ]}
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>

@@ -1,19 +1,15 @@
-import { SelectCustom } from "@/component/SelectCustom";
 import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
-import { formatDate, formatDateWithDayVN } from "@/util/date/dateUtil";
-import {
-  effectiveType,
-  getEffectiveLabel,
-  getEffectiveTag,
-  getStatusLabel,
-  getStatusTag,
-} from "./Filter";
+import { formatDateWithDayVN } from "@/util/date/dateUtil";
+import { getStatusLabel, getStatusTag } from "./Filter";
 import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
 import { CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
+import { InputCustom } from "@/component/InputCustom";
 
-export type CallBacks = BaseTable & {};
+export type CallBacks = BaseTable & {
+  handleSetApiName: (row: CatApiDTO, value: string) => void;
+};
 
 export const getColumns = ({}: CallBacks): ColumnTypeCustom<CatApiDTO>[] => [
   {
@@ -32,7 +28,7 @@ export const getColumns = ({}: CallBacks): ColumnTypeCustom<CatApiDTO>[] => [
     title: "Tên API",
     dataIndex: "apiName",
     key: "apiName",
-    width: 280,
+    width: 200,
     render: (value: string, record: CatApiDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
@@ -42,7 +38,7 @@ export const getColumns = ({}: CallBacks): ColumnTypeCustom<CatApiDTO>[] => [
     title: "Mã code API",
     dataIndex: "apiCode",
     key: "apiCode",
-    width: 280,
+    width: 200,
     render: (value: string, record: CatApiDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
@@ -62,7 +58,7 @@ export const getColumns = ({}: CallBacks): ColumnTypeCustom<CatApiDTO>[] => [
     title: "URI",
     dataIndex: "uri",
     key: "uri",
-    width: 200,
+    width: 260,
     render: (value: string, record: CatApiDTO, index: number) => (
       <TableLabelCustom align="left">{value}</TableLabelCustom>
     ),
@@ -72,7 +68,7 @@ export const getColumns = ({}: CallBacks): ColumnTypeCustom<CatApiDTO>[] => [
     title: "Hệ thống",
     dataIndex: "systemName",
     key: "systemName",
-    width: 200,
+    width: 240,
     render: (value: string, record: CatApiDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
@@ -155,4 +151,32 @@ export const getColumns = ({}: CallBacks): ColumnTypeCustom<CatApiDTO>[] => [
   },
 ];
 
-export const getColumnsEdit = ({}: CallBacks) => [];
+export const getColumnsEdit = ({ handleSetApiName }: CallBacks) => [
+  {
+    title: "STT",
+    dataIndex: "stt",
+    key: "stt",
+    fixed: "left",
+    align: "center",
+    width: 80,
+    render: (value: string, record: CatApiDTO, index: number) => (
+      <TableLabelCustom>{index + 1}</TableLabelCustom>
+    ),
+  },
+  {
+    title: "Tên API",
+    dataIndex: "apiName",
+    key: "apiName",
+    align: "center",
+    width: 240,
+    render: (value: string, record: CatApiDTO, index: number) => (
+      <InputCustom
+        defaultValue={record.apiName}
+        onBlur={(e) => {
+          const value = e.target.value;
+          handleSetApiName(record, value);
+        }}
+      />
+    ),
+  },
+];

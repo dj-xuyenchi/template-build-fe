@@ -38,16 +38,15 @@ import {
   AuthorizeDataRequest,
   RoleApplyCreate,
 } from "@/model/cms/roleApply/AuthorizeDataRequest";
-import { CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
+import { API_ACTIVE, CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
 import { apiApi, GetApiFilter } from "@/api/apiApi";
+import { GetSystemFilter, systemApi } from "@/api/systemApi";
+import { SystemDTO } from "@/model/cms/system/SystemDTO";
+import { AuditApiRequest } from "@/model/cms/cat-api/AuditApiRequest";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: CatApiDTO[] });
-  const [roleData, setRoleData] = useState(new Map() as Map<number, RoleDTO>);
-  const [roleList, setRoleList] = useState([] as RoleDTO[]);
-  const [featureData, setFeatureData] = useState(
-    new Map() as Map<number, FeatureDTO>,
-  );
+  const [systems, setSystems] = useState([] as SystemDTO[]);
   const [applyTypeList, setApplyTypeList] = useState([] as GlobalConfigData[]);
   const [applyValueList, setApplyValueList] = useState(
     [] as {
@@ -58,11 +57,9 @@ export const Index = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     // status: ["ACTIVE"],
-  } as GetRoleApplyFilter);
+  } as GetApiFilter);
   const [viewMode, setViewMode] = useState(true);
-  const [checkBoxSelectedData, setCheckBoxSelectedData] = useState(
-    [] as number[],
-  );
+
   const modal = useGlobalModal();
   const controllerRef = useRef<AbortController | null>(null);
   const messageApi = getMessageInstance();
@@ -92,14 +89,14 @@ export const Index = () => {
         return item.isNewRow;
       });
       const updateDataList = data.data.filter((item) => {
-        return item.isEdited && item.roleApplyId;
+        return item.isEdited && item.apiId;
       });
 
       const request = {
         createData: newDataList,
         updateData: updateDataList,
-      } as AuthorizeDataRequest;
-      const res = await roleApplyApi.authorizeData(request);
+      } as AuditApiRequest;
+      const res = await apiApi.audit(request);
       if (res.code && res.code === "ERROR") {
       }
     } catch (e) {
@@ -109,47 +106,16 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleSetEffectiveType = (row: CatApiDTO, value: string) => {
+  const handleSetApiName = (row: CatApiDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorRoleEffectiveFrom: false,
-              isErrorRoleEffectiveTo: false,
-            }
-          : item,
-      ),
-    }));
-  };
-  const handleSetEffectiveFrom = (
-    row: CatApiDTO,
-    value: dayjs.Dayjs | null,
-  ) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, effectiveFrom: toDateSendBE(value), isEdited: true }
+          ? { ...item, apiName: value, isEdited: true }
           : item,
       ),
     }));
     return;
-  };
-  const handleSetEffectiveTo = (row: CatApiDTO, value: dayjs.Dayjs | null) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, effectiveTo: toDateSendBE(value), isEdited: true }
-          : item,
-      ),
-    }));
   };
   const handleSetStatus = (row: CatApiDTO, value: string) => {
     setData((prev) => ({
@@ -162,50 +128,8 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetRole = (row: CatApiDTO, value: number) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, roleId: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetApplyType = async (row: CatApiDTO, value: string) => {
-    const request = {} as GetOptionAsSelectRequest;
-    request.applyType = value;
-    const option = await roleApplyApi.optionAsSelect(request);
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? {
-              ...item,
-              applyType: value,
-              optionApplyValue: option.data || [],
-              isEdited: true,
-            }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetApplyValue = (row: CatApiDTO, value: number) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, applyId: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
   const triggerNewRow = (row: CatApiDTO) => {
-    row.status = ROLE_ACTIVE;
-    row.effectiveType = "NE";
+    row.status = API_ACTIVE;
     return true;
   };
   const handleQuickSearch = (keyword: string) => {
@@ -216,24 +140,6 @@ export const Index = () => {
     handleGetData({
       ...filter,
       keyword: keyword,
-    });
-  };
-  const handleDeleteBatch = () => {
-    modal.confirm({
-      title: "Xác nhận",
-      content: `Bạn có chắc muốn xóa phân quyền này không?`,
-      centered: true,
-      onOk: async () => {
-        if (checkBoxSelectedData && checkBoxSelectedData.length < 1) {
-          messageApi.warning("Chọn ít nhất 1 bản ghi dữ liệu!");
-        }
-        const res = await roleApplyApi.deleteRoleApply({
-          roleApplyIds: checkBoxSelectedData,
-        });
-        if (res.code == "SUCCESS") {
-          handleGetData(filter);
-        }
-      },
     });
   };
 
@@ -250,45 +156,14 @@ export const Index = () => {
       });
     },
   };
-  const columns = useMemo(() => {
-    return getColumns({
-      roleMap: roleData,
-      featureMap: featureData,
-    } as CallBacks);
-  }, [roleData, featureData]);
-  const deleteBtn = (
-    <>
-      <ButtonCustom
-        danger
-        title="Xóa dữ liệu"
-        style={{
-          marginLeft: "8px",
-        }}
-        icon={<AiFillDelete />}
-        disabled={checkBoxSelectedData.length < 1}
-        onClick={handleDeleteBatch}
-      />
-    </>
-  );
   const config = {
     pagination: pageConfig,
-    columns: columns,
-    columnsEdit: getColumnsEdit({
-      handleSetApplyValue,
-      handleSetApplyType,
-      handleSetRole,
-      handleSetEffectiveFrom,
-      handleSetEffectiveTo,
-      handleSetEffectiveType,
-      handleSetStatus,
-      roleList,
-      applyTypeList,
-      applyValueList,
-    }),
+    columns: getColumns({} as CallBacks),
+    columnsEdit: getColumnsEdit({ handleSetApiName }),
     loading: isTableLoading,
     dataSource: data.data as CatApiDTO[],
     viewMode: viewMode,
-    tableName: "Quản lý phân quyền",
+    tableName: "Quản lý API",
     extendFunction: {
       triggerNewRow: triggerNewRow,
       quickSearch: true,
@@ -308,31 +183,12 @@ export const Index = () => {
         addNewData().catch((e) => {
           throw e;
         });
+        return true;
       },
-      extendComponents: [deleteBtn],
     },
   } as TablePropsCustom<CatApiDTO>;
 
-  const handleGetRoleData = async () => {
-    try {
-      const res = await roleApi.getRole({} as GetRoleFilter);
-      const map = new Map(res.data.map((item) => [item.roleId, item]));
-      setRoleData(map);
-      setRoleList(res.data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  const handleGetFeatureData = async () => {
-    try {
-      const res = await featureApi.getFeature({} as GetFeatureFilter);
-      const map = new Map(res.data.map((item) => [item.featureId, item]));
-      setFeatureData(map);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  const handleGetData = async (params: GetRoleApplyFilter) => {
+  const handleGetData = async (params: GetApiFilter) => {
     try {
       // abort request cũ
       controllerRef.current?.abort();
@@ -345,13 +201,14 @@ export const Index = () => {
       const res = await apiApi.getApi(
         {
           ...params,
+          isTakeSystemName: true,
         } as GetApiFilter,
         controller.signal,
       );
       setFilter(params);
 
       setData({
-        data: orderByField(res.data, "roleApplyId"),
+        data: orderByField(res.data, "apiId"),
       });
     } catch (e) {
       console.error(e);
@@ -375,8 +232,6 @@ export const Index = () => {
   };
 
   useEffect(() => {
-    handleGetRoleData();
-    handleGetFeatureData();
     handleGetData({ ...filter });
     handleGetApplyType();
   }, []);
@@ -395,8 +250,7 @@ export const Index = () => {
         <Filter
           handleFilter={handleGetData}
           filter={filter}
-          roleList={roleList}
-          applyTypeList={applyTypeList}
+          systemList={systems}
         />
       </Content>
       <TableData config={config} />
