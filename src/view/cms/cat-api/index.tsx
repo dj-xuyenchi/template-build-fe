@@ -2,58 +2,25 @@ import { Content } from "antd/es/layout/layout";
 import { Filter } from "./Filter";
 import { TableData } from "./TableData";
 import { TablePropsCustom } from "@/component/TableCustom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
-import { AiFillDelete } from "react-icons/ai";
-import {
-  orderByCreatedAt,
-  orderByField,
-  orderByUpdatedAt,
-} from "@/util/orderBaseTableData";
+import { orderByField } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { ROLE_ACTIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
-import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
-import dayjs from "dayjs";
-import {
-  AuditRoleRequest,
-  CreateRoleRequestData,
-  UpdateRoleRequestData,
-} from "@/model/cms/role/AuditRoleRequest";
-import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
-import {
-  GetOptionAsSelectRequest,
-  GetRoleApplyFilter,
-  roleApplyApi,
-} from "@/api/roleApplyApi";
-import { featureApi, GetFeatureFilter } from "@/api/featureApi";
-import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
-import { TableProps } from "antd";
-import { ButtonCustom } from "@/component/ButtonCustom";
-import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
-import { GetGlobalConfigRequest, globalConfigApi } from "@/api/globalConfigApi";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
-import {
-  AuthorizeDataRequest,
-  RoleApplyCreate,
-} from "@/model/cms/roleApply/AuthorizeDataRequest";
 import { API_ACTIVE, CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
 import { apiApi, GetApiFilter } from "@/api/apiApi";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
-import { SystemDTO } from "@/model/cms/system/SystemDTO";
 import { AuditApiRequest } from "@/model/cms/cat-api/AuditApiRequest";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: CatApiDTO[] });
-  const [systems, setSystems] = useState([] as SystemDTO[]);
-  const [applyTypeList, setApplyTypeList] = useState([] as GlobalConfigData[]);
-  const [applyValueList, setApplyValueList] = useState(
-    [] as {
-      value: string;
-      label: string;
-    }[],
+  const [systemList, setSystemList] = useState(
+    [] as { label: string; value: number }[],
   );
+
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [filter, setFilter] = useState({
     // status: ["ACTIVE"],
@@ -117,19 +84,111 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetStatus = (row: CatApiDTO, value: string) => {
+  const handleSetApiCode = (row: CatApiDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, status: value, isEdited: true }
+          ? { ...item, apiCode: value, isEdited: true }
           : item,
       ),
     }));
     return;
   };
+  const handleSetApiDescription = (row: CatApiDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, apiDescription: value, isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const handleSetSystemId = (row: CatApiDTO, value: number) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, systemId: value, isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const handleSetIsWhiteEndPoint = (row: CatApiDTO, value: boolean) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, isWhiteEndPoint: value, isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const handleSetMethod = (row: CatApiDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, method: value, isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const handleSetUri = (row: CatApiDTO, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      data: prev.data.map((item) =>
+        item.rowUUID === row.rowUUID
+          ? { ...item, uri: value, isEdited: true }
+          : item,
+      ),
+    }));
+    return;
+  };
+  const handleInactiveRow = (row: CatApiDTO) => {
+    if (!row.apiId) {
+      return;
+    }
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn ngưng hoạt động API này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await apiApi.inactiveApi({
+          ids: [row.apiId],
+        });
+        if (res.code && res.code !== "ERROR") {
+          handleGetData(filter);
+        }
+      },
+    });
+  };
+  const handleActiveRow = (row: CatApiDTO) => {
+    if (!row.apiId) {
+      return;
+    }
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn kích hoạt API này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await apiApi.activeApi({
+          ids: [row.apiId],
+        });
+        if (res.code && res.code !== "ERROR") {
+          handleGetData(filter);
+        }
+      },
+    });
+  };
   const triggerNewRow = (row: CatApiDTO) => {
     row.status = API_ACTIVE;
+    row.isWhiteEndPoint = false;
     return true;
   };
   const handleQuickSearch = (keyword: string) => {
@@ -158,8 +217,19 @@ export const Index = () => {
   };
   const config = {
     pagination: pageConfig,
-    columns: getColumns({} as CallBacks),
-    columnsEdit: getColumnsEdit({ handleSetApiName }),
+    columns: getColumns({ handleInactiveRow, handleActiveRow } as CallBacks),
+    columnsEdit: getColumnsEdit({
+      handleSetApiName,
+      handleSetApiCode,
+      handleSetApiDescription,
+      handleSetSystemId,
+      handleSetIsWhiteEndPoint,
+      handleSetMethod,
+      handleSetUri,
+      handleInactiveRow,
+      handleActiveRow,
+      systemList,
+    }),
     loading: isTableLoading,
     dataSource: data.data as CatApiDTO[],
     viewMode: viewMode,
@@ -216,24 +286,27 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleGetApplyType = async () => {
+
+  const handleGetSystem = async () => {
     try {
-      const request = {
-        globalConfigCode: "APPLY_TYPE_ROLE",
-        isTakeGlobalConfigData: true,
-      } as GetGlobalConfigRequest;
-      const res = await globalConfigApi.getGlobalConfig(request);
-      if (res.code == "SUCCESS") {
-        setApplyTypeList(res.data.globalConfigData);
-      }
+      const res = await systemApi.getSystem({} as GetSystemFilter);
+
+      setSystemList(
+        res.data?.map((s) => {
+          return {
+            label: s.systemName,
+            value: s.systemId,
+          };
+        }),
+      );
     } catch (e) {
       console.error(e);
+    } finally {
     }
   };
-
   useEffect(() => {
+    handleGetSystem();
     handleGetData({ ...filter });
-    handleGetApplyType();
   }, []);
 
   return (
@@ -250,7 +323,7 @@ export const Index = () => {
         <Filter
           handleFilter={handleGetData}
           filter={filter}
-          systemList={systems}
+          systemList={systemList}
         />
       </Content>
       <TableData config={config} />

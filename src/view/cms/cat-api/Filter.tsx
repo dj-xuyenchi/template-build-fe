@@ -7,7 +7,6 @@ import { DefaultOptionType } from "antd/es/select";
 import { useEffect } from "react";
 import { GetApiFilter } from "@/api/apiApi";
 import { InputCustom } from "@/component/InputCustom";
-import { SystemDTO } from "@/model/cms/system/SystemDTO";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -20,6 +19,10 @@ export const getStatusTag = (value: string) => {
   })?.tag;
 };
 
+export const methodSelect: DefaultOptionType[] = [
+  { value: "GET", label: "GET" },
+  { value: "POST", label: "POST" },
+];
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
@@ -30,7 +33,7 @@ const statusSelect: DefaultOptionType[] = [
 type FilterProps = {
   handleFilter: (params: GetApiFilter, signal: AbortSignal | null) => void;
   filter: GetApiFilter;
-  systemList: SystemDTO[];
+  systemList: { label: string; value: number }[];
 };
 export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
   const [form] = Form.useForm();
@@ -94,26 +97,24 @@ export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
                       <Form.Item
                         label="Service hệ thống"
                         tooltip="Chọn service API sẽ forward đến"
+                        name={"systemId"}
                       >
                         <SelectCustom
                           placeholder="Chọn service hệ thống"
-                          options={[
-                            ...systemList?.map((s) => {
-                              return {
-                                label: s.systemName,
-                                value: s.systemId,
-                              };
-                            }),
-                          ]}
+                          options={systemList}
                         />
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
+                        name={"method"}
                         label="Phương thức API"
                         tooltip="API thuộc phương thức nào"
                       >
-                        <InputCustom placeholder="Đường dẫn endpoint đến server" />
+                        <SelectCustom
+                          placeholder="Chọn phương thức API"
+                          options={methodSelect}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>

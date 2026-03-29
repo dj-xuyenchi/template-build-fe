@@ -4,6 +4,7 @@ import { BaseFilter } from "@/model/BaseFilter";
 import { BaseResponse } from "@/model/BaseResponse";
 import { AuditApiRequest } from "@/model/cms/cat-api/AuditApiRequest";
 import { CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
+import { InactiveApiRequest } from "@/model/cms/cat-api/InactiveApiRequest";
 export interface GetApiFilter extends BaseFilter {
   isTakeSystemName?: boolean;
   apiName?: string;
@@ -25,11 +26,28 @@ export const apiApi = {
   },
   audit: async (
     params: AuditApiRequest,
-    signal?: AbortSignal,
   ): Promise<BaseResponse<CatApiDTO[]>> => {
-    const res = await axiosClient.post(`${AUTHEN_SERVICE}/cat-api/audit`, {
+    const res = await axiosClient.post(`${AUTHEN_SERVICE}/cat-api/audit-api`, {
       params: params,
-      signal: signal,
+    });
+    return res.data;
+  },
+  inactiveApi: async (
+    params: InactiveApiRequest,
+  ): Promise<BaseResponse<CatApiDTO[]>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/cat-api/inactive-api`,
+      {
+        params: params,
+      },
+    );
+    return res.data;
+  },
+  activeApi: async (
+    params: InactiveApiRequest,
+  ): Promise<BaseResponse<CatApiDTO[]>> => {
+    const res = await axiosClient.post(`${AUTHEN_SERVICE}/cat-api/active-api`, {
+      params: params,
     });
     return res.data;
   },

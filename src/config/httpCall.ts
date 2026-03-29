@@ -40,6 +40,7 @@ const refreshToken = async (): Promise<string> => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(TOKEN_EXPIRED_KEY);
+    messageApi.warning(res.data.message);
     window.location.href = LOGIN_URL;
     throw new Error("Refresh token failed");
   }
@@ -50,7 +51,10 @@ const refreshToken = async (): Promise<string> => {
   // Cập nhật localStorage
   localStorage.setItem(TOKEN_KEY, newToken);
   localStorage.setItem(TOKEN_EXPIRED_KEY, accessTokenExpiredAt);
-  messageApi.success(res.data.message);
+  // Bỏ hiển thị message nếu có, vì đây là thao tác refresh token ngầm
+  // messageApi.success(res.data.message);
+  console.info(res.data.message);
+
   return newToken;
 };
 // Interceptor cho request
