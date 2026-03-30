@@ -500,3 +500,7 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
+
+.ant-modal-container .ant-modal-body .ant-btn {
+    border-radius: 0px !important;
+}

@@ -40,6 +40,7 @@ export default function Login() {
               TOKEN_EXPIRED_KEY,
               String(loginRes.data.accessTokenExpiredAt),
             );
+
             // Chỗ này bắt buộc dùng href để nhảy để useEffect tổng chạy lại kiểm tra token load các api tiên quyết
             window.location.href = FE_ROOT || "/";
             return;

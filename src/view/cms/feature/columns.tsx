@@ -151,7 +151,7 @@ export const getColumns = ({
     title: "Chức năng cha",
     dataIndex: "parentFeatureName",
     key: "parentFeatureName",
-    width: 240,
+    width: 300,
     render: (value: string, record: FeatureDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
@@ -458,7 +458,7 @@ export const getColumnsEdit = ({
     dataIndex: "parentId",
     key: "parentId",
     align: "center",
-    width: 240,
+    width: 300,
     render: (value: string, record: FeatureDTO, index: number) => (
       <SelectCustom
         size="small"

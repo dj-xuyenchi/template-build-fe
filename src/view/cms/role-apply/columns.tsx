@@ -279,7 +279,7 @@ export const getColumnsEdit = ({
     dataIndex: "applyId",
     key: "applyId",
     align: "center",
-    width: 240,
+    width: 300,
     render: (value: string, record: RoleApplyDTO, index: number) => (
       <SelectCustom
         size="small"
