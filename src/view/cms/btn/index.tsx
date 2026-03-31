@@ -6,17 +6,18 @@ import { useEffect, useRef, useState } from "react";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 import { orderByField } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { ROLE_ACTIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
-import { API_ACTIVE, CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
 import { apiApi, GetApiFilter } from "@/api/apiApi";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
 import { AuditApiRequest } from "@/model/cms/cat-api/AuditApiRequest";
+import { btnApi, GetBtnFilter } from "@/api/btnApi";
+import { BTN_ACTIVE, BtnDTO } from "@/model/cms/btn/ButtonDTO";
+import { AuditBtnRequest } from "@/model/cms/btn/AuditBtnRequest";
 
 export const Index = () => {
-  const [data, setData] = useState({} as { data: CatApiDTO[] });
+  const [data, setData] = useState({} as { data: BtnDTO[] });
   const [systemList, setSystemList] = useState(
     [] as { label: string; value: number }[],
   );
@@ -30,17 +31,17 @@ export const Index = () => {
   const modal = useGlobalModal();
   const controllerRef = useRef<AbortController | null>(null);
   const messageApi = getMessageInstance();
-  const handleArchiveActiveRow = async (row: RoleDTO) => {
-    if (!row.roleId) {
+  const handleArchiveActiveRow = async (row: BtnDTO) => {
+    if (!row.btnId) {
       return;
     }
     modal.confirm({
       title: "Xác nhận",
-      content: `Bạn có chắc muốn ${row.status == ROLE_ACTIVE ? "lưu trữ" : "active lại"} quyền này không?`,
+      content: `Bạn có chắc muốn ${row.status == BTN_ACTIVE ? "lưu trữ" : "active lại"} quyền này không?`,
       centered: true,
       onOk: async () => {
         const res = await roleApi.archiveActive({
-          id: row.roleId,
+          id: row.btnId,
         });
         if (res.code && res.code !== "ERROR") {
           handleGetData(filter);
@@ -56,14 +57,14 @@ export const Index = () => {
         return item.isNewRow;
       });
       const updateDataList = data.data.filter((item) => {
-        return item.isEdited && item.apiId;
+        return item.isEdited && item.btnId;
       });
 
       const request = {
         createData: newDataList,
         updateData: updateDataList,
-      } as AuditApiRequest;
-      const res = await apiApi.audit(request);
+      } as AuditBtnRequest;
+      const res = await btnApi.audit(request);
       if (res.code && res.code === "ERROR") {
       }
     } catch (e) {
@@ -73,103 +74,42 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleSetApiName = (row: CatApiDTO, value: string) => {
+  const handleSetBtnName = (row: BtnDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, apiName: value, isEdited: true }
+          ? { ...item, btnName: value, isEdited: true }
           : item,
       ),
     }));
     return;
   };
-  const handleSetApiCode = (row: CatApiDTO, value: string) => {
+  const handleSetBtnCode = (row: BtnDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, apiCode: value, isEdited: true }
+          ? { ...item, btnCode: value, isEdited: true }
           : item,
       ),
     }));
     return;
   };
-  const handleSetApiDescription = (row: CatApiDTO, value: string) => {
+  const handleSetBtnDescription = (row: BtnDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, apiDescription: value, isEdited: true }
+          ? { ...item, btnDescription: value, isEdited: true }
           : item,
       ),
     }));
     return;
   };
-  const handleSetSystemId = (row: CatApiDTO, value: number) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, systemId: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetIsWhiteEndPoint = (row: CatApiDTO, value: boolean) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, isWhiteEndPoint: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetMethod = (row: CatApiDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, method: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetUri = (row: CatApiDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, uri: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleInactiveRow = (row: CatApiDTO) => {
-    if (!row.apiId) {
-      return;
-    }
-    modal.confirm({
-      title: "Xác nhận",
-      content: `Bạn có chắc muốn ngưng hoạt động API này không?`,
-      centered: true,
-      onOk: async () => {
-        const res = await apiApi.inactiveApi({
-          ids: [row.apiId],
-        });
-        if (res.code && res.code !== "ERROR") {
-          handleGetData(filter);
-        }
-      },
-    });
-  };
-  const handleActiveRow = (row: CatApiDTO) => {
-    if (!row.apiId) {
+
+  const handleInactiveActiveRow = (row: BtnDTO) => {
+    if (!row.btnId) {
       return;
     }
     modal.confirm({
@@ -177,8 +117,8 @@ export const Index = () => {
       content: `Bạn có chắc muốn kích hoạt API này không?`,
       centered: true,
       onOk: async () => {
-        const res = await apiApi.activeApi({
-          ids: [row.apiId],
+        const res = await btnApi.inactiveActive({
+          ids: [row.btnId],
         });
         if (res.code && res.code !== "ERROR") {
           handleGetData(filter);
@@ -186,9 +126,8 @@ export const Index = () => {
       },
     });
   };
-  const triggerNewRow = (row: CatApiDTO) => {
-    row.status = API_ACTIVE;
-    row.isWhiteEndPoint = false;
+  const triggerNewRow = (row: BtnDTO) => {
+    row.status = BTN_ACTIVE;
     return true;
   };
   const handleQuickSearch = (keyword: string) => {
@@ -217,21 +156,15 @@ export const Index = () => {
   };
   const config = {
     pagination: pageConfig,
-    columns: getColumns({ handleInactiveRow, handleActiveRow } as CallBacks),
+    columns: getColumns({ handleInactiveActiveRow } as CallBacks),
     columnsEdit: getColumnsEdit({
-      handleSetApiName,
-      handleSetApiCode,
-      handleSetApiDescription,
-      handleSetSystemId,
-      handleSetIsWhiteEndPoint,
-      handleSetMethod,
-      handleSetUri,
-      handleInactiveRow,
-      handleActiveRow,
+      handleSetBtnCode,
+      handleSetBtnDescription,
+      handleSetBtnName,
       systemList,
-    }),
+    } as CallBacks),
     loading: isTableLoading,
-    dataSource: data.data as CatApiDTO[],
+    dataSource: data.data as BtnDTO[],
     viewMode: viewMode,
     tableName: "Quản lý API",
     extendFunction: {
@@ -243,7 +176,7 @@ export const Index = () => {
       },
       toggleViewMode: toggleViewMode,
       disableAddData: !allowBtnCode("AUDIT_ROLE"),
-      handleUpdateDataSource: (data: CatApiDTO[]) => {
+      handleUpdateDataSource: (data: BtnDTO[]) => {
         setData({ data: [...data] });
       },
       andOn: "table",
@@ -256,7 +189,7 @@ export const Index = () => {
         return true;
       },
     },
-  } as TablePropsCustom<CatApiDTO>;
+  } as TablePropsCustom<BtnDTO>;
 
   const handleGetData = async (params: GetApiFilter) => {
     try {
@@ -268,17 +201,17 @@ export const Index = () => {
       controllerRef.current = controller;
 
       setIsTableLoading(true);
-      const res = await apiApi.getApi(
+      const res = await btnApi.getBtn(
         {
           ...params,
           isTakeSystemName: true,
-        } as GetApiFilter,
+        } as GetBtnFilter,
         controller.signal,
       );
       setFilter(params);
 
       setData({
-        data: orderByField(res.data, "apiId"),
+        data: orderByField(res.data, "btnId"),
       });
     } catch (e) {
       console.error(e);

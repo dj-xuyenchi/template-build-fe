@@ -1,12 +1,12 @@
 import { ButtonCustom } from "@/component/ButtonCustom";
 import { CollapseCustom } from "@/component/CollapseCustom";
 import { FormCustom } from "@/component/FormCustom";
-import { SelectCustom } from "@/component/SelectCustom";
 import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import { useEffect } from "react";
-import { GetApiFilter } from "@/api/apiApi";
 import { InputCustom } from "@/component/InputCustom";
+import { GetBtnFilter } from "@/api/btnApi";
+import { SelectCustom } from "@/component/SelectCustom";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -18,31 +18,25 @@ export const getStatusTag = (value: string) => {
     return item.value === value;
   })?.tag;
 };
-
-export const methodSelect: DefaultOptionType[] = [
-  { value: "GET", label: "GET" },
-  { value: "POST", label: "POST" },
-];
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
   { value: "IN_ACTIVE", label: "Tạm ngưng hoạt động", tag: "warning" },
-  { value: "DELETED", label: "Đã xóa", tag: "red" },
 ];
 
 type FilterProps = {
-  handleFilter: (params: GetApiFilter, signal: AbortSignal | null) => void;
-  filter: GetApiFilter;
+  handleFilter: (params: GetBtnFilter, signal: AbortSignal | null) => void;
+  filter: GetBtnFilter;
   systemList: { label: string; value: number }[];
 };
 export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
   const [form] = Form.useForm();
-  const onFinish = (value: GetApiFilter) => {
+  const onFinish = (value: GetBtnFilter) => {
     const params = {
       ...value,
     };
 
-    handleFilter(params as GetApiFilter, null);
+    handleFilter(params as GetBtnFilter, null);
   };
   const handleClearFilter = () => {
     form.resetFields();
@@ -68,52 +62,32 @@ export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
                   <Row gutter={16}>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
-                        label="Tên API"
-                        name="apiName"
-                        tooltip="Tên API"
+                        label="Tên nút"
+                        name="btnName"
+                        tooltip="Tên nút"
                       >
-                        <InputCustom placeholder="Tên API" />
+                        <InputCustom placeholder="Tên nút" />
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
                       <Form.Item
-                        label="Mã Code API"
-                        name="apiCode"
-                        tooltip="Mã Code API"
+                        label="Mã Code nút"
+                        name="btnCode"
+                        tooltip="Mã Code nút"
                       >
-                        <InputCustom placeholder="Mã Code API" />
+                        <InputCustom placeholder="Mã Code nút" />
                       </Form.Item>
-                    </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
+                    </Col>{" "}
+                    <Col span={12} md={12} lg={6} xl={6}>
                       <Form.Item
-                        label="URI"
-                        name="uri"
-                        tooltip="Đường dẫn endpoint đến server"
-                      >
-                        <InputCustom placeholder="Đường dẫn endpoint đến server" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
-                      <Form.Item
-                        label="Service hệ thống"
-                        tooltip="Chọn service API sẽ forward đến"
-                        name={"systemId"}
+                        label="Trạng thái"
+                        name="status"
+                        tooltip="Trạng thái cần tìm"
                       >
                         <SelectCustom
-                          placeholder="Chọn service hệ thống"
-                          options={systemList}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12} md={8} lg={6} xl={6}>
-                      <Form.Item
-                        name={"method"}
-                        label="Phương thức API"
-                        tooltip="API thuộc phương thức nào"
-                      >
-                        <SelectCustom
-                          placeholder="Chọn phương thức API"
-                          options={methodSelect}
+                          mode="multiple"
+                          placeholder="Chọn trạng thái"
+                          options={[...statusSelect]}
                         />
                       </Form.Item>
                     </Col>

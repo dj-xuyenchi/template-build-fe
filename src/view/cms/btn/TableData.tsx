@@ -1,9 +1,9 @@
 import { TableCustom, TablePropsCustom } from "@/component/TableCustom";
+import { BtnDTO } from "@/model/cms/btn/ButtonDTO";
 import { Content } from "antd/es/layout/layout";
-import { CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
 
 type TableFunction = {
-  config: TablePropsCustom<CatApiDTO>;
+  config: TablePropsCustom<BtnDTO>;
 };
 export const TableData = ({ config }: TableFunction) => {
   return (

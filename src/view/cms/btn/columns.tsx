@@ -1,119 +1,66 @@
 import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
 import { formatDateWithDayVN } from "@/util/date/dateUtil";
-import { getStatusLabel, getStatusTag, methodSelect } from "./Filter";
+import { getStatusLabel, getStatusTag } from "./Filter";
 import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
-import {
-  API_ACTIVE,
-  API_INACTIVE,
-  CatApiDTO,
-} from "@/model/cms/cat-api/CatApiDTO";
 import { InputCustom } from "@/component/InputCustom";
 import { TextAreaCustom } from "@/component/TextAreaCustom";
-import { SelectCustom } from "@/component/SelectCustom";
-import { SwitchCustom } from "@/component/SwitchCustom";
+
+import { BTN_ACTIVE, BTN_IN_ACTIVE, BtnDTO } from "@/model/cms/btn/ButtonDTO";
 import { ArchiveBtn } from "@/component/table-btn/ArchiveBtn";
-import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
+import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 
 export type CallBacks = BaseTable & {
-  handleSetApiName: (row: CatApiDTO, value: string) => void;
-  handleSetApiCode: (row: CatApiDTO, value: string) => void;
-  handleSetApiDescription: (row: CatApiDTO, value: string) => void;
-  handleSetSystemId: (row: CatApiDTO, value: number) => void;
-  handleSetIsWhiteEndPoint: (row: CatApiDTO, value: boolean) => void;
-  handleSetMethod: (row: CatApiDTO, value: string) => void;
-  handleSetUri: (row: CatApiDTO, value: string) => void;
-  handleInactiveRow: (row: CatApiDTO) => void;
-  handleActiveRow: (row: CatApiDTO) => void;
+  handleSetBtnName: (row: BtnDTO, value: string) => void;
+  handleSetBtnCode: (row: BtnDTO, value: string) => void;
+  handleSetBtnDescription: (row: BtnDTO, value: string) => void;
+  handleInactiveActiveRow: (row: BtnDTO) => void;
   systemList: { label: string; value: number }[];
 };
 
 export const getColumns = ({
-  handleInactiveRow,
-  handleActiveRow,
-}: CallBacks): ColumnTypeCustom<CatApiDTO>[] => [
+  handleInactiveActiveRow,
+}: CallBacks): ColumnTypeCustom<BtnDTO>[] => [
   {
     title: "STT",
     dataIndex: "stt",
     key: "stt",
     fixed: "left",
     width: 80,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
     ),
     align: "center",
   },
-
   {
-    title: "Tên API",
-    dataIndex: "apiName",
-    key: "apiName",
+    title: "Tên nút",
+    dataIndex: "btnName",
+    key: "btnName",
     width: 200,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
   },
   {
-    title: "Mã code API",
-    dataIndex: "apiCode",
-    key: "apiCode",
+    title: "Mã code nút",
+    dataIndex: "btnCode",
+    key: "btnCode",
     width: 200,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
   },
   {
-    title: "Mô tả API",
-    dataIndex: "apiDescription",
-    key: "apiDescription",
+    title: "Mô tả nút",
+    dataIndex: "btnDescription",
+    key: "btnDescription",
     width: 260,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
-    ),
-    align: "center",
-  },
-  {
-    title: "URI",
-    dataIndex: "uri",
-    key: "uri",
-    width: 260,
-    render: (value: string, record: CatApiDTO, index: number) => (
-      <TableLabelCustom align="left">{value}</TableLabelCustom>
-    ),
-    align: "center",
-  },
-  {
-    title: "Hệ thống",
-    dataIndex: "systemName",
-    key: "systemName",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
-      <TableLabelCustom>{value}</TableLabelCustom>
-    ),
-    align: "center",
-  },
-
-  {
-    title: "Phương thức",
-    dataIndex: "method",
-    key: "method",
-    width: 200,
-    render: (value: string, record: CatApiDTO, index: number) => (
-      <TableLabelCustom>{value}</TableLabelCustom>
-    ),
-    align: "center",
-  },
-  {
-    title: "Yêu cầu xác thực",
-    dataIndex: "isWhiteEndPoint",
-    key: "isWhiteEndPoint",
-    width: 200,
-    render: (value: boolean, record: CatApiDTO, index: number) => (
-      <TableLabelCustom>{value ? "Có" : "Không"}</TableLabelCustom>
     ),
     align: "center",
   },
@@ -122,7 +69,7 @@ export const getColumns = ({
     dataIndex: "status",
     key: "status",
     width: 220,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>
         <TagCustom color={getStatusTag(value)}>
           {getStatusLabel(value)}
@@ -136,7 +83,7 @@ export const getColumns = ({
     dataIndex: "maker",
     key: "maker",
     width: 160,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -146,7 +93,7 @@ export const getColumns = ({
     dataIndex: "createdAt",
     key: "createdAt",
     width: 200,
-    render: (value: Date, record: CatApiDTO, index: number) => (
+    render: (value: Date, record: BtnDTO, index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
     align: "center",
@@ -156,7 +103,7 @@ export const getColumns = ({
     dataIndex: "updatedBy",
     key: "updatedBy",
     width: 160,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -166,7 +113,7 @@ export const getColumns = ({
     dataIndex: "updatedAt",
     key: "updatedAt",
     width: 200,
-    render: (value: Date, record: CatApiDTO, index: number) => (
+    render: (value: Date, record: BtnDTO, index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
     align: "center",
@@ -177,25 +124,25 @@ export const getColumns = ({
     key: "action",
     width: 100,
     fixed: "right",
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <div
         style={{
           padding: "8px 11px",
         }}
       >
-        {record.status === API_ACTIVE && (
+        {record.status === BTN_ACTIVE && (
           <ArchiveBtn
             disable={!allowBtnCode("ARCHIVE_ROLE")}
             handleArchive={() => {
-              handleInactiveRow(record);
+              handleInactiveActiveRow(record);
             }}
           />
-        )}{" "}
-        {record.status === API_INACTIVE && (
+        )}
+        {record.status === BTN_IN_ACTIVE && (
           <ReOpenBtn
             disable={!allowBtnCode("ACTIVE_ROLE")}
             handleReopen={() => {
-              handleActiveRow(record);
+              handleInactiveActiveRow(record);
             }}
           />
         )}
@@ -206,15 +153,9 @@ export const getColumns = ({
 ];
 
 export const getColumnsEdit = ({
-  handleSetApiName,
-  handleSetApiCode,
-  handleSetApiDescription,
-  handleSetSystemId,
-  handleSetIsWhiteEndPoint,
-  handleSetMethod,
-  handleSetUri,
-  handleInactiveRow,
-  handleActiveRow,
+  handleSetBtnName,
+  handleSetBtnCode,
+  handleSetBtnDescription,
   systemList,
 }: CallBacks) => [
   {
@@ -224,128 +165,112 @@ export const getColumnsEdit = ({
     fixed: "left",
     align: "center",
     width: 80,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    render: (value: string, record: BtnDTO, index: number) => (
       <TableLabelCustom>{index + 1}</TableLabelCustom>
     ),
   },
   {
-    title: "Tên API",
-    dataIndex: "apiName",
-    key: "apiName",
-    align: "center",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    title: "Tên nút",
+    dataIndex: "btnName",
+    key: "btnName",
+    width: 200,
+    render: (value: string, record: BtnDTO, index: number) => (
       <InputCustom
-        defaultValue={record.apiName}
+        defaultValue={record.btnName}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetApiName(record, value);
+          handleSetBtnName(record, value);
         }}
       />
     ),
+    align: "center",
   },
   {
-    title: "Mã code API",
-    dataIndex: "apiCode",
-    key: "apiCode",
-    align: "center",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    title: "Mã code nút",
+    dataIndex: "btnCode",
+    key: "btnCode",
+    width: 200,
+    render: (value: string, record: BtnDTO, index: number) => (
       <InputCustom
         disabled={!record.isNewRow}
-        defaultValue={record.apiCode}
+        defaultValue={record.btnCode}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetApiCode(record, value);
+          handleSetBtnCode(record, value);
         }}
       />
     ),
+    align: "center",
   },
   {
-    title: "Mô tả API",
-    dataIndex: "apiDescription",
-    key: "apiDescription",
-    align: "center",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
+    title: "Mô tả nút",
+    dataIndex: "btnDescription",
+    key: "btnDescription",
+    width: 260,
+    render: (value: string, record: BtnDTO, index: number) => (
       <TextAreaCustom
         rows={1}
-        defaultValue={record.apiDescription}
+        defaultValue={record.btnDescription}
         onBlur={(e) => {
           const value = e.target.value;
-          handleSetApiDescription(record, value);
+          handleSetBtnDescription(record, value);
         }}
       />
     ),
+    align: "center",
   },
   {
-    title: "URI",
-    dataIndex: "uri",
-    key: "uri",
-    align: "center",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
-      <InputCustom
-        defaultValue={record.uri}
-        onBlur={(e) => {
-          const value = e.target.value;
-          handleSetUri(record, value);
-        }}
-      />
+    title: "Trạng thái",
+    dataIndex: "status",
+    key: "status",
+    width: 220,
+    render: (value: string, record: BtnDTO, index: number) => (
+      <TableLabelCustom>
+        <TagCustom color={getStatusTag(value)}>
+          {getStatusLabel(value)}
+        </TagCustom>
+      </TableLabelCustom>
     ),
+    align: "center",
   },
   {
-    title: "Hệ thống",
-    dataIndex: "systemId",
-    key: "systemId",
-    align: "center",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
-      <SelectCustom
-        size="small"
-        value={record.systemId}
-        options={systemList}
-        onChange={(e) => {
-          const value = e;
-          handleSetSystemId(record, value);
-        }}
-      />
+    title: "Người tạo",
+    dataIndex: "maker",
+    key: "maker",
+    width: 160,
+    render: (value: string, record: BtnDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
     ),
+    align: "center",
   },
   {
-    title: "Phương thức",
-    dataIndex: "method",
-    key: "method",
-    align: "center",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
-      <SelectCustom
-        size="small"
-        value={record.method}
-        options={methodSelect}
-        onChange={(e) => {
-          const value = e;
-          handleSetMethod(record, value);
-        }}
-      />
+    title: "Ngày tạo",
+    dataIndex: "createdAt",
+    key: "createdAt",
+    width: 200,
+    render: (value: Date, record: BtnDTO, index: number) => (
+      <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
+    align: "center",
   },
   {
-    title: "Yêu cầu xác thực",
-    dataIndex: "isWhiteEndPoint",
-    key: "isWhiteEndPoint",
-    align: "center",
-    width: 240,
-    render: (value: string, record: CatApiDTO, index: number) => (
-      <>
-        <SwitchCustom
-          size="small"
-          defaultValue={record.isWhiteEndPoint}
-          onChange={(e) => {
-            handleSetIsWhiteEndPoint(record, e);
-          }}
-        />
-      </>
+    title: "Người cập nhật",
+    dataIndex: "updatedBy",
+    key: "updatedBy",
+    width: 160,
+    render: (value: string, record: BtnDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
     ),
+    align: "center",
+  },
+  {
+    title: "Ngày cập nhật",
+    dataIndex: "updatedAt",
+    key: "updatedAt",
+    width: 200,
+    render: (value: Date, record: BtnDTO, index: number) => (
+      <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
+    ),
+    align: "center",
   },
 ];
