@@ -136,7 +136,7 @@ export const getColumns = ({
     title: "Ngày tạo",
     dataIndex: "createdAt",
     key: "createdAt",
-    width: 160,
+    width: 220,
     render: (value: Date, record: RoleDTO, index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),

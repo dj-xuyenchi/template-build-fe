@@ -314,7 +314,7 @@ export const Index = () => {
         handleGetData(filter, null);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !allowBtnCode("AUDIT_ROLE"),
+      disableAddData: !allowBtnCode("AUDIT_FEATURE"),
       handleUpdateDataSource: (data: []) => {
         setData({ data: [...data] });
       },

@@ -79,10 +79,10 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              status: value ? SYSTEM_ACTIVE : SYSTEM_IN_ACTIVE,
-              isEdited: true,
-            }
+            ...item,
+            status: value ? SYSTEM_ACTIVE : SYSTEM_IN_ACTIVE,
+            isEdited: true,
+          }
           : item,
       ),
     }));
@@ -155,7 +155,7 @@ export const Index = () => {
         handleGetData(filter, null);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !allowBtnCode("AUDIT_ROLE"),
+      disableAddData: !allowBtnCode("AUDIT_SYSTEM"),
       handleUpdateDataSource: (data: []) => {
         setData({ data: [...data] });
       },

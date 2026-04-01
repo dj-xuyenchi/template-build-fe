@@ -6,20 +6,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CallBacks, getColumns, getColumnsEdit } from "./columns";
 import { AiFillDelete } from "react-icons/ai";
 import {
-  orderByCreatedAt,
   orderByField,
-  orderByUpdatedAt,
 } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { ROLE_ACTIVE, RoleDTO } from "@/model/cms/role/RoleDTO";
 import { roleApi } from "@/api/roleApi";
 import { GetRoleFilter } from "@/model/cms/role/GetRoleFilter";
 import dayjs from "dayjs";
-import {
-  AuditRoleRequest,
-  CreateRoleRequestData,
-  UpdateRoleRequestData,
-} from "@/model/cms/role/AuditRoleRequest";
+
 import { toDateSendBE } from "@/util/date/dateUtil";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import {
@@ -96,14 +90,14 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              effectiveType: value,
-              isEdited: true,
-              effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
-              effectiveTo: value == "NE" ? undefined : item.effectiveTo,
-              isErrorRoleEffectiveFrom: false,
-              isErrorRoleEffectiveTo: false,
-            }
+            ...item,
+            effectiveType: value,
+            isEdited: true,
+            effectiveFrom: value == "NE" ? undefined : item.effectiveFrom,
+            effectiveTo: value == "NE" ? undefined : item.effectiveTo,
+            isErrorRoleEffectiveFrom: false,
+            isErrorRoleEffectiveTo: false,
+          }
           : item,
       ),
     }));
@@ -152,33 +146,81 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              roleId: option.value,
-              roleName: option.label,
-              isEdited: true,
-            }
+            ...item,
+            roleId: option.value,
+            roleName: option.label,
+            isEdited: true,
+          }
           : item,
       ),
     }));
     return;
   };
+  const handleDeleteRow = (row: RoleApplyDTO) => {
+    if (row.isNewRow) {
+      setData((prev) => ({
+        ...prev,
+        data: prev.data.filter((item) => item.rowUUID !== row.rowUUID),
+      }));
+      return;
+    }
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn xóa phân quyền này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await roleApplyApi.deleteRoleApply({
+          roleApplyIds: [row.roleApplyId as number],
+        });
+        if (res.code == "SUCCESS") {
+          handleGetData(filter);
+        }
+      },
+    });
+  }
   const handleSetApplyType = async (row: RoleApplyDTO, value: string) => {
-    const request = {} as GetOptionAsSelectRequest;
-    request.applyType = value;
-    const option = await roleApplyApi.optionAsSelect(request);
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? {
+    try {
+      setData((prev) => ({
+        ...prev,
+        data: prev.data.map((item) =>
+          item.rowUUID === row.rowUUID
+            ? {
+              ...item,
+              isLoadingOption: true
+            }
+            : item,
+        ),
+      }));
+      const request = {} as GetOptionAsSelectRequest;
+      request.applyType = value;
+      const option = await roleApplyApi.optionAsSelect(request);
+      setData((prev) => ({
+        ...prev,
+        data: prev.data.map((item) =>
+          item.rowUUID === row.rowUUID
+            ? {
               ...item,
               applyType: value,
               optionApplyValue: option.data || [],
               isEdited: true,
             }
-          : item,
-      ),
-    }));
+            : item,
+        ),
+      }));
+    } finally {
+      setData((prev) => ({
+        ...prev,
+        data: prev.data.map((item) =>
+          item.rowUUID === row.rowUUID
+            ? {
+              ...item,
+              isLoadingOption: false
+            }
+            : item,
+        ),
+      }));
+    }
+
     return;
   };
   const handleSetApplyValue = (row: RoleApplyDTO, option: OptionAsSelect) => {
@@ -187,11 +229,11 @@ export const Index = () => {
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
           ? {
-              ...item,
-              applyId: option.value,
-              applyName: option.label,
-              isEdited: true,
-            }
+            ...item,
+            applyId: option.value,
+            applyName: option.label,
+            isEdited: true,
+          }
           : item,
       ),
     }));
@@ -247,8 +289,8 @@ export const Index = () => {
   };
   const columns = useMemo(() => {
     return getColumns({
+      handleDeleteRow,
       roleMap: roleData,
-      featureMap: featureData,
     } as CallBacks);
   }, [roleData, featureData]);
   const deleteBtn = (
@@ -260,7 +302,7 @@ export const Index = () => {
           marginLeft: "8px",
         }}
         icon={<AiFillDelete />}
-        disabled={checkBoxSelectedData.length < 1}
+        disabled={checkBoxSelectedData.length < 1 || !allowBtnCode("DELETE_ROLE_APPLY")}
         onClick={handleDeleteBatch}
       />
     </>
@@ -276,6 +318,7 @@ export const Index = () => {
       handleSetEffectiveTo,
       handleSetEffectiveType,
       handleSetStatus,
+      handleDeleteRow,
       roleList,
       applyTypeList,
       applyValueList,
@@ -292,7 +335,7 @@ export const Index = () => {
         handleGetData(filter);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !allowBtnCode("AUDIT_ROLE"),
+      disableAddData: !allowBtnCode("AUDIT_ROLE_APPLY"),
       handleUpdateDataSource: (data: RoleApplyDTO[]) => {
         setData({ data: [...data] });
       },

@@ -446,8 +446,8 @@ export const TableCustom = <T extends BaseDataTable>({
                   locale={
                     loading
                       ? {
-                          emptyText: <div style={{ height: HEIGHT_LOADING }} />,
-                        }
+                        emptyText: <div style={{ height: HEIGHT_LOADING }} />,
+                      }
                       : undefined
                   }
                   style={{ ...style }}
@@ -631,7 +631,7 @@ export const TableCustom = <T extends BaseDataTable>({
                       {!isEditAddBtn && (
                         <ButtonCustom
                           icon={<FaPlus />}
-                          disabled={loading as boolean | undefined}
+                          disabled={extendFunction.disableAddData || (loading as boolean | undefined)}
                           size={extendFunction.size || "middle"}
                           title={
                             extendFunction.buttonAddTitle || "Chỉnh sửa tạo mới"

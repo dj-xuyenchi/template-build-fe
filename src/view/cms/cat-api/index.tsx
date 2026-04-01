@@ -242,7 +242,7 @@ export const Index = () => {
         handleGetData(filter);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !allowBtnCode("AUDIT_ROLE"),
+      disableAddData: !allowBtnCode("AUDIT_API"),
       handleUpdateDataSource: (data: CatApiDTO[]) => {
         setData({ data: [...data] });
       },

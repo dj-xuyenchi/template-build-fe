@@ -15,6 +15,7 @@ export interface RoleApplyDTO extends BaseDataTable {
   maker: string;
   updatedBy: string;
   optionApplyValue?: OptionAsSelect[];
+  isLoadingOption: boolean
 }
 export interface OptionAsSelect {
   label: string;
@@ -22,4 +23,4 @@ export interface OptionAsSelect {
 }
 export const ROLE_APPLY_ACTIVE = "ACTIVE";
 export const ROLE_APPLY_INACTIVE = "INACTIVE";
-export const ROLE_APPLY_DELETE = "DELETE";
+export const ROLE_APPLY_DELETE = "DELETED";
