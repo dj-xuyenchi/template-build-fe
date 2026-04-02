@@ -13,7 +13,7 @@ export const allowBtnCode = (btnCode: string): boolean => {
         const allowBtnCode: string[] = global.userApp.btnCodes;
 
         if (!allowBtnCode || allowBtnCode.length === 0) {
-            return true;
+            return false;
         }
         // Mã code truyền vào tồn tại trong danh sách mã code được phép sử dụng → có quyền sử dụng nút
         return allowBtnCode.includes(btnCode);

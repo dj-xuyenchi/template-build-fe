@@ -12,9 +12,7 @@ export interface DeleteBtnProps {
 
 export const DeleteBtn = ({ handleDelete, disable }: DeleteBtnProps) => {
   return (
-    <Tooltip placement="top"
-      title={disable ? "Không có quyền xóa" : "Xóa"}
-    >
+    <Tooltip placement="top" title={disable ? "Không có quyền xóa" : "Xóa"}>
       <ButtonCustom
         icon={
           <>

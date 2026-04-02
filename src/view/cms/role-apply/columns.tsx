@@ -56,172 +56,173 @@ export const getColumns = ({
   handleDeleteRow,
   roleMap,
 }: CallBacks): ColumnTypeCustom<RoleApplyDTO>[] => [
-    {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
-      fixed: "left",
-      width: 80,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Tên quyền",
-      dataIndex: "roleId",
-      key: "roleId",
-      width: 200,
-      render: (value: number, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{roleMap?.get(value)?.roleName}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Mã quyền",
-      dataIndex: "roleId",
-      key: "roleId",
-      width: 160,
-      render: (value: number, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{roleMap?.get(value)?.roleCode}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Kiểu áp dụng dữ liệu",
-      dataIndex: "applyTypeName",
-      key: "applyTypeName",
-      width: 280,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Dữ liệu áp dụng",
-      dataIndex: "applyValue",
-      key: "applyValue",
-      width: 260,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Kiểu áp dụng thời gian",
-      dataIndex: "effectiveType",
-      key: "effectiveType",
-      width: 200,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TagCustom color={getEffectiveTag(value)}>
-          {getEffectiveLabel(value)}
-        </TagCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Áp dụng từ",
-      dataIndex: "effectiveFrom",
-      key: "effectiveFrom",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom align="left">
-          {formatDateWithDayVN(value, true)}
-        </TableLabelCustom>
-      ),
-      align: "center",
-    },
+  {
+    title: "STT",
+    dataIndex: "stt",
+    key: "stt",
+    fixed: "left",
+    width: 80,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Tên quyền",
+    dataIndex: "roleId",
+    key: "roleId",
+    width: 200,
+    render: (value: number, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{roleMap?.get(value)?.roleName}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Mã quyền",
+    dataIndex: "roleId",
+    key: "roleId",
+    width: 160,
+    render: (value: number, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{roleMap?.get(value)?.roleCode}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Kiểu áp dụng dữ liệu",
+    dataIndex: "applyTypeName",
+    key: "applyTypeName",
+    width: 280,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Dữ liệu áp dụng",
+    dataIndex: "applyValue",
+    key: "applyValue",
+    width: 300,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Kiểu áp dụng thời gian",
+    dataIndex: "effectiveType",
+    key: "effectiveType",
+    width: 200,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TagCustom color={getEffectiveTag(value)}>
+        {getEffectiveLabel(value)}
+      </TagCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Áp dụng từ",
+    dataIndex: "effectiveFrom",
+    key: "effectiveFrom",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom align="left">
+        {formatDateWithDayVN(value, true)}
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
 
-    {
-      title: "Áp dụng đến",
-      dataIndex: "effectiveTo",
-      key: "effectiveTo",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom align="left">
-          {formatDateWithDayVN(value, true)}
-        </TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      width: 220,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>
-          <TagCustom color={getStatusTag(value)}>
-            {getStatusLabel(value)}
-          </TagCustom>
-        </TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Người tạo",
-      dataIndex: "maker",
-      key: "maker",
-      width: 160,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Người cập nhật",
-      dataIndex: "updatedBy",
-      key: "updatedBy",
-      width: 160,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Ngày cập nhật",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      width: 200,
-      render: (value: Date, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
-      ),
-      align: "center",
-    }, {
-      title: "Thao tác",
-      dataIndex: "action",
-      key: "action",
-      width: 100,
-      fixed: "right",
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <div
-          style={{
-            padding: "8px 11px",
-          }}
-        >
-          {record.status != ROLE_APPLY_DELETE && (
-            <DeleteBtn
-              disable={!allowBtnCode("DELETE_ROLE_APPLY")}
-              handleDelete={() => {
-                handleDeleteRow(record);
-              }}
-            />
-          )}
-        </div>
-      ),
-      align: "center",
-    },
-  ];
+  {
+    title: "Áp dụng đến",
+    dataIndex: "effectiveTo",
+    key: "effectiveTo",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom align="left">
+        {formatDateWithDayVN(value, true)}
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Trạng thái",
+    dataIndex: "status",
+    key: "status",
+    width: 220,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>
+        <TagCustom color={getStatusTag(value)}>
+          {getStatusLabel(value)}
+        </TagCustom>
+      </TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Người tạo",
+    dataIndex: "maker",
+    key: "maker",
+    width: 160,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Ngày tạo",
+    dataIndex: "createdAt",
+    key: "createdAt",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Người cập nhật",
+    dataIndex: "updatedBy",
+    key: "updatedBy",
+    width: 160,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Ngày cập nhật",
+    dataIndex: "updatedAt",
+    key: "updatedAt",
+    width: 200,
+    render: (value: Date, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Thao tác",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+    fixed: "right",
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <div
+        style={{
+          padding: "8px 11px",
+        }}
+      >
+        {record.status != ROLE_APPLY_DELETE && (
+          <DeleteBtn
+            disable={!allowBtnCode("DELETE_ROLE_APPLY")}
+            handleDelete={() => {
+              handleDeleteRow(record);
+            }}
+          />
+        )}
+      </div>
+    ),
+    align: "center",
+  },
+];
 
 export const getColumnsEdit = ({
   handleSetApplyType,
@@ -234,172 +235,172 @@ export const getColumnsEdit = ({
   roleList,
   applyTypeList,
 }: CallBacks) => [
-    {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
-      fixed: "left",
-      width: 80,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
-      ),
-      align: "center",
-    },
-    {
-      title: "Quyền",
-      dataIndex: "roleId",
-      key: "roleId",
-      align: "center",
-      width: 240,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <SelectCustom
-          size="small"
-          disabled={!record.isNewRow}
-          value={record.roleId}
-          options={roleList?.map((r) => {
-            return {
-              label: r.roleName + " - " + r.roleCode,
-              value: r.roleId,
-            };
-          })}
-          onChange={(e) => {
-            const objectRole = roleList?.find((o) => {
-              return o.roleId == e;
-            });
+  {
+    title: "STT",
+    dataIndex: "stt",
+    key: "stt",
+    fixed: "left",
+    width: 80,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
+    ),
+    align: "center",
+  },
+  {
+    title: "Quyền",
+    dataIndex: "roleId",
+    key: "roleId",
+    align: "center",
+    width: 240,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <SelectCustom
+        size="small"
+        disabled={!record.isNewRow}
+        value={record.roleId}
+        options={roleList?.map((r) => {
+          return {
+            label: r.roleName + " - " + r.roleCode,
+            value: r.roleId,
+          };
+        })}
+        onChange={(e) => {
+          const objectRole = roleList?.find((o) => {
+            return o.roleId == e;
+          });
 
-            handleSetRole(record, {
-              value: objectRole?.roleId,
-              label: objectRole?.roleName + " (" + objectRole?.roleCode + ")",
-            } as OptionAsSelect);
-          }}
-        />
-      ),
-    },
-    {
-      title: "Kiểu áp dụng dữ liệu",
-      dataIndex: "applyType",
-      key: "applyType",
-      align: "center",
-      width: 240,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <SelectCustom
-          size="small"
-          disabled={!record.isNewRow}
-          value={record.applyType}
-          options={applyTypeList?.map((a) => {
-            return {
-              value: a.globalConfigDataCode,
-              label: a.globalConfigDataName,
-            };
-          })}
-          onChange={(e) => {
-            const value = e;
-            handleSetApplyType(record, value);
-          }}
-        />
-      ),
-    },
-    {
-      title: "Dữ liệu áp dụng",
-      dataIndex: "applyId",
-      key: "applyId",
-      align: "center",
-      width: 300,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <SelectCustom
-          size="small"
-          loading={record.isLoadingOption}
-          disabled={!record.isNewRow}
-          value={record.isNewRow ? record.applyId : record.applyValue}
-          options={record.optionApplyValue}
-          onChange={(e) => {
-            const objectApply = record.optionApplyValue?.find((o) => {
-              return o.value == e;
-            });
+          handleSetRole(record, {
+            value: objectRole?.roleId,
+            label: objectRole?.roleName + " (" + objectRole?.roleCode + ")",
+          } as OptionAsSelect);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Kiểu áp dụng dữ liệu",
+    dataIndex: "applyType",
+    key: "applyType",
+    align: "center",
+    width: 240,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <SelectCustom
+        size="small"
+        disabled={!record.isNewRow}
+        value={record.applyType}
+        options={applyTypeList?.map((a) => {
+          return {
+            value: a.globalConfigDataCode,
+            label: a.globalConfigDataName,
+          };
+        })}
+        onChange={(e) => {
+          const value = e;
+          handleSetApplyType(record, value);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Dữ liệu áp dụng",
+    dataIndex: "applyId",
+    key: "applyId",
+    align: "center",
+    width: 300,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <SelectCustom
+        size="small"
+        loading={record.isLoadingOption}
+        disabled={!record.isNewRow}
+        value={record.isNewRow ? record.applyId : record.applyValue}
+        options={record.optionApplyValue}
+        onChange={(e) => {
+          const objectApply = record.optionApplyValue?.find((o) => {
+            return o.value == e;
+          });
 
-            handleSetApplyValue(record, objectApply as OptionAsSelect);
-          }}
-        />
-      ),
-    },
-    {
-      title: "Kiểu áp dụng",
-      dataIndex: "effectiveType",
-      key: "effectiveType",
-      align: "center",
-      width: 200,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <SelectCustom
-          size="small"
-          value={record.effectiveType}
-          options={effectiveType}
-          onChange={(e) => {
-            const value = e;
-            handleSetEffectiveType(record, value);
-          }}
-        />
-      ),
-    },
-    {
-      title: "Áp dụng từ",
-      dataIndex: "effectiveFrom",
-      key: "effectiveFrom",
-      align: "center",
-      width: 200,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <DatePickerCustom
-          showTime
-          value={value ? dayjs(value) : null}
-          disabled={record.effectiveType != "E"}
-          placeholder="Chọn thời gian áp dụng từ"
-          onChange={(e) => {
-            const value = e;
-            handleSetEffectiveFrom(record, value as dayjs.Dayjs | null);
-          }}
-        />
-      ),
-    },
-    {
-      title: "Áp dụng đến",
-      dataIndex: "effectiveTo",
-      key: "effectiveTo",
-      align: "center",
-      width: 200,
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <DatePickerCustom
-          showTime
-          value={value ? dayjs(value) : null}
-          disabled={record.effectiveType != "E"}
-          placeholder="Chọn thời gian áp dụng đến"
-          onChange={(e) => {
-            const value = e;
-            handleSetEffectiveTo(record, value as dayjs.Dayjs | null);
-          }}
-        />
-      ),
-    },
-    {
-      title: "Thao tác",
-      dataIndex: "action",
-      key: "action",
-      width: 100,
-      fixed: "right",
-      render: (value: string, record: RoleApplyDTO, index: number) => (
-        <div
-          style={{
-            padding: "8px 11px",
-          }}
-        >
-          {record.status != ROLE_APPLY_DELETE && (
-            <DeleteBtn
-              disable={!allowBtnCode("DELETE_ROLE_APPLY")}
-              handleDelete={() => {
-                handleDeleteRow(record);
-              }}
-            />
-          )}
-        </div>
-      ),
-      align: "center",
-    },
-  ];
+          handleSetApplyValue(record, objectApply as OptionAsSelect);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Kiểu áp dụng",
+    dataIndex: "effectiveType",
+    key: "effectiveType",
+    align: "center",
+    width: 200,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <SelectCustom
+        size="small"
+        value={record.effectiveType}
+        options={effectiveType}
+        onChange={(e) => {
+          const value = e;
+          handleSetEffectiveType(record, value);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Áp dụng từ",
+    dataIndex: "effectiveFrom",
+    key: "effectiveFrom",
+    align: "center",
+    width: 200,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <DatePickerCustom
+        showTime
+        value={value ? dayjs(value) : null}
+        disabled={record.effectiveType != "E"}
+        placeholder="Chọn thời gian áp dụng từ"
+        onChange={(e) => {
+          const value = e;
+          handleSetEffectiveFrom(record, value as dayjs.Dayjs | null);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Áp dụng đến",
+    dataIndex: "effectiveTo",
+    key: "effectiveTo",
+    align: "center",
+    width: 200,
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <DatePickerCustom
+        showTime
+        value={value ? dayjs(value) : null}
+        disabled={record.effectiveType != "E"}
+        placeholder="Chọn thời gian áp dụng đến"
+        onChange={(e) => {
+          const value = e;
+          handleSetEffectiveTo(record, value as dayjs.Dayjs | null);
+        }}
+      />
+    ),
+  },
+  {
+    title: "Thao tác",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+    fixed: "right",
+    render: (value: string, record: RoleApplyDTO, index: number) => (
+      <div
+        style={{
+          padding: "8px 11px",
+        }}
+      >
+        {record.status != ROLE_APPLY_DELETE && (
+          <DeleteBtn
+            disable={!allowBtnCode("DELETE_ROLE_APPLY")}
+            handleDelete={() => {
+              handleDeleteRow(record);
+            }}
+          />
+        )}
+      </div>
+    ),
+    align: "center",
+  },
+];
