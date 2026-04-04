@@ -3,7 +3,7 @@ import { Filter } from "./Filter";
 import { TableData } from "./TableData";
 import { TablePropsCustom } from "@/component/TableCustom";
 import { useEffect, useRef, useState } from "react";
-import { CallBacks, getColumns, getColumnsEdit } from "./columns";
+import { CallBacks, getColumns } from "./columns";
 import { orderByField } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { roleApi } from "@/api/roleApi";
@@ -13,11 +13,15 @@ import { apiApi, GetApiFilter } from "@/api/apiApi";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
 import { AuditApiRequest } from "@/model/cms/cat-api/AuditApiRequest";
 import { btnApi, GetBtnFilter } from "@/api/btnApi";
-import { BTN_ACTIVE, BtnDTO } from "@/model/cms/btn/ButtonDTO";
 import { AuditBtnRequest } from "@/model/cms/btn/AuditBtnRequest";
+import {
+  SystemUserDTO,
+  USER_ACTIVE,
+} from "@/model/cms/system-user/SystemUserDTO";
+import { GetSystemUserFilter, sysUserApi } from "@/api/sysUserApi";
 
 export const Index = () => {
-  const [data, setData] = useState({} as { data: BtnDTO[] });
+  const [data, setData] = useState({} as { data: SystemUserDTO[] });
   const [systemList, setSystemList] = useState(
     [] as { label: string; value: number }[],
   );
@@ -31,24 +35,6 @@ export const Index = () => {
   const modal = useGlobalModal();
   const controllerRef = useRef<AbortController | null>(null);
   const messageApi = getMessageInstance();
-  const handleArchiveActiveRow = async (row: BtnDTO) => {
-    if (!row.btnId) {
-      return;
-    }
-    modal.confirm({
-      title: "Xác nhận",
-      content: `Bạn có chắc muốn ${row.status == BTN_ACTIVE ? "lưu trữ" : "active lại"} quyền này không?`,
-      centered: true,
-      onOk: async () => {
-        const res = await roleApi.archiveActive({
-          id: row.btnId,
-        });
-        if (res.code && res.code !== "ERROR") {
-          handleGetData(filter);
-        }
-      },
-    });
-  };
 
   const addNewData = async () => {
     try {
@@ -57,7 +43,7 @@ export const Index = () => {
         return item.isNewRow;
       });
       const updateDataList = data.data.filter((item) => {
-        return item.isEdited && item.btnId;
+        return item.isEdited && item.userId;
       });
 
       const request = {
@@ -74,7 +60,7 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleSetBtnName = (row: BtnDTO, value: string) => {
+  const handleSetBtnName = (row: SystemUserDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -85,7 +71,7 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetBtnCode = (row: BtnDTO, value: string) => {
+  const handleSetBtnCode = (row: SystemUserDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -96,7 +82,7 @@ export const Index = () => {
     }));
     return;
   };
-  const handleSetBtnDescription = (row: BtnDTO, value: string) => {
+  const handleSetBtnDescription = (row: SystemUserDTO, value: string) => {
     setData((prev) => ({
       ...prev,
       data: prev.data.map((item) =>
@@ -108,26 +94,8 @@ export const Index = () => {
     return;
   };
 
-  const handleInactiveActiveRow = (row: BtnDTO) => {
-    if (!row.btnId) {
-      return;
-    }
-    modal.confirm({
-      title: "Xác nhận",
-      content: `Bạn có chắc muốn kích hoạt API này không?`,
-      centered: true,
-      onOk: async () => {
-        const res = await btnApi.inactiveActive({
-          ids: [row.btnId],
-        });
-        if (res.code && res.code !== "ERROR") {
-          handleGetData(filter);
-        }
-      },
-    });
-  };
-  const triggerNewRow = (row: BtnDTO) => {
-    row.status = BTN_ACTIVE;
+  const triggerNewRow = (row: SystemUserDTO) => {
+    row.status = USER_ACTIVE;
     return true;
   };
   const handleQuickSearch = (keyword: string) => {
@@ -156,15 +124,9 @@ export const Index = () => {
   };
   const config = {
     pagination: pageConfig,
-    columns: getColumns({ handleInactiveActiveRow } as CallBacks),
-    columnsEdit: getColumnsEdit({
-      handleSetBtnCode,
-      handleSetBtnDescription,
-      handleSetBtnName,
-      systemList,
-    } as CallBacks),
+    columns: getColumns({} as CallBacks),
     loading: isTableLoading,
-    dataSource: data.data as BtnDTO[],
+    dataSource: data.data as SystemUserDTO[],
     viewMode: viewMode,
     tableName: "Quản lý API",
     extendFunction: {
@@ -176,10 +138,10 @@ export const Index = () => {
       },
       toggleViewMode: toggleViewMode,
       disableAddData: !allowBtnCode("AUDIT_ROLE"),
-      handleUpdateDataSource: (data: BtnDTO[]) => {
+      handleUpdateDataSource: (data: SystemUserDTO[]) => {
         setData({ data: [...data] });
       },
-      andOn: "table",
+      andOn: "drawer",
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
@@ -189,7 +151,7 @@ export const Index = () => {
         return true;
       },
     },
-  } as TablePropsCustom<BtnDTO>;
+  } as TablePropsCustom<SystemUserDTO>;
 
   const handleGetData = async (params: GetApiFilter) => {
     try {
@@ -201,17 +163,16 @@ export const Index = () => {
       controllerRef.current = controller;
 
       setIsTableLoading(true);
-      const res = await btnApi.getBtn(
+      const res = await sysUserApi.getUser(
         {
           ...params,
-          isTakeSystemName: true,
-        } as GetBtnFilter,
+        } as GetSystemUserFilter,
         controller.signal,
       );
       setFilter(params);
 
       setData({
-        data: orderByField(res.data, "btnId"),
+        data: orderByField(res.data, "userId"),
       });
     } catch (e) {
       console.error(e);

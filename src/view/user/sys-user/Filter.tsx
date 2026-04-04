@@ -5,8 +5,8 @@ import { Col, Form, Row } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import { useEffect } from "react";
 import { InputCustom } from "@/component/InputCustom";
-import { GetBtnFilter } from "@/api/btnApi";
 import { SelectCustom } from "@/component/SelectCustom";
+import { GetSystemUserFilter } from "@/api/sysUserApi";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -25,18 +25,21 @@ const statusSelect: DefaultOptionType[] = [
 ];
 
 type FilterProps = {
-  handleFilter: (params: GetBtnFilter, signal: AbortSignal | null) => void;
-  filter: GetBtnFilter;
+  handleFilter: (
+    params: GetSystemUserFilter,
+    signal: AbortSignal | null,
+  ) => void;
+  filter: GetSystemUserFilter;
   systemList: { label: string; value: number }[];
 };
 export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
   const [form] = Form.useForm();
-  const onFinish = (value: GetBtnFilter) => {
+  const onFinish = (value: GetSystemUserFilter) => {
     const params = {
       ...value,
     };
 
-    handleFilter(params as GetBtnFilter, null);
+    handleFilter(params as GetSystemUserFilter, null);
   };
   const handleClearFilter = () => {
     form.resetFields();
@@ -88,11 +91,7 @@ export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
                       </Form.Item>
                     </Col>
                     <Col span={12} md={8} lg={6} xl={6}>
-                      <Form.Item
-                        label="Email"
-                        name="email"
-                        tooltip="Email"
-                      >
+                      <Form.Item label="Email" name="email" tooltip="Email">
                         <InputCustom placeholder="Email" />
                       </Form.Item>
                     </Col>

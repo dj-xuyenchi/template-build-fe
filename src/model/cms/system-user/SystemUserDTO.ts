@@ -15,3 +15,6 @@ export interface SystemUserDTO extends BaseDataTable {
   status: string;
   createdByChannel: string;
 }
+
+export const USER_ACTIVE = "ACTIVE";
+export const USER_IN_ACTIVE = "IN_ACTIVE";

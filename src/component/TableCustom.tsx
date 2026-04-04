@@ -9,7 +9,6 @@ import {
   Modal,
   message,
 } from "antd";
-import "@/config/styleOverride.css";
 import { ButtonCustom } from "./ButtonCustom";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -446,8 +445,8 @@ export const TableCustom = <T extends BaseDataTable>({
                   locale={
                     loading
                       ? {
-                        emptyText: <div style={{ height: HEIGHT_LOADING }} />,
-                      }
+                          emptyText: <div style={{ height: HEIGHT_LOADING }} />,
+                        }
                       : undefined
                   }
                   style={{ ...style }}
@@ -631,7 +630,10 @@ export const TableCustom = <T extends BaseDataTable>({
                       {!isEditAddBtn && (
                         <ButtonCustom
                           icon={<FaPlus />}
-                          disabled={extendFunction.disableAddData || (loading as boolean | undefined)}
+                          disabled={
+                            extendFunction.disableAddData ||
+                            (loading as boolean | undefined)
+                          }
                           size={extendFunction.size || "middle"}
                           title={
                             extendFunction.buttonAddTitle || "Chỉnh sửa tạo mới"
@@ -738,7 +740,7 @@ export const TableCustom = <T extends BaseDataTable>({
         <Drawer
           title="Basic Drawer"
           closable={{ "aria-label": "Close Button" }}
-          open={true}
+          open={false}
         >
           {extendFunction.formOnDrawer}
         </Drawer>
