@@ -251,14 +251,16 @@ export const TableCustom = <T extends BaseDataTable>({
     if (extendFunction?.toggleViewMode) {
       extendFunction.toggleViewMode(false);
     }
-    if (extendFunction?.andOn === "table") {
+    if (extendFunction?.andOn == "table") {
       // Mở nút thêm dòng và mở lại hết các cột nếu đang bị ẩn
       setVisibleColumns(columns);
     }
-    if (extendFunction?.andOn === "drawer") {
+    if (extendFunction?.andOn == "drawer") {
+      console.error(123);
+
       // mở drawer
     }
-    if (extendFunction?.andOn === "page") {
+    if (extendFunction?.andOn == "page") {
       // điều hướng trang tạo mới
     }
   };
@@ -373,7 +375,10 @@ export const TableCustom = <T extends BaseDataTable>({
   };
 
   useEffect(() => {
-    setVisibleColumns(viewMode ? columns : columnsEdit);
+    // Nếu cấu hình tạo sửa dữ liệu là table thì mới cho phép đổi columns sang chỉnh sửa
+    if (extendFunction?.andOn === "table") {
+      setVisibleColumns(viewMode ? columns : columnsEdit);
+    }
 
     const scroller = getScroller();
     if (scroller) {
