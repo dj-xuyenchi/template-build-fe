@@ -113,7 +113,7 @@ export const getColumns = ({
     key: "isWhiteEndPoint",
     width: 200,
     render: (value: boolean, record: CatApiDTO, index: number) => (
-      <TableLabelCustom>{value ? "Có" : "Không"}</TableLabelCustom>
+      <TableLabelCustom>{value ? "Không" : "Có"}</TableLabelCustom>
     ),
     align: "center",
   },
@@ -340,7 +340,7 @@ export const getColumnsEdit = ({
       <>
         <SwitchCustom
           size="small"
-          defaultValue={record.isWhiteEndPoint}
+          defaultValue={!record.isWhiteEndPoint}
           onChange={(e) => {
             handleSetIsWhiteEndPoint(record, e);
           }}

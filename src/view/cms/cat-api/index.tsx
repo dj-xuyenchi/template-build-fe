@@ -122,7 +122,7 @@ export const Index = () => {
       ...prev,
       data: prev.data.map((item) =>
         item.rowUUID === row.rowUUID
-          ? { ...item, isWhiteEndPoint: value, isEdited: true }
+          ? { ...item, isWhiteEndPoint: !value, isEdited: true }
           : item,
       ),
     }));

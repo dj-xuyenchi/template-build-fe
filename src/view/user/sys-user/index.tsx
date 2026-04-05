@@ -137,7 +137,7 @@ export const Index = () => {
         handleGetData(filter);
       },
       toggleViewMode: toggleViewMode,
-      disableAddData: !allowBtnCode("AUDIT_ROLE"),
+      disableAddData: !allowBtnCode("AUDIT_SYS_USER"),
       handleUpdateDataSource: (data: SystemUserDTO[]) => {
         setData({ data: [...data] });
       },
@@ -153,7 +153,7 @@ export const Index = () => {
     },
   } as TablePropsCustom<SystemUserDTO>;
 
-  const handleGetData = async (params: GetApiFilter) => {
+  const handleGetData = async (params: GetSystemUserFilter) => {
     try {
       // abort request cũ
       controllerRef.current?.abort();

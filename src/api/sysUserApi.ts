@@ -5,6 +5,7 @@ import { BaseResponse } from "@/model/BaseResponse";
 import { SystemUserDTO } from "@/model/cms/system-user/SystemUserDTO";
 export interface GetSystemUserFilter extends BaseFilter {
   userId?: number;
+  userName?: string;
 }
 export const sysUserApi = {
   getUser: async (

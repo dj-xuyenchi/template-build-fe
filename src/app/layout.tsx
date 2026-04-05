@@ -1,4 +1,3 @@
-import "./globals.css";
 import { Metadata } from "next";
 import ClientProviders from "./ClientProvider";
 

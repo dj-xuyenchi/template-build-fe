@@ -59,6 +59,7 @@ import { LOGIN_URL } from "@/util/common-home/link";
 import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { BaseResponse } from "@/model/BaseResponse";
 import { UserInformation } from "@/model/login/UserInformation";
+import { mediaApi } from "@/api/mediaApi";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -498,6 +499,9 @@ export default function Wrapper({
                       overflowCount={9}
                       count={11}
                     >
+                      <Image
+                        src={mediaApi.loadImage({ fileName: "kwon.jpg" })}
+                      />
                       <Avatar
                         className={styles.antAvatar}
                         shape="circle"
