@@ -113,7 +113,9 @@ export const getColumns = ({
     key: "isWhiteEndPoint",
     width: 200,
     render: (value: boolean, record: CatApiDTO, index: number) => (
-      <TableLabelCustom>{value ? "Không" : "Có"}</TableLabelCustom>
+      <TagCustom color={value ? "red" : "green"}>
+        {value ? "Không" : "Có"}
+      </TagCustom>
     ),
     align: "center",
   },

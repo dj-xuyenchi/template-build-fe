@@ -1,8 +1,6 @@
 "use client";
 import { FaSignOutAlt } from "react-icons/fa";
 import styles from "./styles.module.scss";
-import "./globals.css";
-import "@/config/styleTableSexy.css";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { TbLockPassword } from "react-icons/tb";
 import {
