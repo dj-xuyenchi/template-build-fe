@@ -497,9 +497,6 @@ export default function Wrapper({
                       overflowCount={9}
                       count={11}
                     >
-                      <Image
-                        src={mediaApi.loadImage({ fileName: "kwon.jpg" })}
-                      />
                       <Avatar
                         className={styles.antAvatar}
                         shape="circle"
@@ -510,7 +507,9 @@ export default function Wrapper({
                     </Badge>
                     <Dropdown menu={{ items }}>
                       <div className={styles.avatarContainer}>
-                        <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+                        <Avatar
+                          src={mediaApi.loadImage({ fileName: "kwon.jpg" })}
+                        />
                       </div>
                     </Dropdown>
                   </Col>
