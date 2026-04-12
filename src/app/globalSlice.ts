@@ -3,7 +3,6 @@ import { GlobalSystemConfig } from "@/model/login/GlobalSystemConfig";
 import { UserInformation } from "@/model/login/UserInformation";
 import { AppSlice } from "@/store/AppSlice";
 import { createSlice } from "@reduxjs/toolkit";
-import { setGlobal } from "next/dist/trace";
 
 const userApp = {} as UserInformation;
 const appSlice = {} as AppSlice;

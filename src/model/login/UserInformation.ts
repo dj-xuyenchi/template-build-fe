@@ -3,6 +3,7 @@ import { FeatureDTO } from "../cms/feature/FeatureDTO";
 export interface UserInformation {
   userId: number;
   userName: string;
+  fullName: string;
   avatar: string;
   status: string;
   roleCodes: string;

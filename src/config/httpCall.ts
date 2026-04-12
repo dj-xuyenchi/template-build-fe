@@ -188,6 +188,11 @@ axiosClient.interceptors.response.use(
     }
     switch (status) {
       case 401:
+      case 403: {
+        const message = error.response?.data.message;
+        messageApi.error(message);
+        break;
+      }
       case 406: {
         messageApi.warning("Vui lòng đăng nhập lại!");
         localStorage.removeItem(TOKEN_KEY);

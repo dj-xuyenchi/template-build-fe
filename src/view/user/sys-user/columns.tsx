@@ -12,6 +12,8 @@ import { ArchiveBtn } from "@/component/table-btn/ArchiveBtn";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import { SystemUserDTO } from "@/model/cms/system-user/SystemUserDTO";
+import Image from "next/image";
+import { mediaApi } from "@/api/mediaApi";
 
 export type CallBacks = BaseTable & {
   systemList: { label: string; value: number }[];
@@ -46,7 +48,14 @@ export const getColumns =
       key: "avatar",
       width: 200,
       render: (value: string, record: SystemUserDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Image
+            width={120}
+            height={180}
+            src={mediaApi.loadImage({ imgKey: value })}
+            alt="avatar"
+          />
+        </div>
       ),
       align: "center",
     },
@@ -66,7 +75,9 @@ export const getColumns =
       key: "fullName",
       width: 260,
       render: (value: string, record: SystemUserDTO, index: number) => (
-        <TableLabelCustom>{value}</TableLabelCustom>
+        <TableLabelCustom>
+          {record.firstName + " " + record.lastName}
+        </TableLabelCustom>
       ),
       align: "center",
     },

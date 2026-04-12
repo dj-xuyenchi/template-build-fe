@@ -117,6 +117,7 @@ export default function Wrapper({
   }[]);
 
   const global = useSelector((state: RootState) => state.global);
+  const userData = useSelector((state: RootState) => state.global?.userApp);
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
 
   const dispatch = useDispatch();
@@ -264,8 +265,7 @@ export default function Wrapper({
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Đỗ Quang Anh",
-      disabled: true,
+      label: userData.fullName,
     },
     {
       type: "divider",
@@ -285,7 +285,7 @@ export default function Wrapper({
     },
   ];
 
-  const handleGetGlobalSystemConfig = async () => {
+  const handleGetStartUpData = async () => {
     try {
       const requestParamUserInfo = {
         isTakeAllowFeatureList: true,
@@ -392,7 +392,7 @@ export default function Wrapper({
       return;
     }
     if (token) {
-      handleGetGlobalSystemConfig();
+      handleGetStartUpData();
       setIsLogin(!!token);
 
       window.scrollTo(0, 0);
@@ -508,7 +508,8 @@ export default function Wrapper({
                     <Dropdown menu={{ items }}>
                       <div className={styles.avatarContainer}>
                         <Avatar
-                          src={mediaApi.loadImage({ fileName: "kwon.jpg" })}
+                          size={"large"}
+                          src={mediaApi.loadImage({ imgKey: userData.avatar })}
                         />
                       </div>
                     </Dropdown>
