@@ -344,6 +344,8 @@ body {
 .archive-btn,
 .delete-btn,
 .edit-btn,
+.lock-btn,
+.unlock-btn,
 .view-btn {
     height: 30px !important;
     width: 30px !important;
@@ -375,6 +377,8 @@ body {
 .archive-btn .ant-btn-icon,
 .delete-btn .ant-btn-icon,
 .edit-btn .ant-btn-icon,
+.lock-btn .ant-btn-icon,
+.unlock-btn .ant-btn-icon,
 .view-btn .ant-btn-icon {
     display: flex;
     align-items: center;
@@ -400,6 +404,16 @@ body {
 
 .archive-btn svg {
     color: #747474 !important;
+    font-size: 19px;
+}
+
+.lock-btn svg {
+    color: #ff9900 !important;
+    font-size: 19px;
+}
+
+.unlock-btn svg {
+    color: #00ff2a !important;
     font-size: 19px;
 }
 

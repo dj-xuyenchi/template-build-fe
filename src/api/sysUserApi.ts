@@ -21,4 +21,26 @@ export const sysUserApi = {
     );
     return res.data;
   },
+  lockUser: async (params: {
+    ids: number[];
+  }): Promise<BaseResponse<boolean>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/system-user/lock-user`,
+      {
+        params: params,
+      },
+    );
+    return res.data;
+  },
+  unlockUser: async (params: {
+    ids: number[];
+  }): Promise<BaseResponse<boolean>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/system-user/unlock-user`,
+      {
+        params: params,
+      },
+    );
+    return res.data;
+  },
 };

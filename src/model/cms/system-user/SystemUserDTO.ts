@@ -17,4 +17,4 @@ export interface SystemUserDTO extends BaseDataTable {
 }
 
 export const USER_ACTIVE = "ACTIVE";
-export const USER_IN_ACTIVE = "IN_ACTIVE";
+export const USER_LOCK = "LOCK";

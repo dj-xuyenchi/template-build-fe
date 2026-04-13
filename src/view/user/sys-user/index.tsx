@@ -6,12 +6,10 @@ import { useEffect, useRef, useState } from "react";
 import { CallBacks, getColumns } from "./columns";
 import { orderByField } from "@/util/orderBaseTableData";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
-import { roleApi } from "@/api/roleApi";
 import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
-import { apiApi, GetApiFilter } from "@/api/apiApi";
+import { GetApiFilter } from "@/api/apiApi";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
-import { AuditApiRequest } from "@/model/cms/cat-api/AuditApiRequest";
 import { btnApi, GetBtnFilter } from "@/api/btnApi";
 import { AuditBtnRequest } from "@/model/cms/btn/AuditBtnRequest";
 import {
@@ -60,39 +58,6 @@ export const Index = () => {
       setIsTableLoading(false);
     }
   };
-  const handleSetBtnName = (row: SystemUserDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, btnName: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetBtnCode = (row: SystemUserDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, btnCode: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
-  const handleSetBtnDescription = (row: SystemUserDTO, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      data: prev.data.map((item) =>
-        item.rowUUID === row.rowUUID
-          ? { ...item, btnDescription: value, isEdited: true }
-          : item,
-      ),
-    }));
-    return;
-  };
 
   const triggerNewRow = (row: SystemUserDTO) => {
     row.status = USER_ACTIVE;
@@ -109,6 +74,42 @@ export const Index = () => {
     });
   };
 
+  const handleLockUser = async (row: SystemUserDTO) => {
+    if (!row.userId) {
+      return;
+    }
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn khóa người dùng này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await sysUserApi.lockUser({
+          ids: [row.userId],
+        });
+        if (res.code && res.code !== "ERROR") {
+          handleGetData(filter);
+        }
+      },
+    });
+  };
+  const handleUnlockUser = async (row: SystemUserDTO) => {
+    if (!row.userId) {
+      return;
+    }
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn mở khóa người dùng này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await sysUserApi.unlockUser({
+          ids: [row.userId],
+        });
+        if (res.code && res.code !== "ERROR") {
+          handleGetData(filter);
+        }
+      },
+    });
+  };
   const toggleViewMode = (mode: boolean) => {
     setViewMode(mode);
   };
@@ -124,7 +125,7 @@ export const Index = () => {
   };
   const config = {
     pagination: pageConfig,
-    columns: getColumns({} as CallBacks),
+    columns: getColumns({ handleLockUser, handleUnlockUser } as CallBacks),
     loading: isTableLoading,
     dataSource: data.data as SystemUserDTO[],
     viewMode: viewMode,
