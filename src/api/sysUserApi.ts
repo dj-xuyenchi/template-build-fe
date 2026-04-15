@@ -43,4 +43,15 @@ export const sysUserApi = {
     );
     return res.data;
   },
+  archiveReopen: async (params: {
+    ids: number[];
+  }): Promise<BaseResponse<boolean>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/system-user/archive-reopen-user`,
+      {
+        params: params,
+      },
+    );
+    return res.data;
+  },
 };

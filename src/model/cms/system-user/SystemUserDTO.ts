@@ -18,3 +18,4 @@ export interface SystemUserDTO extends BaseDataTable {
 
 export const USER_ACTIVE = "ACTIVE";
 export const USER_LOCK = "LOCK";
+export const USER_ARCHIVE = "ARCHIVE";

@@ -110,6 +110,24 @@ export const Index = () => {
       },
     });
   };
+  const handleArchiveReopenUser = async (row: SystemUserDTO) => {
+    if (!row.userId) {
+      return;
+    }
+    modal.confirm({
+      title: "Xác nhận",
+      content: `Bạn có chắc muốn lưu trữ người dùng này không?`,
+      centered: true,
+      onOk: async () => {
+        const res = await sysUserApi.archiveReopen({
+          ids: [row.userId],
+        });
+        if (res.code && res.code !== "ERROR") {
+          handleGetData(filter);
+        }
+      },
+    });
+  };
   const toggleViewMode = (mode: boolean) => {
     setViewMode(mode);
   };
@@ -117,7 +135,7 @@ export const Index = () => {
     total: data?.data?.length, // Tổng số phần tử
     showSizeChanger: true, // Cho phép chọn số phần tử/trang
     pageSizeOptions: ["10", "20", "50", "100", "500"], // Tuỳ chọn pageSize
-    onChange: (page: number, pageSize: number) => {
+    onChange: (_page: number, _pageSize: number) => {
       setFilter({
         ...filter,
       });
@@ -125,7 +143,11 @@ export const Index = () => {
   };
   const config = {
     pagination: pageConfig,
-    columns: getColumns({ handleLockUser, handleUnlockUser } as CallBacks),
+    columns: getColumns({
+      handleLockUser,
+      handleUnlockUser,
+      handleArchiveReopenUser,
+    } as CallBacks),
     loading: isTableLoading,
     dataSource: data.data as SystemUserDTO[],
     viewMode: viewMode,

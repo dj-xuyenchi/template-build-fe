@@ -1,4 +1,3 @@
-import "@/config/styleOverride.css";
 import { Tag, TagProps } from "antd";
 export interface TagPropsCustom extends TagProps {}
 

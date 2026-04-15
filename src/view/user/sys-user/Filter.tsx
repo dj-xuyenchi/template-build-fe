@@ -21,7 +21,8 @@ export const getStatusTag = (value: string) => {
 const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
-  { value: "IN_ACTIVE", label: "Tạm ngưng hoạt động", tag: "warning" },
+  { value: "LOCK", label: "Tạm khóa", tag: "warning" },
+  { value: "ARCHIVE", label: "Lưu trữ", tag: "warning" },
 ];
 
 type FilterProps = {
@@ -49,7 +50,7 @@ export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
     form.setFieldsValue({
       ...filter,
     });
-  }, []);
+  }, [filter, form]);
   return (
     <>
       <CollapseCustom

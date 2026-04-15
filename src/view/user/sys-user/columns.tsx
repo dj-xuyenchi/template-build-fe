@@ -1,19 +1,14 @@
 import { TableLabelCustom } from "@/component/TableLabelCustom";
 import { BaseTable } from "@/model/BasePropsTable";
 import { formatDateWithDayVN } from "@/util/date/dateUtil";
-import { getStatusLabel, getStatusTag } from "./Filter";
-import { TagCustom } from "@/component/TagCustom";
 import { ColumnTypeCustom } from "@/component/TableCustom";
-import { InputCustom } from "@/component/InputCustom";
-import { TextAreaCustom } from "@/component/TextAreaCustom";
-
-import { BTN_ACTIVE, BTN_IN_ACTIVE } from "@/model/cms/btn/ButtonDTO";
 import { ArchiveBtn } from "@/component/table-btn/ArchiveBtn";
 import { ReOpenBtn } from "@/component/table-btn/ReOpenBtn";
 import { allowBtnCode } from "@/util/authen-service/checkRoleBtn";
 import {
   SystemUserDTO,
   USER_ACTIVE,
+  USER_ARCHIVE,
   USER_LOCK,
 } from "@/model/cms/system-user/SystemUserDTO";
 import Image from "next/image";
@@ -24,11 +19,13 @@ import { UnlockBtn } from "@/component/table-btn/UnlockBtn";
 export type CallBacks = BaseTable & {
   handleLockUser: (record: SystemUserDTO) => void;
   handleUnlockUser: (record: SystemUserDTO) => void;
+  handleArchiveReopenUser: (record: SystemUserDTO) => void;
 };
 
 export const getColumns = ({
   handleLockUser,
   handleUnlockUser,
+  handleArchiveReopenUser,
 }: CallBacks): ColumnTypeCustom<SystemUserDTO>[] => [
   {
     title: "STT",
@@ -36,8 +33,8 @@ export const getColumns = ({
     key: "stt",
     fixed: "left",
     width: 80,
-    render: (value: string, record: SystemUserDTO, index: number) => (
-      <TableLabelCustom>{record.indexCountNumber}</TableLabelCustom>
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
+      <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
   },
@@ -46,8 +43,8 @@ export const getColumns = ({
     dataIndex: "userName",
     key: "userName",
     width: 200,
-    render: (value: string, record: SystemUserDTO, index: number) => (
-      <TableLabelCustom>{value}</TableLabelCustom>
+    render: (_value: string, record: SystemUserDTO, _index: number) => (
+      <TableLabelCustom>{record.userName}</TableLabelCustom>
     ),
     align: "center",
   },
@@ -56,7 +53,7 @@ export const getColumns = ({
     dataIndex: "avatar",
     key: "avatar",
     width: 200,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Image
           width={120}
@@ -73,7 +70,7 @@ export const getColumns = ({
     dataIndex: "code",
     key: "code",
     width: 200,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -83,7 +80,7 @@ export const getColumns = ({
     dataIndex: "fullName",
     key: "fullName",
     width: 260,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (_value: string, record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>
         {record.firstName + " " + record.lastName}
       </TableLabelCustom>
@@ -95,7 +92,7 @@ export const getColumns = ({
     dataIndex: "email",
     key: "email",
     width: 220,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -105,7 +102,7 @@ export const getColumns = ({
     dataIndex: "phoneNumber",
     key: "phoneNumber",
     width: 220,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -115,7 +112,7 @@ export const getColumns = ({
     dataIndex: "maker",
     key: "maker",
     width: 160,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -125,7 +122,7 @@ export const getColumns = ({
     dataIndex: "createdByChannel",
     key: "createdByChannel",
     width: 160,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -135,7 +132,7 @@ export const getColumns = ({
     dataIndex: "createdAt",
     key: "createdAt",
     width: 200,
-    render: (value: Date, record: SystemUserDTO, index: number) => (
+    render: (value: Date, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
     align: "center",
@@ -145,7 +142,7 @@ export const getColumns = ({
     dataIndex: "updatedBy",
     key: "updatedBy",
     width: 160,
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (value: string, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{value}</TableLabelCustom>
     ),
     align: "center",
@@ -155,7 +152,7 @@ export const getColumns = ({
     dataIndex: "updatedAt",
     key: "updatedAt",
     width: 200,
-    render: (value: Date, record: SystemUserDTO, index: number) => (
+    render: (value: Date, _record: SystemUserDTO, _index: number) => (
       <TableLabelCustom>{formatDateWithDayVN(value, true)}</TableLabelCustom>
     ),
     align: "center",
@@ -166,7 +163,7 @@ export const getColumns = ({
     key: "action",
     width: 100,
     fixed: "right",
-    render: (value: string, record: SystemUserDTO, index: number) => (
+    render: (_value: string, record: SystemUserDTO, _index: number) => (
       <div
         style={{
           padding: "8px 11px",
@@ -180,7 +177,23 @@ export const getColumns = ({
             }}
           />
         )}
-        {record.status === USER_LOCK && (
+        {(record.status === USER_ACTIVE || record.status === USER_LOCK) && (
+          <ArchiveBtn
+            disable={!allowBtnCode("ARCHIVE_REOPEN_SYS_USER")}
+            handleArchive={() => {
+              handleArchiveReopenUser(record);
+            }}
+          />
+        )}
+        {record.status === USER_ARCHIVE && (
+          <ReOpenBtn
+            disable={!allowBtnCode("ARCHIVE_REOPEN_SYS_USER")}
+            handleReopen={() => {
+              handleArchiveReopenUser(record);
+            }}
+          />
+        )}
+        {record.status == USER_LOCK && (
           <UnlockBtn
             disable={!allowBtnCode("UNLOCK_SYS_USER")}
             handleUnlock={() => {

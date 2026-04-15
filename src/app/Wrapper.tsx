@@ -38,13 +38,8 @@ import {
 } from "@/constant/authen/authenConst";
 import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter";
 import { ItemType } from "antd/es/breadcrumb/Breadcrumb";
+import { setBreadscrumbToLocalStorage } from "@/util/common-home/breadscrumbService";
 import {
-  getBreadscrumbFromLocalStorage,
-  setBreadscrumbToLocalStorage,
-} from "@/util/common-home/breadscrumbService";
-import {
-  getSubmenuFromLocalStorage,
-  getSubmenuValueFromLocalStorage,
   setSubmenuToLocalStorage,
   setSubmenuValueToLocalStorage,
 } from "@/util/common-home/subMenuService";
@@ -58,6 +53,7 @@ import { FeatureDTO } from "@/model/cms/feature/FeatureDTO";
 import { BaseResponse } from "@/model/BaseResponse";
 import { UserInformation } from "@/model/login/UserInformation";
 import { mediaApi } from "@/api/mediaApi";
+import "@/config/styleOverride.css";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",

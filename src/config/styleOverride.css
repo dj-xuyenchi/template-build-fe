@@ -345,6 +345,7 @@ body {
 .delete-btn,
 .edit-btn,
 .lock-btn,
+.reopen-btn,
 .unlock-btn,
 .view-btn {
     height: 30px !important;
@@ -374,10 +375,16 @@ body {
     background: #f0f0f0 !important;
 }
 
+.reopen-btn:hover {
+    border: 1px solid #fff5f5;
+    background: #f0f0f0 !important;
+}
+
 .archive-btn .ant-btn-icon,
 .delete-btn .ant-btn-icon,
 .edit-btn .ant-btn-icon,
 .lock-btn .ant-btn-icon,
+.reopen-btn .ant-btn-icon,
 .unlock-btn .ant-btn-icon,
 .view-btn .ant-btn-icon {
     display: flex;

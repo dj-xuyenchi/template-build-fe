@@ -1,4 +1,3 @@
-import "@/config/styleOverride.css";
 export interface TableLabelPropsCustom {
   align?: "left" | "center" | "right";
   children?: React.ReactNode;
