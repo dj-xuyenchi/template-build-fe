@@ -50,7 +50,7 @@ export interface ExtendFunction<T> {
   handleExportData?: () => void;
   disableExportData?: boolean;
   andOn?: "table" | "drawer" | "page";
-  formOnDrawer?: ReactNode;
+  goPageOrDrawer?: () => void;
   handleConfirm?: () => boolean;
   triggerNewRow?: (newRow: T) => boolean;
   quickSearch?: boolean;
@@ -247,21 +247,27 @@ export const TableCustom = <T extends BaseDataTable>({
 
   // Logic data
   const handleEditAddDataTable = () => {
-    setIsEditAddBtn(true);
-    if (extendFunction?.toggleViewMode) {
-      extendFunction.toggleViewMode(false);
-    }
     if (extendFunction?.andOn == "table") {
+      setIsEditAddBtn(true);
+      if (extendFunction?.toggleViewMode) {
+        extendFunction.toggleViewMode(false);
+      }
       // Mở nút thêm dòng và mở lại hết các cột nếu đang bị ẩn
       setVisibleColumns(columns);
     }
     if (extendFunction?.andOn == "drawer") {
-      console.error(123);
-
-      // mở drawer
+      if (extendFunction?.andOn === "drawer" && extendFunction.goPageOrDrawer) {
+        // mở drawer
+        extendFunction.goPageOrDrawer();
+        return;
+      }
     }
     if (extendFunction?.andOn == "page") {
       // điều hướng trang tạo mới
+      if (extendFunction?.andOn === "page" && extendFunction.goPageOrDrawer) {
+        extendFunction.goPageOrDrawer();
+        return;
+      }
     }
   };
   const addRowData = () => {
@@ -740,16 +746,6 @@ export const TableCustom = <T extends BaseDataTable>({
         ]}
         noBorder={true}
       />
-
-      {extendFunction?.andOn === "drawer" && (
-        <Drawer
-          title="Basic Drawer"
-          closable={{ "aria-label": "Close Button" }}
-          open={false}
-        >
-          {extendFunction.formOnDrawer}
-        </Drawer>
-      )}
       {extendFunction && (
         <Drawer
           title="Cấu hình bảng dữ liệu"

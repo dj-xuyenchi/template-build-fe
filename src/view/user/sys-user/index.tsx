@@ -17,9 +17,12 @@ import {
   USER_ACTIVE,
 } from "@/model/cms/system-user/SystemUserDTO";
 import { GetSystemUserFilter, sysUserApi } from "@/api/sysUserApi";
+import { Drawer } from "antd";
+import { DrawerAddUser } from "./DrawerAddUser";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: SystemUserDTO[] });
+  const [openDrawerAddUser, setOpenDrawerAddUser] = useState(false);
   const [systemList, setSystemList] = useState(
     [] as { label: string; value: number }[],
   );
@@ -165,6 +168,9 @@ export const Index = () => {
         setData({ data: [...data] });
       },
       andOn: "drawer",
+      goPageOrDrawer: () => {
+        setOpenDrawerAddUser(true);
+      },
       isSupportExport: true,
       isSupportZoom: true,
       handleConfirm: () => {
@@ -243,6 +249,10 @@ export const Index = () => {
           systemList={systemList}
         />
       </Content>
+      <DrawerAddUser
+        open={openDrawerAddUser}
+        handleClose={() => setOpenDrawerAddUser(false)}
+      />
       <TableData config={config} />
     </>
   );
