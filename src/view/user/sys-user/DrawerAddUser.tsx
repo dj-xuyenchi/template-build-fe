@@ -22,121 +22,91 @@ export const DrawerAddUser = ({
         size={900}
         extra={
           <Space>
-            <ButtonCustom onClick={handleClose}>Cancel</ButtonCustom>
-            <ButtonCustom onClick={handleClose} type="primary">
-              Submit
-            </ButtonCustom>
+            <ButtonCustom onClick={handleClose} title="Hủy bỏ"></ButtonCustom>
+            <ButtonCustom
+              onClick={handleClose}
+              type="primary"
+              title="Xác nhận"
+            ></ButtonCustom>
           </Space>
         }
       >
-        <Form layout="vertical" requiredMark={false}>
+        <Form layout="vertical">
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="name"
-                label="Name"
-                rules={[{ required: true, message: "Please enter user name" }]}
+                name="userName"
+                label="Tên đăng nhập"
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên đăng nhập" },
+                ]}
+                required
               >
-                <InputCustom placeholder="Please enter user name" />
+                <InputCustom placeholder="Tên đăng nhập" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="url"
-                label="Url"
-                rules={[{ required: true, message: "Please enter url" }]}
+                name="email"
+                label="Email"
+                rules={[{ required: true, message: "Vui lòng nhập email" }]}
               >
-                <SelectCustom
-                  placeholder="Please select an owner"
-                  options={[
-                    { label: "Xiaoxiao Fu", value: "xiao" },
-                    { label: "Maomao Zhou", value: "mao" },
-                  ]}
-                />
+                <InputCustom placeholder="Email" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="owner"
-                label="Owner"
-                rules={[{ required: true, message: "Please select an owner" }]}
+                name="firstName"
+                label="Họ"
+                rules={[
+                  { required: true, message: "Vui lòng nhập không để trống" },
+                ]}
               >
-                <SelectCustom
-                  placeholder="Please select an owner"
-                  options={[
-                    { label: "Xiaoxiao Fu", value: "xiao" },
-                    { label: "Maomao Zhou", value: "mao" },
-                  ]}
-                />
+                <InputCustom placeholder="Họ" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="type"
-                label="Type"
-                rules={[{ required: true, message: "Please choose the type" }]}
+                name="lastName"
+                label="Tên"
+                rules={[
+                  { required: true, message: "Vui lòng nhập không để trống" },
+                ]}
               >
-                <SelectCustom
-                  placeholder="Please choose the type"
-                  options={[
-                    { label: "private", value: "private" },
-                    { label: "public", value: "public" },
-                  ]}
-                />
+                <InputCustom placeholder="Tên" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="approver"
-                label="Approver"
-                rules={[
-                  { required: true, message: "Please choose the approver" },
-                ]}
-              >
-                <SelectCustom
-                  placeholder="Please choose the approver"
-                  options={[
-                    { label: "Jack Ma", value: "jack" },
-                    { label: "Tom Liu", value: "tom" },
-                  ]}
-                />
+              <Form.Item name="phoneNumber" label="Số điện thoại">
+                <InputCustom placeholder="Số điện thoại" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="dateTime"
-                label="DateTime"
+                name="status"
+                label="Trạng thái tài khoản"
                 rules={[
-                  { required: true, message: "Please choose the dateTime" },
+                  { required: true, message: "Vui lòng chọn trạng thái" },
                 ]}
               >
-                <DatePickerCustom
-                  style={{ width: "100%" }}
-                  getPopupContainer={(trigger) => trigger.parentElement!}
-                />
+                <SelectCustom placeholder="Chọn trạng thái" options={[]} />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="description"
-                label="Description"
+                name="role"
+                label="Phân quyền người dùng"
                 rules={[
-                  {
-                    required: true,
-                    message: "please enter url description",
-                  },
+                  { required: true, message: "Vui lòng ít nhất 1 quyền" },
                 ]}
               >
-                <TextAreaCustom
-                  rows={4}
-                  placeholder="please enter url description"
-                />
+                <SelectCustom placeholder="Chọn quyền" options={[]} />
               </Form.Item>
             </Col>
           </Row>
