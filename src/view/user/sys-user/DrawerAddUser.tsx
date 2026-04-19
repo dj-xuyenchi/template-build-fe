@@ -1,9 +1,12 @@
+import { sysUserApi } from "@/api/sysUserApi";
 import { ButtonCustom } from "@/component/ButtonCustom";
-import { DatePickerCustom } from "@/component/DatepickerCustom";
 import { InputCustom } from "@/component/InputCustom";
 import { SelectCustom } from "@/component/SelectCustom";
-import { TextAreaCustom } from "@/component/TextAreaCustom";
-import { Col, Drawer, Form, Row, Space } from "antd";
+import { CreateSysUserRequest } from "@/model/cms/system-user/CreateSysUserRequest";
+import { Avatar, Col, Drawer, Form, Row, Space } from "antd";
+import { statusSelect } from "./Filter";
+import { UserOutlined } from "@ant-design/icons";
+import { UploadFileCustom } from "@/component/UploadFileCustom";
 
 export const DrawerAddUser = ({
   open,
@@ -12,6 +15,34 @@ export const DrawerAddUser = ({
   open: boolean;
   handleClose: () => void;
 }) => {
+  const [form] = Form.useForm();
+  const handleOk = () => {
+    form.submit();
+  };
+  const handleCreateUser = async (values: CreateSysUserRequest) => {
+    try {
+      const payload = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        status: values.status,
+      };
+
+      const res = await sysUserApi.createSysUser(payload);
+
+      if (res?.code == "SUCCESS") {
+        // tuỳ bạn dùng message hay toast
+        form.resetFields();
+        handleClose();
+      }
+    } catch (error) {
+      console.error("Lỗi tạo user", error);
+    }
+  };
+  const getAllowRole =()=>{
+    
+  }
   return (
     <>
       <Drawer
@@ -24,34 +55,24 @@ export const DrawerAddUser = ({
           <Space>
             <ButtonCustom onClick={handleClose} title="Hủy bỏ"></ButtonCustom>
             <ButtonCustom
-              onClick={handleClose}
+              onClick={handleOk}
               type="primary"
               title="Xác nhận"
             ></ButtonCustom>
           </Space>
         }
       >
-        <Form layout="vertical">
+        <Form form={form} layout="vertical" onFinish={handleCreateUser}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="userName"
-                label="Tên đăng nhập"
+                name="avatar"
                 rules={[
-                  { required: true, message: "Vui lòng nhập tên đăng nhập" },
+                  { required: true, message: "Vui lòng nhập không để trống" },
                 ]}
-                required
               >
-                <InputCustom placeholder="Tên đăng nhập" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="email"
-                label="Email"
-                rules={[{ required: true, message: "Vui lòng nhập email" }]}
-              >
-                <InputCustom placeholder="Email" />
+                <Avatar size={64} icon={<UserOutlined />} />{" "}
+                <UploadFileCustom />
               </Form.Item>
             </Col>
           </Row>
@@ -81,19 +102,17 @@ export const DrawerAddUser = ({
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="phoneNumber" label="Số điện thoại">
-                <InputCustom placeholder="Số điện thoại" />
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[{ required: true, message: "Vui lòng nhập email" }]}
+              >
+                <InputCustom placeholder="Email" />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="status"
-                label="Trạng thái tài khoản"
-                rules={[
-                  { required: true, message: "Vui lòng chọn trạng thái" },
-                ]}
-              >
-                <SelectCustom placeholder="Chọn trạng thái" options={[]} />
+              <Form.Item name="phoneNumber" label="Số điện thoại">
+                <InputCustom placeholder="Số điện thoại" />
               </Form.Item>
             </Col>
           </Row>
@@ -106,7 +125,14 @@ export const DrawerAddUser = ({
                   { required: true, message: "Vui lòng ít nhất 1 quyền" },
                 ]}
               >
-                <SelectCustom placeholder="Chọn quyền" options={[]} />
+                <SelectCustom
+                  placeholder="Chọn quyền"
+                  options={[
+                    ...statusSelect.filter((s) => {
+                      return s.value;
+                    }),
+                  ]}
+                />
               </Form.Item>
             </Col>
           </Row>

@@ -18,7 +18,7 @@ export const getStatusTag = (value: string) => {
     return item.value === value;
   })?.tag;
 };
-const statusSelect: DefaultOptionType[] = [
+export const statusSelect: DefaultOptionType[] = [
   { value: null, label: "Tất cả" },
   { value: "ACTIVE", label: "Đang hoạt động", tag: "green" },
   { value: "LOCK", label: "Tạm khóa", tag: "warning" },

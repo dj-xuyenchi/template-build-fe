@@ -10,14 +10,13 @@ import { useGlobalModal } from "@/config/push-noti-message/ModalConfigHolder";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 import { GetApiFilter } from "@/api/apiApi";
 import { GetSystemFilter, systemApi } from "@/api/systemApi";
-import { btnApi, GetBtnFilter } from "@/api/btnApi";
+import { btnApi } from "@/api/btnApi";
 import { AuditBtnRequest } from "@/model/cms/btn/AuditBtnRequest";
 import {
   SystemUserDTO,
   USER_ACTIVE,
 } from "@/model/cms/system-user/SystemUserDTO";
 import { GetSystemUserFilter, sysUserApi } from "@/api/sysUserApi";
-import { Drawer } from "antd";
 import { DrawerAddUser } from "./DrawerAddUser";
 
 export const Index = () => {
