@@ -361,6 +361,7 @@ export const Index = () => {
           const selectedIds = selectedRows.map((r) => {
             return r.roleApplyId;
           });
+          
           setCheckBoxSelectedData(selectedIds);
         },
         getCheckboxProps: (record: RoleApplyDTO) => ({

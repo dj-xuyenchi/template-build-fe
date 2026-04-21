@@ -34,7 +34,7 @@ export const getColumns = ({
     fixed: "left",
     width: 80,
     render: (value: string, _record: SystemUserDTO, _index: number) => (
-      <TableLabelCustom>{value}</TableLabelCustom>
+      <TableLabelCustom>{_record.indexCountNumber}</TableLabelCustom>
     ),
     align: "center",
   },

@@ -16,6 +16,7 @@ export interface GetRoleApplyFilter {
   effectiveFrom: string;
   effectiveTo: string;
   keyword: string;
+  status: string | string[];
 }
 export interface GetOptionAsSelectRequest {
   applyType: string;

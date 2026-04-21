@@ -40,9 +40,10 @@ export const DrawerAddUser = ({
       console.error("Lỗi tạo user", error);
     }
   };
-  const getAllowRole =()=>{
-    
-  }
+  const handleUpload = (fileKey) => {
+    console.error("File key:", fileKey);
+  };
+  const getAllowRole = () => {};
   return (
     <>
       <Drawer
@@ -66,13 +67,12 @@ export const DrawerAddUser = ({
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="avatar"
                 rules={[
                   { required: true, message: "Vui lòng nhập không để trống" },
                 ]}
               >
                 <Avatar size={64} icon={<UserOutlined />} />{" "}
-                <UploadFileCustom />
+                <UploadFileCustom onChange={handleUpload} />
               </Form.Item>
             </Col>
           </Row>

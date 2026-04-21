@@ -98,6 +98,10 @@ axiosClient.interceptors.request.use(
 
     switch (config.method?.toLocaleLowerCase()) {
       case "post": {
+        // Cho phép upload file với content-type là multipart/form-data, nếu data là FormData thì không serialize
+        if (config.data instanceof FormData) {
+          break;
+        }
         const { params, ...rest } = config.data || {};
 
         config.data = {

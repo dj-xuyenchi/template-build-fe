@@ -72,6 +72,7 @@ export const Filter = ({
 
     const params = {
       ...value,
+      status: value.status && [value.status],
     };
 
     handleFilter(params as GetRoleApplyFilter, null);
