@@ -1,138 +1,27 @@
+'use client';
 import clsx from "clsx";
 import styles from "./styles.module.scss";
 import "./globals.css";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import empty from "../../public/empty.webp";
 import { Badge, Spin } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { Notification } from "@/model/push-noti/Notification";
+import { onMessage } from "firebase/messaging";
+
+import { requestFcmToken, messaging } from "@/config/firebase";
+import { NotificationDTO } from "@/model/push-noti/NotificationDTO";
 export const SexyNotification = ({ isShow = false }) => {
   const [activeType, setActiveType] = useState(1);
   const [notifications, setNotifications] = useState([
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-      isRead: true,
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
-    {
-      title: "XIn chaào",
-      shortContent:
-        "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
-      sendTime: "4 ngày trước",
-    },
     {
       title: "Xin chaào",
       shortContent:
         "xin chào các bạn minmhf là doggi rất hawancj hahiahisidhasdiascascsadcsdvsdvsdvsdvssdv",
       sendTime: "4 ngày trước",
     },
-  ] as Notification[]);
+  ] as NotificationDTO[]);
 
   // Chỗ này để gọi call back khi nhận noti sẽ chạy hàm nào
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
@@ -143,6 +32,42 @@ export const SexyNotification = ({ isShow = false }) => {
   const handleSetActiveType = (value: number) => {
     setActiveType(value);
   };
+  useEffect(() => {
+    const init = async () => {
+      const token = await requestFcmToken();
+
+
+      if (token) {
+        console.log("FCM Token:", token);
+
+
+        // gửi về BE Java
+        await fetch("http://localhost:8080/api/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        });
+      }
+    };
+
+
+    init();
+
+
+    if (messaging) {
+      onMessage(messaging, (payload) => {
+        console.log("Foreground message:", payload);
+
+
+        new Notification(payload.notification?.title || "New message", {
+          body: payload.notification?.body,
+        });
+      });
+    }
+
+  }, []);
 
   return (
     <>

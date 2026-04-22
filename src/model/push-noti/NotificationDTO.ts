@@ -1,4 +1,4 @@
-export interface Notification {
+export interface NotificationDTO {
     title: string;
     shortContent: string;
     sendTime: string;
