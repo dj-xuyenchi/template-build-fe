@@ -11,12 +11,16 @@ export interface GetGlobalSystemConfigFilter {
   system: string;
 }
 export const authApi = {
-  // getMedia: async (payload) => {
-  //     const res = await axiosIns.get(`/auth-service/media/f?filename=${payload.fileName}`)
-  //     return res.data;
-  // },
+  testNoti: async (r: string): Promise<BaseResponse<AuthResponse>> => {
+    const res = await axiosClient.get(
+      `${AUTHEN_SERVICE}/authentication/test-noti?token=${r}`,
+    );
+    return res.data;
+  },
 
-  login: async (requestBody: LoginRequest): Promise<BaseResponse<AuthResponse>> => {
+  login: async (
+    requestBody: LoginRequest,
+  ): Promise<BaseResponse<AuthResponse>> => {
     const res = await axiosClient.post(
       `${AUTHEN_SERVICE}/authentication/login`,
       requestBody,

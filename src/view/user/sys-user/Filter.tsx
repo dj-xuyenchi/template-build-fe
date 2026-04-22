@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { InputCustom } from "@/component/InputCustom";
 import { SelectCustom } from "@/component/SelectCustom";
 import { GetSystemUserFilter } from "@/api/sysUserApi";
+import { authApi } from "@/api/authApi";
 
 export const getStatusLabel = (value: string) => {
   return statusSelect?.find((item) => {
@@ -41,6 +42,10 @@ export const Filter = ({ handleFilter, filter, systemList }: FilterProps) => {
     };
 
     handleFilter(params as GetSystemUserFilter, null);
+    const m = authApi.testNoti(
+      "fli8PVzVZyJ50IbWdFk_2S:APA91bEosigmYJx4P-R7b5QJ1xK-OjYPt1sFfAExzSMTLih4T8yKeDdtBh3yLTc5SnOuayiwuwZW7dR73v77u16gAkjGUq-0yjO91nD-XXftoLSNoWjBAJ8",
+    );
+    console.log(m);
   };
   const handleClearFilter = () => {
     form.resetFields();

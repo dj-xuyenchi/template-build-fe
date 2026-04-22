@@ -54,6 +54,7 @@ import { BaseResponse } from "@/model/BaseResponse";
 import { UserInformation } from "@/model/login/UserInformation";
 import { mediaApi } from "@/api/mediaApi";
 import "@/config/styleOverride.css";
+import { requestFcmToken } from "@/config/firebase";
 const FE_URL = process.env.NEXT_PUBLIC_FE_URL;
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -392,6 +393,28 @@ export default function Wrapper({
       setIsLogin(!!token);
 
       window.scrollTo(0, 0);
+
+      const init = async () => {
+        const token = await requestFcmToken();
+
+        console.error("FCM Token:", token);
+        // có token rồi thì gửi BE để lưu với nguowig dùng
+        // mẫu sau phải sửa lại cho phù hợp
+        if (token) {
+          console.log("FCM Token:", token);
+
+          // gửi về BE Java
+          await fetch("http://localhost:8080/api/token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          });
+        }
+      };
+
+      init();
     } else {
       router.push(LOGIN_URL);
     }

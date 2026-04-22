@@ -15,8 +15,14 @@ const messaging = firebase.messaging();
 
 
 messaging.onBackgroundMessage(function (payload) {
-    self.registration.showNotification(payload.notification.title, {
-        body: payload.notification.body,
+    console.log("📩 Background FCM:", payload);
+
+    const title = payload.notification?.title || payload.data?.title || "New message";
+    const body = payload.notification?.body || payload.data?.body || "";
+
+    self.registration.showNotification(title, {
+        body: body,
+        icon: "/icon.png", // optional nhưng nên có
     });
 });
 

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import clsx from "clsx";
 import styles from "./styles.module.scss";
 import "./globals.css";
@@ -12,6 +12,7 @@ import { onMessage } from "firebase/messaging";
 
 import { requestFcmToken, messaging } from "@/config/firebase";
 import { NotificationDTO } from "@/model/push-noti/NotificationDTO";
+import { authApi } from "@/api/authApi";
 export const SexyNotification = ({ isShow = false }) => {
   const [activeType, setActiveType] = useState(1);
   const [notifications, setNotifications] = useState([
@@ -33,40 +34,20 @@ export const SexyNotification = ({ isShow = false }) => {
     setActiveType(value);
   };
   useEffect(() => {
-    const init = async () => {
-      const token = await requestFcmToken();
-
-
-      if (token) {
-        console.log("FCM Token:", token);
-
-
-        // gửi về BE Java
-        await fetch("http://localhost:8080/api/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-      }
-    };
-
-
-    init();
-
-
     if (messaging) {
       onMessage(messaging, (payload) => {
         console.log("Foreground message:", payload);
-
-
-        new Notification(payload.notification?.title || "New message", {
-          body: payload.notification?.body,
-        });
+        setNotifications((prev) => [
+          {
+            title: payload.notification?.title || "New message",
+            shortContent: payload.notification?.body || "",
+            sendTime: "vừa xong",
+            isRead: false,
+          },
+          ...prev,
+        ]);
       });
     }
-
   }, []);
 
   return (
@@ -75,7 +56,7 @@ export const SexyNotification = ({ isShow = false }) => {
         onClick={clearClickEvent}
         className={clsx(
           styles.notiContainer,
-          isShow ? "show-with-magic" : "disappear-with-magic"
+          isShow ? "show-with-magic" : "disappear-with-magic",
         )}
       >
         <div className={styles.notiContainerDetail}>
@@ -90,7 +71,7 @@ export const SexyNotification = ({ isShow = false }) => {
               }}
               className={clsx(
                 styles.notiTypeDetail,
-                activeType === 1 ? styles.active : ""
+                activeType === 1 ? styles.active : "",
               )}
             >
               Tất cả
@@ -101,7 +82,7 @@ export const SexyNotification = ({ isShow = false }) => {
               }}
               className={clsx(
                 styles.notiTypeDetail,
-                activeType === 2 ? styles.active : ""
+                activeType === 2 ? styles.active : "",
               )}
             >
               Hôm nay
@@ -112,7 +93,7 @@ export const SexyNotification = ({ isShow = false }) => {
               }}
               className={clsx(
                 styles.notiTypeDetail,
-                activeType === 3 ? styles.active : ""
+                activeType === 3 ? styles.active : "",
               )}
             >
               Chưa đọc
@@ -136,7 +117,7 @@ export const SexyNotification = ({ isShow = false }) => {
                     key={index}
                     className={clsx(
                       styles.notiItemContainer,
-                      noti.isRead && styles.hasRead
+                      noti.isRead && styles.hasRead,
                     )}
                   >
                     <div className={styles.title}>
