@@ -13,7 +13,7 @@ export interface GetGlobalSystemConfigFilter {
 export const authApi = {
   testNoti: async (r: string): Promise<BaseResponse<AuthResponse>> => {
     const res = await axiosClient.get(
-      `${AUTHEN_SERVICE}/authentication/test-noti?token=${r}`,
+      `${AUTHEN_SERVICE}/authentication/test`,
     );
     return res.data;
   },

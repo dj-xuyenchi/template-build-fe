@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { onMessage } from "firebase/messaging";
 
-import { requestFcmToken, messaging } from "@/config/firebase";
+import { messaging } from "@/config/firebase";
 import { NotificationDTO } from "@/model/push-noti/NotificationDTO";
 import { authApi } from "@/api/authApi";
 export const SexyNotification = ({ isShow = false }) => {

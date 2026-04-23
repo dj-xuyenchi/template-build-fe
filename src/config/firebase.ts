@@ -1,9 +1,12 @@
 "use client";
 
-
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
-import { getMessaging, getToken, Messaging } from "firebase/messaging";
-
+import {
+  deleteToken,
+  getMessaging,
+  getToken,
+  Messaging,
+} from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -13,10 +16,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
-
 let app: FirebaseApp;
 let messaging: Messaging | null = null;
-
 
 if (!getApps().length) {
   app = initializeApp(firebaseConfig);
@@ -24,27 +25,31 @@ if (!getApps().length) {
   app = getApps()[0];
 }
 
-
 if (typeof window !== "undefined") {
   messaging = getMessaging(app);
 }
-
 
 export const requestFcmToken = async (): Promise<string | null> => {
   try {
     const permission = await Notification.requestPermission();
 
-
     if (permission !== "granted") {
-      console.log("Notification permission denied");
       return null;
     }
 
+    // ❗ CHỈ delete khi chắc chắn cần reset
+    const shouldReset = true;
+
+    if (shouldReset) {
+      await deleteToken(messaging!);
+    }
+
+    // 🔥 quan trọng: đợi SW ổn định
+    await navigator.serviceWorker.ready;
 
     const token = await getToken(messaging!, {
       vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
     });
-
 
     return token;
   } catch (error) {
@@ -53,8 +58,4 @@ export const requestFcmToken = async (): Promise<string | null> => {
   }
 };
 
-
 export { messaging };
-
-
-

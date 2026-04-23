@@ -400,18 +400,18 @@ export default function Wrapper({
         console.error("FCM Token:", token);
         // có token rồi thì gửi BE để lưu với nguowig dùng
         // mẫu sau phải sửa lại cho phù hợp
-        if (token) {
-          console.log("FCM Token:", token);
+        // if (token) {
+        //   console.log("FCM Token:", token);
 
-          // gửi về BE Java
-          await fetch("http://localhost:8080/api/token", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token }),
-          });
-        }
+        //   // gửi về BE Java
+        //   await fetch("http://localhost:8080/api/token", {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({ token }),
+        //   });
+        // }
       };
 
       init();
