@@ -38,11 +38,11 @@ export const requestFcmToken = async (): Promise<string | null> => {
     }
 
     // ❗ CHỈ delete khi chắc chắn cần reset
-    const shouldReset = true;
+    // const shouldReset = true;
 
-    if (shouldReset) {
-      await deleteToken(messaging!);
-    }
+    // if (shouldReset) {
+    //   await deleteToken(messaging!);
+    // }
 
     // 🔥 quan trọng: đợi SW ổn định
     await navigator.serviceWorker.ready;

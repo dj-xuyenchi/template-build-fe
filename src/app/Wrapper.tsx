@@ -323,7 +323,6 @@ export default function Wrapper({
     userData: BaseResponse<UserInformation>,
   ) => {
     // Hàm này chỉ được dùng ở logic copy dán link vào trình duyệt vì nó có đủ menu ở tham số param
-
     const uri = window.location.pathname;
     const selectedFeature = features.find((f) => {
       return f.feUri == uri;
