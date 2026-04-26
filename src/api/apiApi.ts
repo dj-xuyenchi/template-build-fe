@@ -5,6 +5,7 @@ import { BaseResponse } from "@/model/BaseResponse";
 import { AuditApiRequest } from "@/model/cms/cat-api/AuditApiRequest";
 import { CatApiDTO } from "@/model/cms/cat-api/CatApiDTO";
 import { InactiveApiRequest } from "@/model/cms/cat-api/InactiveApiRequest";
+import { SignInFirebaseTokenRequest } from "@/model/login/SignInFirebaseToken";
 export interface GetApiFilter extends BaseFilter {
   isTakeSystemName?: boolean;
   apiName?: string;
@@ -50,5 +51,5 @@ export const apiApi = {
       params: params,
     });
     return res.data;
-  },
+  }
 };

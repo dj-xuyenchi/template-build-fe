@@ -37,14 +37,6 @@ export const requestFcmToken = async (): Promise<string | null> => {
       return null;
     }
 
-    // ❗ CHỈ delete khi chắc chắn cần reset
-    // const shouldReset = true;
-
-    // if (shouldReset) {
-    //   await deleteToken(messaging!);
-    // }
-
-    // 🔥 quan trọng: đợi SW ổn định
     await navigator.serviceWorker.ready;
 
     const token = await getToken(messaging!, {

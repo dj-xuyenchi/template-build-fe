@@ -5,16 +5,17 @@ import { GetUserInformationFilter } from "@/model/login/GetUserInformationFilter
 import { GlobalSystemConfig } from "@/model/login/GlobalSystemConfig";
 import { LoginRequest } from "@/model/login/LoginRequest";
 import { AuthResponse } from "@/model/login/LoginResponse";
+import { SignInFirebaseTokenRequest } from "@/model/login/SignInFirebaseToken";
 import { UserInformation } from "@/model/login/UserInformation";
+import { GetNotificationRequest } from "@/model/push-noti/GetNotficationRequest";
+import { NotificationDTO } from "@/model/push-noti/NotificationDTO";
 export interface GetGlobalSystemConfigFilter {
   channel: string;
   system: string;
 }
 export const authApi = {
   testNoti: async (r: string): Promise<BaseResponse<AuthResponse>> => {
-    const res = await axiosClient.get(
-      `${AUTHEN_SERVICE}/authentication/test`,
-    );
+    const res = await axiosClient.get(`${AUTHEN_SERVICE}/authentication/test`);
     return res.data;
   },
 
@@ -46,6 +47,26 @@ export const authApi = {
       {
         params: filter,
       },
+    );
+    return res.data;
+  },
+  signInFirebaseToken: async (
+    params: SignInFirebaseTokenRequest,
+  ): Promise<BaseResponse<boolean>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/authentication/sign-in-token-firebase`,
+      {
+        params: params,
+      },
+    );
+    return res.data;
+  },
+  getNotification: async (
+    params: GetNotificationRequest,
+  ): Promise<BaseResponse<NotificationDTO[]>> => {
+    const res = await axiosClient.post(
+      `${AUTHEN_SERVICE}/notification/get-notification`,
+      params,
     );
     return res.data;
   },

@@ -396,21 +396,17 @@ export default function Wrapper({
       const init = async () => {
         const token = await requestFcmToken();
 
-        console.error("FCM Token:", token);
         // có token rồi thì gửi BE để lưu với nguowig dùng
         // mẫu sau phải sửa lại cho phù hợp
-        // if (token) {
-        //   console.log("FCM Token:", token);
-
-        //   // gửi về BE Java
-        //   await fetch("http://localhost:8080/api/token", {
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({ token }),
-        //   });
-        // }
+        if (token) {
+          // gửi về BE Java
+          const signIn = await authApi.signInFirebaseToken({
+            token: token,
+            system: "CMS",
+            browser: navigator.userAgent,
+          });
+          console.log("signInFirebaseToken", signIn);
+        }
       };
 
       init();

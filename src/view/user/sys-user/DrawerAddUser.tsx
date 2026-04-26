@@ -3,10 +3,11 @@ import { ButtonCustom } from "@/component/ButtonCustom";
 import { InputCustom } from "@/component/InputCustom";
 import { SelectCustom } from "@/component/SelectCustom";
 import { CreateSysUserRequest } from "@/model/cms/system-user/CreateSysUserRequest";
-import { Avatar, Col, Drawer, Form, Row, Space } from "antd";
+import { Avatar, Col, Drawer, Form, Row, Space, UploadFile } from "antd";
 import { statusSelect } from "./Filter";
 import { UserOutlined } from "@ant-design/icons";
 import { UploadFileCustom } from "@/component/UploadFileCustom";
+import { UploadChangeParam } from "antd/es/upload";
 
 export const DrawerAddUser = ({
   open,
@@ -40,7 +41,7 @@ export const DrawerAddUser = ({
       console.error("Lỗi tạo user", error);
     }
   };
-  const handleUpload = (fileKey) => {
+  const handleUpload = (fileKey: UploadChangeParam<UploadFile<unknown>>) => {
     console.error("File key:", fileKey);
   };
   const getAllowRole = () => {};

@@ -1,14 +1,24 @@
 export interface NotificationDTO {
-    title: string;
-    shortContent: string;
-    fullContent: string;
-    sendDate: Date;
-    sender: string;
-    forwardPage: string;
-    callbackFunction: string;
-    typeNotification: string;
-    isHtml: boolean;
-    isRead: boolean;
+  notificationId: string;
+  userId: string;
+  system: string;
+  userName: string;
+  objectContent: string;
+  objectNotification: ObjectNotification;
+  callbackFunction: string;
+  callbackParams: string;
+  createdAt: string;
+  formatTime: string;
+  sender: string;
+  isRead: boolean;
+}
+
+export interface ObjectNotification {
+  title: string;
+  shortContent: string;
+  fullContent: string;
+  isHtml: boolean;
+  typeNotification: string;
 }
 
 export const INFO = "INFO";
