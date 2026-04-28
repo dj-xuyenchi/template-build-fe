@@ -17,8 +17,9 @@ import {
 } from "@/model/push-noti/NotificationDTO";
 import { authApi } from "@/api/authApi";
 import { GetNotificationRequest } from "@/model/push-noti/GetNotficationRequest";
-import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 import { notify } from "@/config/push-noti-message/notifyContext";
+import { notificationApi } from "@/api/notificationApi";
+import { ReadNotificationRequest } from "@/model/push-noti/ReadNotificationRequest";
 export const SexyNotification = ({ isShow = false }) => {
   const [activeType, setActiveType] = useState("ALL" as string);
   const [notifications, setNotifications] = useState([] as NotificationDTO[]);
@@ -30,11 +31,25 @@ export const SexyNotification = ({ isShow = false }) => {
   const clearClickEvent = (e: MouseEvent) => {
     e.stopPropagation();
   };
+  const handleReadNotification = async () => {
+    try {
+      // UN_READ không khác gì ALL cả vì update where theo is_read = 'f'
+      const res = await notificationApi.readNotification({
+        optionReadAllType: activeType == "TODAY" ? "TODAY" : "UN_READ",
+        system: "CMS",
+      } as ReadNotificationRequest);
+      if ((res.code = "SUCCESS")) {
+        handleSetActiveType(activeType);
+      }
+    } catch (error) {
+      console.error("Lỗi khi đánh dấu đã đọc:", error);
+    }
+  };
   const handleSetActiveType = async (value: string) => {
     setActiveType(value);
     try {
       setLoadingMessage(true);
-      const res = await authApi.getNotification({
+      const res = await notificationApi.getNotification({
         option: value,
         system: "CMS",
       } as GetNotificationRequest);
@@ -105,7 +120,9 @@ export const SexyNotification = ({ isShow = false }) => {
         <div className={styles.notiContainerDetail}>
           <div className={styles.notiHeader}>
             <p className={styles.title}>Thông báo</p>
-            <p className={styles.readAll}>Đánh dấu đã đọc</p>
+            <p className={styles.readAll} onClick={handleReadNotification}>
+              Đánh dấu đã đọc
+            </p>
           </div>
           <div className={styles.notiType}>
             <div

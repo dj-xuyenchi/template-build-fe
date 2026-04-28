@@ -61,13 +61,5 @@ export const authApi = {
     );
     return res.data;
   },
-  getNotification: async (
-    params: GetNotificationRequest,
-  ): Promise<BaseResponse<NotificationDTO[]>> => {
-    const res = await axiosClient.post(
-      `${AUTHEN_SERVICE}/notification/get-notification`,
-      params,
-    );
-    return res.data;
-  },
+ 
 };
