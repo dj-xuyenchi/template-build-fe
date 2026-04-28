@@ -22,7 +22,7 @@ import { notify } from "@/config/push-noti-message/notifyContext";
 export const SexyNotification = ({ isShow = false }) => {
   const [activeType, setActiveType] = useState("ALL" as string);
   const [notifications, setNotifications] = useState([] as NotificationDTO[]);
-  const [fisrtLoad, setFirstLoad] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState(true);
 
   // Chỗ này để gọi call back khi nhận noti sẽ chạy hàm nào
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
@@ -30,12 +30,10 @@ export const SexyNotification = ({ isShow = false }) => {
   const clearClickEvent = (e: MouseEvent) => {
     e.stopPropagation();
   };
-  const handleSetActiveType = async (value: string, init: boolean) => {
+  const handleSetActiveType = async (value: string) => {
     setActiveType(value);
     try {
-      if (init) {
-        setFirstLoad(true);
-      }
+      setLoadingMessage(true);
       const res = await authApi.getNotification({
         option: value,
         system: "CMS",
@@ -55,9 +53,7 @@ export const SexyNotification = ({ isShow = false }) => {
         setNotifications([] as NotificationDTO[]);
       }
     } finally {
-      if (init) {
-        setFirstLoad(false);
-      }
+      setLoadingMessage(false);
     }
   };
   useEffect(() => {
@@ -94,7 +90,7 @@ export const SexyNotification = ({ isShow = false }) => {
         ]);
       });
     }
-    handleSetActiveType("ALL", true);
+    handleSetActiveType("ALL");
   }, []);
 
   return (
@@ -114,7 +110,7 @@ export const SexyNotification = ({ isShow = false }) => {
           <div className={styles.notiType}>
             <div
               onClick={() => {
-                handleSetActiveType("ALL", false);
+                handleSetActiveType("ALL");
               }}
               className={clsx(
                 styles.notiTypeDetail,
@@ -125,7 +121,7 @@ export const SexyNotification = ({ isShow = false }) => {
             </div>
             <div
               onClick={() => {
-                handleSetActiveType("TODAY", false);
+                handleSetActiveType("TODAY");
               }}
               className={clsx(
                 styles.notiTypeDetail,
@@ -136,7 +132,7 @@ export const SexyNotification = ({ isShow = false }) => {
             </div>
             <div
               onClick={() => {
-                handleSetActiveType("UN_READ", false);
+                handleSetActiveType("UN_READ");
               }}
               className={clsx(
                 styles.notiTypeDetail,
@@ -149,17 +145,15 @@ export const SexyNotification = ({ isShow = false }) => {
           <div className={clsx("hide-scrollbar", styles.content)}>
             {(!notifications || notifications.length === 0) && (
               <>
-                {!fisrtLoad && (
-                  <div className={styles.noData}>
-                    <div>
-                      <Image alt="empty" height={60} width={60} src={empty} />
-                    </div>
-                    <span>Không có dữ liệu</span>
+                <div className={styles.noData}>
+                  <div>
+                    <Image alt="empty" height={60} width={60} src={empty} />
                   </div>
-                )}
+                  <span>Không có dữ liệu</span>
+                </div>
               </>
             )}
-            <Spin spinning={fisrtLoad} size="large">
+            <Spin spinning={loadingMessage} size="large">
               {notifications.map((noti, index) => {
                 return (
                   <div
