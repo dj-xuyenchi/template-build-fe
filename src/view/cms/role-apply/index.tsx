@@ -33,6 +33,8 @@ import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 import { GetGlobalConfigRequest, globalConfigApi } from "@/api/globalConfigApi";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 import { AuthorizeDataRequest } from "@/model/cms/roleApply/AuthorizeDataRequest";
+import { useDispatch } from "react-redux";
+import { setCallBack } from "@/app/globalSlice";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
@@ -59,7 +61,7 @@ export const Index = () => {
   const modal = useGlobalModal();
   const controllerRef = useRef<AbortController | null>(null);
   const messageApi = getMessageInstance();
-
+  const dispatch = useDispatch();
   const addNewData = async () => {
     try {
       setIsTableLoading(true);
@@ -361,7 +363,7 @@ export const Index = () => {
           const selectedIds = selectedRows.map((r) => {
             return r.roleApplyId;
           });
-          
+
           setCheckBoxSelectedData(selectedIds);
         },
         getCheckboxProps: (record: RoleApplyDTO) => ({
@@ -436,6 +438,7 @@ export const Index = () => {
     handleGetFeatureData();
     handleGetData({ ...filter });
     handleGetApplyType();
+    dispatch(setCallBack(handleGetData));
   }, []);
 
   return (

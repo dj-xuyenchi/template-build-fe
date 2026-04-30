@@ -1,4 +1,4 @@
 export interface AppSlice {
-  callBack: (paramsString?: string) => void;
+  callBack: (paramsString?: object) => void;
 }
 

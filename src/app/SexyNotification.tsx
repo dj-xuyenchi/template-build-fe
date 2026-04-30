@@ -7,7 +7,7 @@ import empty from "../../public/empty.webp";
 import { Badge, Spin } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { onMessage } from "firebase/messaging";
+import { Messaging, onMessage } from "firebase/messaging";
 import "./globals.css";
 
 import { messaging } from "@/config/firebase";
@@ -71,39 +71,50 @@ export const SexyNotification = ({ isShow = false }) => {
       setLoadingMessage(false);
     }
   };
+  const handleOnMessage = (messaging: Messaging) => {
+    onMessage(messaging, (payload) => {
+      console.log("Message từ Firebase  -> ", payload);
+      const notification = JSON.parse(
+        payload.notification?.body || "",
+      ) as ObjectNotification;
+      console.log("Message từ Firebase parse  -> ", notification);
+      switch (notification.typeNotification) {
+        case "SUCCESS": {
+          notify.success(notification.title, notification.shortContent);
+          break;
+        }
+        case "ERROR": {
+          notify.error(notification.title, notification.shortContent);
+          break;
+        }
+        case "WARN": {
+          notify.warning(notification.title, notification.shortContent);
+          break;
+        }
+        case "INFO": {
+          notify.info(notification.title, notification.shortContent);
+          break;
+        }
+      }
+      setNotifications((prev) => [
+        {
+          objectNotification: notification,
+          formatTime: "Vừa xong",
+        } as NotificationDTO,
+        ...prev,
+      ]);
+      if (!notification.isFromInternalService && notification.willCallback) {
+        let params = {}
+        if (notification.callbackParams) {
+          params = JSON.parse(notification.callbackParams);
+        }
+        appSlice.callBack(params);
+      }
+    });
+  }
   useEffect(() => {
     if (messaging) {
-      onMessage(messaging, (payload) => {
-        console.log("Message từ Firebase  -> ", payload);
-        const notification = JSON.parse(
-          payload.notification?.body || "",
-        ) as ObjectNotification;
-        switch (notification.typeNotification) {
-          case "SUCCESS": {
-            notify.success(notification.title, notification.shortContent);
-            break;
-          }
-          case "ERROR": {
-            notify.error(notification.title, notification.shortContent);
-            break;
-          }
-          case "WARN": {
-            notify.warning(notification.title, notification.shortContent);
-            break;
-          }
-          case "INFO": {
-            notify.info(notification.title, notification.shortContent);
-            break;
-          }
-        }
-        setNotifications((prev) => [
-          {
-            objectNotification: JSON.parse(payload.notification?.body || ""),
-            formatTime: "Vừa xong",
-          } as NotificationDTO,
-          ...prev,
-        ]);
-      });
+      handleOnMessage(messaging);
     }
     handleSetActiveType("ALL");
   }, []);

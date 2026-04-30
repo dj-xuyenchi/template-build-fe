@@ -5,12 +5,13 @@ export interface NotificationDTO {
   userName: string;
   objectContent: string;
   objectNotification: ObjectNotification;
-  callbackFunction: string;
+  willCallback: boolean;
   callbackParams: string;
   createdAt: string;
   formatTime: string;
   sender: string;
   isRead: boolean;
+  isFromInternalService: boolean;
 }
 
 export interface ObjectNotification {
@@ -19,6 +20,9 @@ export interface ObjectNotification {
   fullContent: string;
   isHtml: boolean;
   typeNotification: string;
+  willCallback: boolean;
+  callbackParams: string;
+  isFromInternalService: boolean;
 }
 
 export const INFO = "INFO";
