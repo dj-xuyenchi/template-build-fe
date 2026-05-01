@@ -105,7 +105,9 @@ export const SexyNotification = ({ isShow = false }) => {
         ...prev,
       ]);
       if (!notification.isFromInternalService && notification.willCallback) {
-        let params = {}
+        let params = {
+          functionName: notification.functionName,
+        }
         if (notification.callbackParams) {
           params = JSON.parse(notification.callbackParams);
         }

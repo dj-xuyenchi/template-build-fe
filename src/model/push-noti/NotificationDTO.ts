@@ -20,6 +20,7 @@ export interface ObjectNotification {
   fullContent: string;
   isHtml: boolean;
   typeNotification: string;
+  functionName: string;
   willCallback: boolean;
   callbackParams: string;
   isFromInternalService: boolean;

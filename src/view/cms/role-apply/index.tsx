@@ -440,10 +440,9 @@ export const Index = () => {
     handleGetFeatureData();
     handleGetApplyType();
     handleGetData({ ...filter });
-
   }, []);
   useEffect(() => {
-    if (triggerCallBackFlag) {
+    if (triggerCallBackFlag && (callBackParams as { functionName: string }).functionName === "getRoleApply") {
       handleGetData({ ...filter });
     }
   }, [triggerCallBackFlag]);
