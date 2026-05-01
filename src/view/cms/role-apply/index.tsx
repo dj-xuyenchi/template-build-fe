@@ -33,8 +33,8 @@ import { GlobalConfigData } from "@/model/global-config/GlobalConfigData";
 import { GetGlobalConfigRequest, globalConfigApi } from "@/api/globalConfigApi";
 import { getMessageInstance } from "@/config/push-noti-message/messageContext";
 import { AuthorizeDataRequest } from "@/model/cms/roleApply/AuthorizeDataRequest";
-import { useDispatch } from "react-redux";
-import { setCallBack } from "@/app/globalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export const Index = () => {
   const [data, setData] = useState({} as { data: RoleApplyDTO[] });
@@ -432,15 +432,21 @@ export const Index = () => {
       console.error(e);
     }
   };
-
+  const { triggerCallBackFlag, callBackParams } = useSelector(
+    (state: RootState) => state.global.appSlice
+  );
   useEffect(() => {
     handleGetRoleData();
     handleGetFeatureData();
-    handleGetData({ ...filter });
     handleGetApplyType();
-    dispatch(setCallBack(handleGetData));
-  }, []);
+    handleGetData({ ...filter });
 
+  }, []);
+  useEffect(() => {
+    if (triggerCallBackFlag) {
+      handleGetData({ ...filter });
+    }
+  }, [triggerCallBackFlag]);
   return (
     <>
       <Content

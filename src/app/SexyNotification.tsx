@@ -5,7 +5,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import empty from "../../public/empty.webp";
 import { Badge, Spin } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Messaging, onMessage } from "firebase/messaging";
 import "./globals.css";
@@ -20,6 +20,7 @@ import { GetNotificationRequest } from "@/model/push-noti/GetNotficationRequest"
 import { notify } from "@/config/push-noti-message/notifyContext";
 import { notificationApi } from "@/api/notificationApi";
 import { ReadNotificationRequest } from "@/model/push-noti/ReadNotificationRequest";
+import { setCallBackParams } from "./globalSlice";
 export const SexyNotification = ({ isShow = false }) => {
   const [activeType, setActiveType] = useState("ALL" as string);
   const [notifications, setNotifications] = useState([] as NotificationDTO[]);
@@ -27,7 +28,7 @@ export const SexyNotification = ({ isShow = false }) => {
 
   // Chỗ này để gọi call back khi nhận noti sẽ chạy hàm nào
   const appSlice = useSelector((state: RootState) => state.global.appSlice);
-  // appSlice.callBack("");
+  const dispatch = useDispatch();
   const clearClickEvent = (e: MouseEvent) => {
     e.stopPropagation();
   };
@@ -108,7 +109,7 @@ export const SexyNotification = ({ isShow = false }) => {
         if (notification.callbackParams) {
           params = JSON.parse(notification.callbackParams);
         }
-        appSlice.callBack(params);
+        dispatch(setCallBackParams(params));
       }
     });
   }

@@ -22,13 +22,14 @@ const globalSlice = createSlice({
     setGlobalSystemConfig: (state, action) => {
       state.globalSystemConfig = action.payload;
     },
-    setCallBack: (state, action) => {
-      state.appSlice.callBack = action.payload;
-    },
+    setCallBackParams: (state, action) => {
+      state.appSlice.callBackParams = action.payload;
+      state.appSlice.triggerCallBackFlag = Date.now();
+    }
   },
 });
 
-export const { setUserInformation, setCallBack, setGlobalSystemConfig } =
+export const { setUserInformation, setCallBackParams, setGlobalSystemConfig } =
   globalSlice.actions;
 
 export default globalSlice.reducer;

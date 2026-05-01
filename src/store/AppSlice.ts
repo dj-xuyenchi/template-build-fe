@@ -1,4 +1,5 @@
 export interface AppSlice {
-  callBack: (paramsString?: object) => void;
+  triggerCallBackFlag: number
+  callBackParams: object
 }
 
