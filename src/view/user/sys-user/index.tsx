@@ -153,8 +153,9 @@ export const Index = () => {
     loading: isTableLoading,
     dataSource: data.data as SystemUserDTO[],
     viewMode: viewMode,
-    tableName: "Quản lý API",
+    tableName: "Quản lý người dùng hệ thống",
     extendFunction: {
+      buttonAddTitle: 'Tạo mới người dùng',
       triggerNewRow: triggerNewRow,
       quickSearch: true,
       handleQuickSearch: handleQuickSearch,

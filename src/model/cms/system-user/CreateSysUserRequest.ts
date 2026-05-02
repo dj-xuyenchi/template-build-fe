@@ -3,5 +3,6 @@ export interface CreateSysUserRequest {
   firstName: string;
   email: string;
   phoneNumber: string;
+  avatarKey: string;
   status: string;
 }
